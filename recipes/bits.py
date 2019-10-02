@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-01 21:53:19
+# @Last Modified time: 2019-10-02 19:59:00
 
 bin(0x7F)
 # '0b1111111'
@@ -78,6 +78,11 @@ hex(sys.maxsize)
 # '11001010'
 
 
+def reverse_bits(x):
+    inp_bits = bin(x)[2:]
+    return f"{inp_bits} -> {inp_bits[::-1]}"
+
+
 def add_by_bits_rec(i, j):
     assert i >= 0 and j >= 0
     uncommon_bits_from_both = i ^ j
@@ -132,9 +137,64 @@ def check_num_is_power_of_two(n):
     return n & (n - 1) == 0
 
 
-def reverse_bits(x):
-    inp_bits = bin(x)[2:]
-    return f'{inp_bits} -> {inp_bits[::-1]}'
+def is_div_by_17(n):
+    # true for any n of the form 2**k + 1 like 5, 9, 17, 33...
+    if n == 0 or n == 17:
+        return True
+    elif n < 17:
+        return False
+    return is_div_by_17((n >> 4) - (n & 15))
+
+
+def divide_by_bits(x, y):
+    power_y = y
+    power = 1
+    loopCount = 0
+    while power_y < x:
+        power_y <<= 1
+        power <<= 1
+        loopCount += 1
+    quotient = 0
+    while power_y > 0:
+        power_y >>= 1
+        power >>= 1
+        if x >= power_y:
+            x -= power_y
+            quotient += power
+    print(f"loopCount = {2*loopCount}")
+    return quotient
+
+
+def power_by_bits(a, b):
+    result = 1
+    while b:
+        if b & 1:
+            result *= a
+        b >>= 1
+        a *= a
+    return result
+
+
+def find_position_of_msb(n):
+    high = 31
+    low = 0
+    while (high - low) > 1:
+        mid = (high + low) // 2
+        mask_high = (1 << high) - (1 << mid)
+        if (mask_high & n) > 0:
+            low = mid
+        else:
+            high = mid
+    print(f"{n} : MSB at {low}. Between {pow(2, low)} and {pow(2, low + 1)}")
+
+
+def swap_bits(x, i, j):
+    x_old = bin(x)
+    low = (x >> i) & 1
+    high = (x >> j) & 1
+    if low ^ high:
+        x ^= (1 << i) | (1 << j)
+    return f"{x_old} -> {bin(x)}"
 
 
 # https://catonmat.net/low-level-bit-hacks
