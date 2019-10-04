@@ -1,17 +1,49 @@
 # -*- coding: utf-8 -*-
-import sys
 import io
+import sys
 
 
 sys.stdin
 sys.stdin.read()
 sys.stdin.readline()
 sys.stdin.readlines()
+
+
+
 sys.stdin = io.StringIO("1\n2\n3\n4\n5\n6\n7\n8\n9")
 
 
 
-lines = list(map(str.strip, f_in.readlines()))
+with open(file) as f:
+    file.write()
+    file.tell()
+    file.read()
+    file.seek(0)
+    file.readline()
+    file.readlines()
+
+file.writelines()
+
+
+
+with open("/path/to/file") as f:
+    for line in f:
+        print(line)
+
+f = open("/path/tofile", 'w')
+for e in aList:
+    f.write(e + "\n")
+f.close()
+
+
+
+f = open('data.txt')
+first, second, *rest, last = f.readlines()
+f.close()
+
+
+
+lines = list(map(str.strip, sys.stdin.readlines()))
 
 a = []
 a = list(map(int, input().split()))
@@ -30,7 +62,6 @@ input_list = next(sys.stdin).split()
 
 ls = [[*map(int, i.split())] for i in sys.stdin]
 (n, e, d), ps, res = ls[0], [*range(ls[0][0] + 1)], 1
-
 
 
 _, arr = (tuple(map(int, lst))
@@ -89,6 +120,13 @@ lst = [input().split() for _ in range(n)]
 lst = [input().split() for _ in range((*map(int, input().split()),)[0])]
 
 shapes = (*map(int, input().split()),)
+
+
+with open('mydata.txt') as fp:
+    for line in iter(fp.readline, ''):
+        process_line(line)
+
+
 
 
 

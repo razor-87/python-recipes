@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 ord('f')
 # 102
 
@@ -6,13 +7,14 @@ chr(102)
 # 'f'
 
 
+word.strip('.,!').lower()
+
 ''.swapcase()
 "-".join(s.split())
 
 from string import ascii_lowercase
 list(ascii_lowercase)
 # ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
 
 
 width = len("{0:b}".format(number))
@@ -110,6 +112,8 @@ raw.translate(table)
 '_'.join('hello')
 # 'h_e_l_l_o'
 
+print(', '.join(list))    # str.join()
+
 print('\n'.join(['0', '1', '2']))
 # 0
 # 1
@@ -118,3 +122,20 @@ print('\n'.join(['0', '1', '2']))
 
 bytes("hello", "ascii")
 # b'hello'
+
+
+''.join(reversed('aaabbb'))
+# bbbaaa
+''.join(reversed('aabbaa')) == 'aabbaa'
+# True
+
+"0123456789"[6:3:-1]
+# "654"
+
+foo = "yasoob"
+foo[::-1]
+# 'boosay'
+
+
+["%-3d%12d" % (exponent, 10**exponent) for exponent in range(7, 11)]
+# ['7      10000000', '8     100000000', '9    1000000000', '10  10000000000']
