@@ -14,28 +14,6 @@ sys.stdin = io.StringIO("1\n2\n3\n4\n5\n6\n7\n8\n9")
 
 
 
-with open(file) as f:
-    file.write()
-    file.tell()
-    file.read()
-    file.seek(0)
-    file.readline()
-    file.readlines()
-
-file.writelines()
-
-
-
-with open("/path/to/file") as f:
-    for line in f:
-        print(line)
-
-f = open("/path/tofile", 'w')
-for e in aList:
-    f.write(e + "\n")
-f.close()
-
-
 
 f = open('data.txt')
 first, second, *rest, last = f.readlines()
@@ -53,8 +31,8 @@ print(*a)
 a, b = map(int, input().split())
 a, b = sys.stdin.read().split()
 
-reader = (line.strip() for line in sys.stdin.readlines())
-N = int(next(reader))
+reader = (int(line.strip()) for line in sys.stdin.readlines())
+N = next(reader)
 
 input_list = next(sys.stdin).split()
 
@@ -68,8 +46,6 @@ _, arr = (tuple(map(int, lst))
           for lst in map(str.split, map(str.strip, sys.stdin.readlines())))
 _, arr = sys.stdin.readline(), tuple(sys.stdin.readline().split())
 
-with open('input00.txt') as f:
-    _, arr = f.readline(), tuple(f.readline().split())
 
 
 
@@ -83,7 +59,7 @@ arr = tuple(
     for lst in map(str.split, map(str.strip, sys.stdin.readlines()[1:])))
 
 
-arr = np.array([tuple(map(int, el.split())) for el in map(str.strip, sys.stdin.readlines()[1:])], int)
+[tuple(map(int, el.split())) for el in map(str.strip, sys.stdin.readlines()[1:])]
 
 
 *n, m = (tuple(map(float, row.strip().split())) for row in sys.stdin.readlines())
@@ -119,7 +95,18 @@ lst = [input().split() for _ in range(n)]
 
 lst = [input().split() for _ in range((*map(int, input().split()),)[0])]
 
-shapes = (*map(int, input().split()),)
+(*map(int, input().split()),)
+# 45 66 34 -> (45, 66, 34)
+
+({*map(int, input().split())} for _ in range(2))
+
+
+with open('input00.txt') as f:
+    _, arr = f.readline(), tuple(f.readline().split())
+
+with open("input07.txt") as f:
+    _, n, m = (f.readline(), map(int, f.readline().split()),
+               ({*map(int, f.readline().split())} for _ in range(2)))
 
 
 with open('mydata.txt') as fp:
@@ -128,6 +115,28 @@ with open('mydata.txt') as fp:
 
 
 
+
+
+with open(file) as f:
+    file.write()
+    file.tell()
+    file.read()
+    file.seek(0)
+    file.readline()
+    file.readlines()
+
+file.writelines()
+
+
+
+with open("/path/to/file") as f:
+    for line in f:
+        print(line)
+
+f = open("/path/tofile", 'w')
+for e in aList:
+    f.write(e + "\n")
+f.close()
 
 
 

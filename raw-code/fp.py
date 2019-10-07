@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-
 import functools
+import operator
+
+
 prints = functools.partial(print, end=' ')
 prints()
 print(functools.reduce(lambda x, y: x + y, [1, 2, 3]))
 
 
-
-import operator
 somelist = [(1, 5, 8), (6, 2, 4), (9, 7, 5)]
 somelist.sort(key=operator.itemgetter(0))
 somelist
@@ -30,6 +30,9 @@ operatot.attrgetter('sort')
 
 operator.xor
 
+
+functools.reduce(operator.mul, range(1, 11))  # math.factorial(10)
+# 3628800
 
 
 # The lambda keyword in Python provides a
@@ -175,6 +178,9 @@ sum(sub == 'CDC' for sub in ("ABCDCDC"[i:i+len('CDC')] for i in range(len("ABCDC
 sum(sub_string == pattern for sub_string in (string[i:i + len(pattern)] for i in range(n)))
 
 
+sum((i in a) - (i in b) for i in n)
+sum(bool({i} & a) - bool({i} & b) for i in n)
+
 matrix = [
     [1, 2, 3, 4],
     [5, 6, 7, 8],
@@ -226,6 +232,7 @@ list(filter(is_coprime, range(1, 21)))
 # [1, 3, 7, 9, 11, 13, 17, 19]
 
 
+(int)(num) == int(num)
 
 
 
@@ -284,3 +291,8 @@ pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
 pairs.sort(key=lambda pair: pair[1])
 pairs
 # [(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
+
+
+
+functools.reduce(lambda x, y: y**x, reversed(arr))
+# (3, 2, 2) -> 3**(2**2) -> 81

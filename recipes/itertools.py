@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-08-01 11:08:22
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-01 21:52:15
+# @Last Modified time: 2019-10-04 20:05:32
 import collections
 import itertools
 import operator
@@ -26,6 +26,10 @@ print(list(itertools.takewhile(lambda x: x <= 6, nums)))
 
 nums = [2, 4, 6, 7, 9, 8]
 a = itertools.takewhile(lambda x: x % 2 == 0, nums)
+
+# itertools.starmap
+list(map(pow, [(2, 5), (3, 2), (10, 3)]))
+# -> TypeError: pow expected at least 2 arguments, got 1
 
 list(itertools.starmap(pow, data))
 # -> [32, 9, 1000]

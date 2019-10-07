@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-02 19:59:00
+# @Last Modified time: 2019-10-07 10:40:05
 
 bin(0x7F)
 # '0b1111111'
@@ -195,6 +195,33 @@ def swap_bits(x, i, j):
     if low ^ high:
         x ^= (1 << i) | (1 << j)
     return f"{x_old} -> {bin(x)}"
+
+
+
+
+import math
+# function to print remainder and
+# quotient
+def divide(n, m):
+
+    # print Remainder by
+    # n AND (m-1)
+    print("Remainder = ",
+                  ((n) &(m-1)))
+
+    # print quotient by
+    # right shifting n by
+    # (log2(m)) times
+    print("Quotient = " ,(n >>
+          (int)(math.log2(m))))
+
+# driver program
+n = 43
+m = 8
+divide(n, m)
+
+
+
 
 
 # https://catonmat.net/low-level-bit-hacks

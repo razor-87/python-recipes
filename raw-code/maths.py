@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import math
 
 num = 1.5e2    # == 1.5 * (10 ** 2)
 num = 100_000_000   # Only >=3.6
@@ -6,8 +7,7 @@ num = 100_000_000   # Only >=3.6
 # cubic root
 round(x**(1/3))
 
-from math import gcd
-gcd(100, 75)
+math.gcd(100, 75)
 # 25
 
 # n(n+1)/2
@@ -34,21 +34,55 @@ pow(3, 4, 5)
 
 
 
-import functools
-functools.reduce(operator.mul, range(1, 11))  # math.factorial(10)
-# 3628800
+n, k = 52, 2
+permutations = math.factorial(n) // math.factorial(n - k)  # nPk
+# 2652
+combinations = permutations // math.factorial(k)  # nCk
+# 1326
+
+
+
+math.isclose()
 
 
 
 
 
-
-import warnings; warnings.simplefilter('ignore')  # Fix NumPy issues.
-
-from numpy import array, cos, sin
 def rotate(vector, angle):
+    import warnings
+    warnings.simplefilter('ignore')  # Fix NumPy issues.
+    from numpy import array, cos, sin
     θ = angle
     mat = [[cos(θ), -sin(θ)],
            [sin(θ), cos(θ)]]
     mat = array(mat)
     return mat @ vector
+
+
+
+def struct_inverse_sqrt(number):
+    import struct
+    threehalfs = 1.5
+    x2 = number * 0.5
+    y = number
+
+    packed_y = struct.pack('f', y)
+    i = struct.unpack('i', packed_y)[0]  # treat float's bytes as int
+    i = 0x5f3759df - (i >> 1)            # arithmetic with magic number
+    packed_i = struct.pack('i', i)
+    y = struct.unpack('f', packed_i)[0]  # treat int's bytes as float
+
+    y = y * (threehalfs - (x2 * y * y))  # Newton's method
+    return y
+
+
+
+def tower_of_powers(arr):
+    """
+    >>> tower_of_powers((3, 2, 2, 2))
+    43046721
+    >>> tower_of_powers((2, 2, 2, 2, 0))
+    16
+    """
+    from functools import reduce
+    return reduce(lambda x, y: y**x, reversed((3, 2, 2, 2)))

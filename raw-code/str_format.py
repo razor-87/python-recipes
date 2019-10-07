@@ -14,7 +14,8 @@ word.strip('.,!').lower()
 
 from string import ascii_lowercase
 list(ascii_lowercase)
-# ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+# ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+# 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 
 width = len("{0:b}".format(number))
@@ -139,3 +140,29 @@ foo[::-1]
 
 ["%-3d%12d" % (exponent, 10**exponent) for exponent in range(7, 11)]
 # ['7      10000000', '8     100000000', '9    1000000000', '10  10000000000']
+
+
+correct = 'correct'
+phonetic_correct = 'phonetic_correct'
+typo = 'typo'
+phonetic_typo = 'phonetic_typo'
+phonetic_distance = 'phonetic_distance'
+
+print(f'No Spacing:')
+print(f'{correct}|{phonetic_correct}|{typo}|{phonetic_typo}|{phonetic_distance}|\n')
+# No Spacing:
+# correct|phonetic_correct|typo|phonetic_typo|phonetic_distance|
+
+print(f'Right Aligned:')
+print(f'{correct:>10}|{phonetic_correct:>20}|{typo:>10}|{phonetic_typo:>20}|{phonetic_distance:>20}|\n')
+# Right Aligned:
+#    correct|    phonetic_correct|      typo|       phonetic_typo|   phonetic_distance|
+
+print(f'Left Aligned:')
+print(f'{correct:<10}|{phonetic_correct:<20}|{typo:<10}|{phonetic_typo:<20}|{phonetic_distance:<20}|\n')
+# Left Aligned:
+# correct   |phonetic_correct    |typo      |phonetic_typo       |phonetic_distance   |
+
+print(f'Centre Aligned:')
+print(f'{correct:^10}|{phonetic_correct:^20}|{typo:^10}|{phonetic_typo:^20}|{phonetic_distance:^20}|')
+# Centre Aligned:

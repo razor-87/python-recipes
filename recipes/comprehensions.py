@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:47:20
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-01 21:49:44
+# @Last Modified time: 2019-10-04 21:01:38
 
 kilometer = [39.2, 36.5, 37.3, 37.8]
 feet = map(lambda x: float(3280.8399) * x, kilometer)
@@ -106,7 +106,7 @@ even_squares = [x * x for x in range(10) if not x % 2]
 even_squares
 # [0, 4, 16, 36, 64]
 
-squares = list(map(lambda x: x**2, range(10)))
+
 squares = [x**2 for x in range(10)]
 [(x, y) for x in [1, 2, 3] for y in [3, 1, 4] if x != y]
 # [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
@@ -130,11 +130,23 @@ vec = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 [num for elem in vec for num in elem]
 # [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+
+[x for x in arr if x > 0]
+
+[x for x in range(16) if x % 2 == 0]
+# [0, 2, 4, 6, 8, 10, 12, 14]
+
+targetList = [v for v in targetList if not v.strip() == '']
+
+
+
+lst = ['fsd', 'gf', '  ', 'dsf', ' ']
+# [x for x in lst if x.strip() != '']
+[x for x in lst if x.strip()]
+# ['fsd', 'gf', 'dsf']
+
+
+
 pattern = [('.|.' * (2 * i + 1)).center(m, '-') for i in range(n // 2)]
 print('\n'.join(pattern + ['WELCOME'.center(m, '-')] + pattern[::-1]))
 
-[x for x in arr if x > 0]
-[
-    ' '.join(map(str, lst))
-    for lst in [d[i] if i in d else [-1] for i in arr[n + 1:]]
-]

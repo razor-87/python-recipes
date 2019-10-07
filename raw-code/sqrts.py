@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+sqrt_random         : 0.244644
+i_sqrt              : 0.057472
+sqrt_newton         : 0.054136
+i_sqrt_             : 0.039157
+**0.5               : 0.031894
+math.sqrt           : 0.027638
+"""
 import math
-import operator
 import random
 import timeit
 
@@ -9,21 +16,39 @@ NUMS = [
     50000, 150_000, 500_000
 ]
 
+sqrts = {
+    "sqrt_random": ('sqrt_random(NUMS[random.randint(0, len(NUMS)-1)])',
+                    'sqrt_random(rand())'),
+    "i_sqrt":
+    ('i_sqrt(NUMS[random.randint(0, len(NUMS)-1)])', 'i_sqrt(rand())'),
+    "sqrt_newton": ('sqrt_newton(NUMS[random.randint(0, len(NUMS)-1)])',
+                    'sqrt_newton(rand())'),
+    "i_sqrt_":
+    ('i_sqrt_(NUMS[random.randint(0, len(NUMS)-1)])', 'i_sqrt_(rand())'),
+    "**0.5":
+    ('round(NUMS[random.randint(0, len(NUMS)-1)]**0.5)', 'round(rand()**0.5)'),
+    "math.sqrt":
+    ('math.sqrt(NUMS[random.randint(0, len(NUMS)-1)])', 'math.sqrt(rand())')
+}
 
-def square_root_bi(x, epsilon=0.01):
-    low = 0
-    high = max(1, x)
-    ans = (high + low) / 2
-    while abs(ans**2 - x) >= epsilon:
-        if ans**2 < x:
-            low = ans
+
+def sqrt_random(x, epsilon=0.01):
+    assert x > 0
+    bound_low = 1
+    bound_up = x * 0.25 + 1
+    while True:
+        guess = random.uniform(bound_low, bound_up)
+        diff = guess * guess - x
+        if (abs(diff) <= epsilon) or (bound_up - bound_low <= epsilon * 2):
+            return guess
+        if diff > 0:
+            bound_up = guess
         else:
-            high = ans
-        ans = (high + low) / 2
-    return ans
+            bound_low = guess
 
 
-def newton_sqrt(n):
+def sqrt_newton(n):
+    """Newton-Raphson for square root"""
     approx = 0.5 * n
     better = 0.5 * (approx + n / approx)
     while better != approx:
@@ -32,61 +57,39 @@ def newton_sqrt(n):
     return approx
 
 
-def square_root_nr(x, epsilon=0.01):
-    # Newton-Raphson for square root
-    guess = x / 2
-    diff = guess * guess - x
-    while abs(diff) >= epsilon:
-        guess = guess - diff / (2 * guess)
-        diff = guess * guess - x
-    # print('Square root of', x, 'is about', guess)
-    return guess
+def i_sqrt(n):
+    i = n.bit_length() >> 1  # i = floor( (1 + floor(log_2(n))) / 2 )
+    m = 1 << i  # m = 2^i
+    #
+    # Fact: (2^(i + 1))^2 > n, so m has at least as many bits
+    # as the floor of the square root of n.
+    #
+    # Proof: (2^(i+1))^2 = 2^(2i + 2) >= 2^(floor(log_2(n)) + 2)
+    # >= 2^(ceil(log_2(n) + 1) >= 2^(log_2(n) + 1) > 2^(log_2(n)) = n. QED.
+    #
+    while m * m > n:
+        m >>= 1
+        i -= 1
+    for k in range(i - 1, -1, -1):
+        x = m | (1 << k)
+        if x * x <= n:
+            m = x
+    return m
 
 
-def sqrt_random(x, epsilon=0.01):
-    assert x > 0
-    bound_lower = 1
-    bound_upper = x * 0.25 + 1
-    # times = 0
-    while True:
-        guess = random.uniform(bound_lower, bound_upper)
-        diff = guess * guess - x
-        # times += 1
-        # print((f"times: {times} | guess: {guess} | diff: {diff} | "
-        #        f"bound_lower: {bound_lower} | bound_upper: {bound_upper}"))
-        if (abs(diff) <= epsilon) or (bound_upper - bound_lower <= epsilon * 2):
-            # print(f"math.sqrt({x}) = {round(guess, 2)}\n")
-            return guess
-        if diff > 0:
-            bound_upper = guess
-        else:
-            bound_lower = guess
-
-
-def newton_sqrt_isclose(n, verbose=False):
-    guess = n / 2
-    while True:
-        if verbose:
-            print('guess ->', guess)
-        better_guess = (guess + n / guess) / 2
-        if math.isclose(guess, better_guess):
-            return better_guess
-        guess = better_guess
-
-
-# def compare(fs, args=NUMS):
-#     from matplotlib import pyplot as plt
-#     for f in fs:
-#         plt.plot(args, [(timeit.timeit(str(f(arg)), number=100000)) * 10000
-#                         for arg in args],
-#                  label=f.__name__)
-#     plt.xlim(1, args[-1])
-#     plt.legend()
-#     plt.grid(True)
-#     plt.show()
-
-# compare([square_root_bi, sqrt_random, square_root_nr, newton_sqrt,
-#          math.sqrt, newton_sqrt_isclose])
+def i_sqrt_(n):
+    # if not isinstance(n, int):
+    #     raise TypeError('an int is required')
+    # if n < 0:
+    #     raise ValueError('math domain error')
+    guess = (n >> n.bit_length() // 2) + 1
+    result = (guess + n // guess) // 2
+    while abs(result - guess) > 1:
+        guess = result
+        result = (guess + n // guess) // 2
+    while result * result > n:
+        result -= 1
+    return result
 
 
 def rand():
@@ -95,60 +98,18 @@ def rand():
     return a
 
 
-print(
-    'square_root_bi: ',
-    operator.add(
-        timeit.timeit('square_root_bi(NUMS[random.randint(0, len(NUMS)-1)])',
-                      number=10000,
-                      globals=globals()),
-        timeit.timeit('square_root_bi(rand())',
-                      number=10000, globals=globals()) / 2))
-print(
-    'sqrt_random: ',
-    operator.add(
-        timeit.timeit('sqrt_random(NUMS[random.randint(0, len(NUMS)-1)])',
-                      number=10000,
-                      globals=globals()),
-        timeit.timeit('sqrt_random(rand())',
-                      number=10000, globals=globals()) / 2))
-print(
-    'newton_sqrt_isclose: ',
-    operator.add(
-        timeit.timeit('newton_sqrt_isclose(NUMS[random.randint(0, len(NUMS)-1)])',
-                      number=10000,
-                      globals=globals()),
-        timeit.timeit('newton_sqrt_isclose(rand())',
-                      number=10000,
-                      globals=globals()) / 2))
-print(
-    'square_root_nr: ',
-    operator.add(
-        timeit.timeit('square_root_nr(NUMS[random.randint(0, len(NUMS)-1)])',
-                      number=10000,
-                      globals=globals()),
-        timeit.timeit('square_root_nr(rand())',
-                      number=10000, globals=globals()) / 2))
-print(
-    'newton_sqrt: ',
-    operator.add(
-        timeit.timeit('newton_sqrt(NUMS[random.randint(0, len(NUMS)-1)])',
-                      number=10000,
-                      globals=globals()),
-        timeit.timeit('newton_sqrt(rand())',
-                      number=10000, globals=globals()) / 2))
-print(
-    '**0.5: ',
-    operator.add(
-        timeit.timeit('round(NUMS[random.randint(0, len(NUMS)-1)]**0.5)',
-                      number=10000,
-                      globals=globals()),
-        timeit.timeit('round(rand()**0.5)',
-                      number=10000, globals=globals()) / 2))
-print(
-    'math.sqrt: ',
-    operator.add(
-        timeit.timeit('math.sqrt(NUMS[random.randint(0, len(NUMS)-1)])',
-                      number=10000,
-                      globals=globals()),
-        timeit.timeit('math.sqrt(rand())',
-                      number=10000, globals=globals()) / 2))
+def mean(*args):
+    return sum(args) / len(args)
+
+
+def timeit_(param):
+    return timeit.timeit(param, number=10000, globals=globals())
+
+
+def main():
+    for k, v in sqrts.items():
+        print(f"{k:<20}: {mean(*(timeit_(p) for p in v)):>7f}")
+
+
+if __name__ == '__main__':
+    main()
