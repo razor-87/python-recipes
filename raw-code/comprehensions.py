@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-09-29 19:47:20
-# @Last Modified by:   razor87
-# @Last Modified time: 2019-10-04 21:01:38
 
 kilometer = [39.2, 36.5, 37.3, 37.8]
 feet = map(lambda x: float(3280.8399) * x, kilometer)
@@ -139,14 +135,13 @@ vec = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 targetList = [v for v in targetList if not v.strip() == '']
 
 
-
 lst = ['fsd', 'gf', '  ', 'dsf', ' ']
 # [x for x in lst if x.strip() != '']
 [x for x in lst if x.strip()]
 # ['fsd', 'gf', 'dsf']
 
-
+tuple(x for x in ['d', '1', 'f', '5'] if x.isdigit())
+# ('1', '5')
 
 pattern = [('.|.' * (2 * i + 1)).center(m, '-') for i in range(n // 2)]
 print('\n'.join(pattern + ['WELCOME'.center(m, '-')] + pattern[::-1]))
-

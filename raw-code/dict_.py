@@ -83,6 +83,41 @@ pprint(my_dict)
 
 
 
+
+
+# collections.Counter lets you find the most common
+# elements in an iterable:
+import collections
+c = collections.Counter('helloworld')
+c
+# Counter({'l': 3, 'o': 2, 'e': 1, 'd': 1, 'h': 1, 'r': 1, 'w': 1})
+
+c.most_common(3)
+# [('l', 3), ('o', 2), ('e', 1)]
+
+collections.Counter(list).most_common(3)    # from collection import Counter
+collections.Counter(a).most_common(1)[0][1]
+
+sum(c.values())                 # total of all counts
+c.clear()                       # reset all counts
+list(c)                         # list unique elements
+set(c)                          # convert to a set
+dict(c)                         # convert to a regular dictionary
+c.items()                       # convert to a list of (elem, cnt) pairs
+Counter(dict(list_of_pairs))    # convert from a list of (elem, cnt) pairs
+c.most_common()[:-n-1:-1]       # n least common elements
++c                              # remove zero and negative counts
+
+
+# d_words = collections.defaultdict(int)
+# for word in arr:
+#     d_words[word] += 1
+d_words = collections.Counter(arr)  # two times faster
+
+
+
+
+
 # The get() method on dicts
 # and its "default" argument
 name_for_userid = {
@@ -123,3 +158,32 @@ dispatch_dict('mul', 2, 8)
 
 dispatch_dict('unknown', 2, 8)
 # None
+
+
+
+# docs.python.org/3/library/collections.html#ordereddict-examples-and-recipes
+class LastUpdatedOrderedDict(OrderedDict):
+    'Store items in the order the keys were last added'
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, value)
+        super().move_to_end(key)
+
+
+class LRU(OrderedDict):
+    'Limit size, evicting the least recently looked-up key when full'
+
+    def __init__(self, maxsize=128, *args, **kwds):
+        self.maxsize = maxsize
+        super().__init__(*args, **kwds)
+
+    def __getitem__(self, key):
+        value = super().__getitem__(key)
+        self.move_to_end(key)
+        return value
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, value)
+        if len(self) > self.maxsize:
+            oldest = next(iter(self))
+            del self[oldest]

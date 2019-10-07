@@ -100,6 +100,9 @@ list(enumerate('abc', 1))
 # [(1, 'a'), (2, 'b'), (3, 'c')]
 
 
+tuple(filter(lambda x: x.isdigit(), ['d', '1', 'f', '5']))
+# ('1', '5')
+
 targetList = filter(lambda x: len(x) > 0, targetList)
 
 
@@ -236,6 +239,21 @@ list(filter(is_coprime, range(1, 21)))
 
 
 
+(*itertools.combinations_with_replacement('ABC', 2),)
+# (('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C'))
+(*map(collections.Counter, itertools.combinations_with_replacement('ABC', 2)),)
+# (Counter({'A': 2}),
+#  Counter({'A': 1, 'B': 1}),
+#  Counter({'A': 1, 'C': 1}),
+#  Counter({'B': 2}),
+#  Counter({'B': 1, 'C': 1}),
+#  Counter({'C': 2}))
+
+
+
+
+
+
 
 s = 'abcdefghi'
 [*zip(s, s, s)]
@@ -275,7 +293,6 @@ if all((x, y, z)):
 
 
 
-
 # How to sort a Python dict by value
 # (== get a representation sorted by value)
 xs = {'a': 4, 'b': 3, 'c': 2, 'd': 1}
@@ -296,3 +313,10 @@ pairs
 
 functools.reduce(lambda x, y: y**x, reversed(arr))
 # (3, 2, 2) -> 3**(2**2) -> 81
+
+
+# Note, many of the above recipes can be optimized by replacing global lookups
+# with local variables defined as default values. For example,
+# the dotproduct recipe can be written as:
+def dotproduct_(vec1, vec2, sum=sum, map=map, mul=operator.mul):
+    return sum(map(mul, vec1, vec2))

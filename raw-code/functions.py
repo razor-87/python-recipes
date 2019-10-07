@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
+def timeit_(param: str, n: int = 10000) -> float:
+    from timeit import timeit
+    return timeit(param, number=n, globals=globals())
+
+
 def unique(seq, idfun=repr):
     seen = {}
     return [seen.setdefault(idfun(e), e) for e in seq if idfun(e) not in seen]

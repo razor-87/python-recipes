@@ -322,9 +322,7 @@ objects = [1, [2], 1, [2], 3]
 len({id(el) for el in objects})  # len(set(id(el) for el in objects))
 # 4
 
-tuple(filter(lambda x: x.isdigit(), ['d', '1', 'f', '5']))
-tuple(x for x in ['d', '1', 'f', '5'] if x.isdigit())
-# ('1', '5')
+
 
 
 pi: float = 3.142
@@ -455,8 +453,6 @@ print(now.strftime("%Y-%m-%d %H:%M:%S"))
 
 
 
-
-
 # "is" vs "=="
 # • "==" evaluates to True if the objects
 #   referred to by the variables are equal
@@ -532,19 +528,6 @@ list(range(*args))
 
 
 
-
-# collections.Counter lets you find the most common
-# elements in an iterable:
-import collections
-c = collections.Counter('helloworld')
-c
-# Counter({'l': 3, 'o': 2, 'e': 1, 'd': 1, 'h': 1, 'r': 1, 'w': 1})
-
-c.most_common(3)
-# [('l', 3), ('o', 2), ('e', 1)]
-
-collections.Counter(list).most_common(3)    # from collection import Counter
-collections.Counter(a).most_common(1)[0][1]
 
 
 

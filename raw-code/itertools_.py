@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-08-01 11:08:22
-# @Last Modified by:   razor87
-# @Last Modified time: 2019-10-04 20:05:32
 import collections
 import itertools
 import operator
@@ -244,8 +240,6 @@ for p in itertools.permutations('ABCD'):
 # ('D', 'C', 'B', 'A')
 
 lst = list(itertools.zip_longest('ABCD', 'xy', fillvalue='-'))
-print(lst)
-
 # Ax By C- D-
 
 
@@ -490,10 +484,3 @@ def nth_combination(iterable, r, index):
             c, n = c * (n - r) // n, n - 1
         result.append(pool[-1 - n])
     return tuple(result)
-
-
-# Note, many of the above recipes can be optimized by replacing global lookups
-# with local variables defined as default values. For example,
-# the dotproduct recipe can be written as:
-def dotproduct_(vec1, vec2, sum=sum, map=map, mul=operator.mul):
-    return sum(map(mul, vec1, vec2))
