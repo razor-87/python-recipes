@@ -130,6 +130,20 @@ f(3)
 
 
 
+def my_decorator(f):
+    from functools import wraps
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        print('Calling decorated function')
+        return f(*args, **kwds)
+    return wrapper
+
+@my_decorator
+def example():
+    """Docstring"""
+    print('Called example function')
+
+
 def first_decorator(func):
     def wrapped():
         print('Inside first_decorator product')

@@ -238,6 +238,10 @@ list(filter(is_coprime, range(1, 21)))
 (int)(num) == int(num)
 
 
+sorted(arr, key=lambda x: (len(x), x))
+sorted(collections.Counter(s).most_common(24), key=lambda x: (-x[1], x))[:3]
+
+
 
 (*itertools.combinations_with_replacement('ABC', 2),)
 # (('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C'))

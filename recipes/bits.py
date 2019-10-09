@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-07 10:40:05
+# @Last Modified time: 2019-10-09 20:09:28
 
 bin(0x7F)
 # '0b1111111'
@@ -40,6 +40,9 @@ bin(255)[2:], len(bin(255)[2:])
 bin(100).count('1')
 # 3
 
+(100).bit_length()
+# 7
+
 (0xFF00FF << 8) == (0xFF00FF * 2**8)  # (16711935 << 8) == (16711935 * 2**8)
 # True
 
@@ -76,6 +79,13 @@ hex(sys.maxsize)
         0xCA % 2,
     )))
 # '11001010'
+
+4 << 3   # 4 * (2**3) -> 4 * 8
+# 32
+64 >> 1  # 64 // (2**1)
+# 32
+1 << 4  # 2**4
+# 16
 
 
 def reverse_bits(x):
@@ -165,6 +175,11 @@ def divide_by_bits(x, y):
     return quotient
 
 
+def divide(n, m):
+    # XXX: Exact division only by powers of two
+    return n >> (m.bit_length() - 1), n & (m - 1)  # quotient, remainder
+
+
 def power_by_bits(a, b):
     result = 1
     while b:
@@ -195,33 +210,6 @@ def swap_bits(x, i, j):
     if low ^ high:
         x ^= (1 << i) | (1 << j)
     return f"{x_old} -> {bin(x)}"
-
-
-
-
-import math
-# function to print remainder and
-# quotient
-def divide(n, m):
-
-    # print Remainder by
-    # n AND (m-1)
-    print("Remainder = ",
-                  ((n) &(m-1)))
-
-    # print quotient by
-    # right shifting n by
-    # (log2(m)) times
-    print("Quotient = " ,(n >>
-          (int)(math.log2(m))))
-
-# driver program
-n = 43
-m = 8
-divide(n, m)
-
-
-
 
 
 # https://catonmat.net/low-level-bit-hacks

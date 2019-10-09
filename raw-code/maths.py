@@ -31,6 +31,9 @@ pow(3, 4, 5)
 # integer quotient of division with rounding up
 (m + n - 1) // n
 
+n / 9
+# 0.nnnnnnnnnnn
+
 
 
 
@@ -42,10 +45,60 @@ combinations = permutations // math.factorial(k)  # nCk
 
 
 
-math.isclose()
+# Return True if the values a and b are close to each other and False otherwise.
+math.isclose(a, b, *, rel_tol=1e-09, abs_tol=0.0)
+
+
+# base-2 logarithm of x
+# slow
+math.log(x, 2.0)  # -> float
+math.log2(x)  # -> float
+# fast
+math.frexp(x)[1] - 1  # -> int
+# faster
+n.bit_length() - 1  # -> int
 
 
 
+def last_digit(n):
+    # Get the last digit of a number
+    return n % 10
+
+
+def digits(n):
+    # How to get the digits of an integer
+    while n:
+        yield n % 10
+        n /= 10
+
+
+def sum_digits(n):
+    # Sum of all digits of a number
+    s = 0
+    while n:
+        s += n % 10
+        n /= 10
+    return s
+
+
+def length_digits(n):
+    # Number of digits in a number
+    s = 0
+    while n:
+        s += 1
+        n /= 10
+    return s
+
+
+def reverse_digits(n):
+    # Reverse digits in a number
+    s = 0
+    k = 10**(length_digits(n) - 1)
+    while n:
+        s += k * (n % 10)
+        n /= 10
+        k /= 10
+    return s
 
 
 def rotate(vector, angle):
@@ -59,22 +112,18 @@ def rotate(vector, angle):
     return mat @ vector
 
 
-
 def struct_inverse_sqrt(number):
     import struct
     threehalfs = 1.5
     x2 = number * 0.5
     y = number
-
     packed_y = struct.pack('f', y)
     i = struct.unpack('i', packed_y)[0]  # treat float's bytes as int
     i = 0x5f3759df - (i >> 1)            # arithmetic with magic number
     packed_i = struct.pack('i', i)
     y = struct.unpack('f', packed_i)[0]  # treat int's bytes as float
-
     y = y * (threehalfs - (x2 * y * y))  # Newton's method
     return y
-
 
 
 def tower_of_powers(arr):
@@ -86,3 +135,8 @@ def tower_of_powers(arr):
     """
     from functools import reduce
     return reduce(lambda x, y: y**x, reversed((3, 2, 2, 2)))
+
+
+def approx_pi2(n=10000000):
+    val = sum(1/k**2 for k in range(1, n+1))
+    return (6 * val)**0.5

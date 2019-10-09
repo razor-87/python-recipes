@@ -58,15 +58,13 @@ def sqrt_newton(n):
 
 
 def i_sqrt(n):
-    i = n.bit_length() >> 1  # i = floor( (1 + floor(log_2(n))) / 2 )
+    i = n.bit_length() >> 1  # i = floor((1 + floor(log_2(n))) / 2)
     m = 1 << i  # m = 2^i
-    #
     # Fact: (2^(i + 1))^2 > n, so m has at least as many bits
     # as the floor of the square root of n.
     #
     # Proof: (2^(i+1))^2 = 2^(2i + 2) >= 2^(floor(log_2(n)) + 2)
     # >= 2^(ceil(log_2(n) + 1) >= 2^(log_2(n) + 1) > 2^(log_2(n)) = n. QED.
-    #
     while m * m > n:
         m >>= 1
         i -= 1

@@ -222,9 +222,6 @@ xP == hP and text[:m] == P and print(0, end=' ')
 
 
 
-
-
-
 db = MySQLdb.connect("localhost", "username", "password", "dbname")
 cursor = db.cursor()
 sql = "SELECT `name`, `age` FROM `ursers` ORDER BY `age` DESC"
@@ -253,22 +250,6 @@ a.tostring()
 
 
 
-
-
-python -m timeit -s 'a = (10, 20, 30)' 'a[1]'
-# 10000000 loops, best of 3: 0.0304 usec per loop
-python -m timeit -s 'a = [10, 20, 30]' 'a[1]'
-# 10000000 loops, best of 3: 0.0309 usec per loop
-
-python -m timeit -s 'a = (10, 20, 30)' 'x, y, z = a'
-# 10000000 loops, best of 3: 0.0249 usec per loop
-python -m timeit -s 'a = [10, 20, 30]' 'x, y, z = a'
-# 10000000 loops, best of 3: 0.0251 usec per loop
-
-python -m timeit -n 100 -s "s = 'A'*10000; import textwrap; textwrap.fill(s)"
-# 100 loops, best of 5: 12.3 nsec per loop
-python -m timeit -s "s = 'A'*10000; import textwrap; textwrap.fill(s)"
-# 20000000 loops, best of 5: 11.8 nsec per loop
 
 
 import timeit
@@ -310,6 +291,8 @@ timeit.timeit('sorted(int(s) for s in set(arr))', number=1000000, globals=global
 
 
 
+
+
 assert issubclass(bool, int)
 assert isinstance(lst, list)
 assert isinstance(lst, tuple), 'TypeError'
@@ -324,11 +307,6 @@ len({id(el) for el in objects})  # len(set(id(el) for el in objects))
 
 
 
-
-pi: float = 3.142
-deq: Deque = collections.deque()
-
-
 hasattr(a, 'attr')
 
 getattr(d, cmd)(*args)
@@ -339,11 +317,6 @@ tuple(getattr(deq, el[0])() if len(el) == 1 else getattr(deq, el[0])(el[1])
 func.__closure__.cell_contents
 
 __all__ = []
-
-
-
-
-
 
 
 
@@ -448,6 +421,54 @@ print(now.strftime("%Y-%m-%d %H:%M:%S"))
 
 
 
+
+# Attribute access on nullable value
+a and a.x
+a and a.f()
+match = re.match(r, s)
+return match and match.group(0)
+
+# Finding first matching element
+try:
+    x = next(i for i, n in enumerate(l) if n > 0)
+except StopIteration:
+    print('No positive numbers')
+else:
+    print('The index of the first positive number is', x)
+
+# Truncating
+del l[j:]
+del l[:i]
+# Anti-idiom:
+l = l[:j]
+l = l[i:]
+
+# Sorted list from an iterable
+d = {'a': 1, ...}
+l = sorted(d)
+
+# Single-character match
+def valid_sign(sign):
+    return sign in ('+', '-')
+
+# Building a string
+s = ''.join(f(x) for x in l)
+
+# Dict from parallel sequences of keys and values
+dict(zip(keys, values))
+
+# Data type choice
+set1 = set([tuple(entry.items()) for entry in list1])
+set2 = set([tuple(entry.items()) for entry in list2])
+common = set1.intersection(set2)
+common = [dict(entry) for entry in common]
+
+
+
+
+# Membership testing with sets and dictionaries is much faster, O(1), than
+# searching sequences, O(n). When testing "a in b", b should be a set or
+# dictionary instead of a list or tuple.
 
 
 
