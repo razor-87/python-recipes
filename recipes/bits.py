@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-09 20:09:28
+# @Last Modified time: 2019-10-11 13:26:05
 
 bin(0x7F)
 # '0b1111111'
@@ -80,12 +80,27 @@ hex(sys.maxsize)
     )))
 # '11001010'
 
-4 << 3   # 4 * (2**3) -> 4 * 8
+1 << 1
+# 2
+4 << 3  # 4 * (2**3) -> 4 * 8
 # 32
 64 >> 1  # 64 // (2**1)
 # 32
-1 << 4  # 2**4
+
+2 << 1  # 2**2 == 1 << 2
+# 4
+(3 << 1) + 3  # 3**2
+# 9
+4 << 2  # 4**2 == 1 << 4 == 2 << 3
 # 16
+(5 << 2) + 5  # 5**2
+# 25
+(6 << 2) + (6 << 1)  # 6**2
+# 36
+(7 << 2) + (7 << 1) + 7  # 7**2
+# 49
+(8 << 3)  # 8**2 == 2**6 == 1 << 6 == 2 << 5
+# 64
 
 
 def reverse_bits(x):
@@ -222,18 +237,37 @@ def int_to_bin(num, bits=8):
     print(r)
 
 
-def check_even_or_odd(i):
+def check_even_or_odd(i: int) -> bool:
     """
     Bit Hack #1. Check if the integer is even or odd.
+
+    >>> check_even_or_odd(0)
+    True
+    >>> check_even_or_odd(1)
+    False
+    >>> check_even_or_odd(2)
+    True
+    >>> check_even_or_odd(101)
+    False
     """
-    return 'even' if i & 1 == 0 else 'odd'
+    return i & 1 == 0
 
 
-def test_nth_bit_is_set(i, n):
+def test_nth_bit_is_set(i: int, n: int) -> bool:
     """
     Bit Hack #2. Test if the n-th bit is set
+
+    10 -> 0b1010
+    >>> test_nth_bit_is_set(10, 0)
+    False
+    >>> test_nth_bit_is_set(10, 1)
+    True
+    >>> test_nth_bit_is_set(10, 4)
+    True
+    >>> test_nth_bit_is_set(10, 5)
+    False
     """
-    return 'is set' if i & (1 << n) else 'is not set'
+    return bool(i & (1 << n))
 
 
 def set_nth_bit(i, n):

@@ -242,9 +242,15 @@ sorted(arr, key=lambda x: (len(x), x))
 sorted(collections.Counter(s).most_common(24), key=lambda x: (-x[1], x))[:3]
 
 
+len((*filter(lambda x: x & 1 == 0, range(1001)),))
+# 501
+sum(x & 1 == 0 for x in range(1001))
+# 501
 
-(*itertools.combinations_with_replacement('ABC', 2),)
-# (('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C'))
+functools.reduce(operator.mul, ((3 << 1) + 3 for _ in range(1, 101)))  # 3**200
+# 265613988875874769338781322035779626829233452653394495974574961739092490901302182994384699044001
+
+
 (*map(collections.Counter, itertools.combinations_with_replacement('ABC', 2)),)
 # (Counter({'A': 2}),
 #  Counter({'A': 1, 'B': 1}),
@@ -252,9 +258,6 @@ sorted(collections.Counter(s).most_common(24), key=lambda x: (-x[1], x))[:3]
 #  Counter({'B': 2}),
 #  Counter({'B': 1, 'C': 1}),
 #  Counter({'C': 2}))
-
-
-
 
 
 

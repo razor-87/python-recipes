@@ -127,10 +127,13 @@ vec = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 # [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
-[x for x in arr if x > 0]
 
-[x for x in range(16) if x % 2 == 0]
-# [0, 2, 4, 6, 8, 10, 12, 14]
+(*(x for x in range(21) if x & 1 == 0),)
+# (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20)
+
+(*(x for x in range(21) if x & 1 != 0),)
+# (1, 3, 5, 7, 9, 11, 13, 15, 17, 19)
+
 
 targetList = [v for v in targetList if not v.strip() == '']
 

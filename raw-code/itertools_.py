@@ -242,6 +242,9 @@ for p in itertools.permutations('ABCD'):
 lst = list(itertools.zip_longest('ABCD', 'xy', fillvalue='-'))
 # Ax By C- D-
 
+(*itertools.combinations_with_replacement('ABC', 2),)
+# (('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C'))
+
 
 # https://docs.python.org/3/library/itertools.html#itertools-recipes
 def take(n, iterable):

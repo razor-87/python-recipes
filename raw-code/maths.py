@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import math
 
-num = 1.5e2    # == 1.5 * (10 ** 2)
-num = 100_000_000   # Only >=3.6
+1.5e2    # == 1.5 * (10 ** 2)
+100_000_000   # Only >=3.6
 
 # cubic root
 round(x**(1/3))
 
-math.gcd(100, 75)
+math.gcd(100, 75)  # gcd
 # 25
 
 # n(n+1)/2
@@ -23,9 +23,14 @@ divmod(x, y)  # (x // y, x % y)
 divmod(177, 10)
 # (17, 7)
 
-pow(x, y, m)  # x**y mod m
+pow(x, y, m)  # x**y mod m - Modular exponentiation
 pow(3, 4, 5)
 # 1
+
+
+3**200 % 50
+# 1
+
 
 
 # integer quotient of division with rounding up

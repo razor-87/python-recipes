@@ -3,6 +3,30 @@ import io
 import sys
 
 
+# 'r'  open for reading (default)
+# 'w'  open for writing, truncating the file first
+# 'x'  open for exclusive creation, failing if the file already exists
+# 'a'  open for writing, appending to the end of the file if it exists
+# 'b'  binary mode
+# 't'  text mode (default)
+# '+'  open a disk file for updating (reading and writing)
+
+# 'r'  This is the default mode. It Opens file for reading.
+# 'w'  This Mode Opens file for writing.
+#      If file does not exist, it creates a new file.
+#      If file exists it truncates the file.
+# 'x'  Creates a new file. If file already exists, the operation fails.
+# 'a'  Open file in append mode.
+#      If file does not exist, it creates a new file.
+# 't'  This is the default mode. It opens in text mode.
+# 'b'  This opens in binary mode.
+# '+'  This will open a file for reading and writing (updating)
+
+
+
+
+
+
 sys.stdin
 sys.stdin.read()
 sys.stdin.readline()

@@ -13,6 +13,7 @@ abs.__doc__
 
 num = 13
 num.__add__(2)
+# 15
 dir(num)
 
 func.__code__.co_code
@@ -150,41 +151,23 @@ print('y', y, id(y), id(y[0]), id(y[1]))
 
 
 
-
-
-bool(bool)    # True
-bool(12)    # True
-bool('asdsa')    # True
-bool(0)    # False
-bool('')    # False
-bool(None)    # False
-answer = None    # if not answer: (True), if answer is None:
-
-
-
-
-
-
-
-import ast
-expr = "[1, 2, 3]"
-my_list = ast.literal_eval(expr)
-
-
-import pdb
-pdb.set_trace()
-
-if n in [1, 4, 5, 6]:
-    pass
-
-a = [1, 2, 3, 4]
-a[::-1]
+bool(bool)          # True
+bool(12)            # True
+bool('asdsa')       # True
+bool(0)             # False
+bool('')            # False
+bool(None)          # False
+answer = None
+answer is None      # True
+answer is not None  # True
 
 
 
 
 
-
+# Since Python 3.5
+[1, 2, *[3, 4]]
+# [1, 2, 3, 4]
 
 
 
@@ -196,9 +179,7 @@ a, *rest, b = range(5)
 *rest, a, b = range(5)
 
 
-# Since Python 3.5
-[1, 2, *[3, 4]]
-# [1, 2, 3, 4]
+
 
 
 

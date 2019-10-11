@@ -57,3 +57,22 @@ p.with_suffix('.jpg') # only change the extension, but keep the folder and the n
 p.chmod(mode)
 p.rmdir()
 
+
+
+p_text = Path('my_text_file')
+p_text.write_text('Text file contents')
+# 18
+p_text.read_text()
+# 'Text file contents'
+p_binary = Path('my_binary_file')
+p_binary.write_bytes(b'Binary file contents')
+# 20
+p_binary.read_bytes()
+# b'Binary file contents'
+
+
+cur_path = Path(".")
+FILE_PATTERN = "*.txt"
+path_list = cur_path.glob(FILE_PATTERN)
+print(list(path_list))
+
