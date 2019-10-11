@@ -1,24 +1,20 @@
 # -*- coding: utf-8 -*-
+# @Author: razor87
+# @Date:   2019-10-04 19:15:19
+# @Last Modified by:   razor87
+# @Last Modified time: 2019-10-11 16:49:00
+import collections
 
-from collections import defaultdict
-defaultdict(int)
-defaultdict(list)
-defaultdict(set)
 
-
-my_dict = {}
-isinstance(my_dict, abc.Mapping)
-
+collections.defaultdict(int)
+collections.defaultdict(list)
+collections.defaultdict(set)
 
 d = {'flux': 1}
 d.clear()
-li = ['spam', 'egg', 'spam']
-li.clear()
-
 
 {}.fromkeys(chunk)
 # 'AAB' -> {'A': None, 'B': None}
-
 
 
 dict.fromkeys(range(5), None)
@@ -78,16 +74,8 @@ z
 
 
 
-from pprint import pprint
-pprint(my_dict)
-
-
-
-
-
 # collections.Counter lets you find the most common
 # elements in an iterable:
-import collections
 c = collections.Counter('helloworld')
 c
 # Counter({'l': 3, 'o': 2, 'e': 1, 'd': 1, 'h': 1, 'r': 1, 'w': 1})
@@ -113,9 +101,6 @@ c.most_common()[:-n-1:-1]       # n least common elements
 # for word in arr:
 #     d_words[word] += 1
 d_words = collections.Counter(arr)  # two times faster
-
-
-
 
 
 # The get() method on dicts

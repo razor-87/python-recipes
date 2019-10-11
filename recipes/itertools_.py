@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
+# @Author: razor87
+# @Date:   2019-08-01 11:08:22
+# @Last Modified by:   razor87
+# @Last Modified time: 2019-10-11 17:01:43
 import collections
 import itertools
 import operator
 import random
 
-itertools.islice()
-itertools.count()
 
 print(*itertools.combinations([1, 2, 3], 2))
+# (1, 2) (1, 3) (2, 3)
 print(*itertools.permutations([1, 2, 3]))
+# (1, 2, 3) (1, 3, 2) (2, 1, 3) (2, 3, 1) (3, 1, 2) (3, 2, 1)
 print(*itertools.accumulate([1, 4, 3, 5], max))
-
+# 1 4 4 5
 for i in itertools.count(3):
     print(i)
     if i >= 11:
@@ -36,11 +40,7 @@ list(itertools.compress('abcd', [0, 1, 1, 0]))
 list(itertools.accumulate(range(1, 11), operator.mul))  # list of factorials
 # [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
 
-list(itertools.chain.from_iterable([[1, 2, 3], [
-    4,
-    5,
-    6,
-], [7, 8, 9]]))
+list(itertools.chain.from_iterable([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
 list(itertools.chain.from_iterable((range(1, 4), range(4, 7), range(7, 10))))
 # [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -211,7 +211,6 @@ for c in itertools.chain(range(3), range(12, 15)):
 
 # itertools.permutations() generates permutations
 # for an iterable. Time to brute-force those passwords ;-)
-import itertools
 for p in itertools.permutations('ABCD'):
     print(p)
 # ('A', 'B', 'C', 'D')

@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+import dis
+import sys
+import array
+import numpy as np
+
 
 help(5)
 # Help on int object:
@@ -11,15 +16,10 @@ abs.__doc__
 # 'abs(number) -> number
 # Return the absolute value of the argument.
 
-num = 13
-num.__add__(2)
-# 15
-dir(num)
 
-func.__code__.co_code
 
-import dis
 dis.dis(func)
+func.__code__.co_code
 
 dis.dis(compile("(10, 'abc')", '', 'eval'))
 dis.dis(compile("[10, 'abc']", '', 'eval'))
@@ -69,11 +69,6 @@ sys.modules
 
 
 
-
-import sys
-import array
-import numpy as np
-
 sys.getrefcount
 
 sys.getsizeof(range(10))
@@ -118,28 +113,22 @@ asizeof.asizeof(set(range(10)))
 
 
 
-hash(tuple())
-
 class SameHash():
-    def __hash__(self):
-        return 1
+    def __hash__(self): return 1
 
-a = SameHash()
-b = SameHash()
-a == b    # False
-hash(a), hash(b)    # (1, 1)
+a, b = SameHash(), SameHash()
+a == b
+# False
+a is b
+# False
+hash(a), hash(b)
+# (1, 1)
+id(a), id(b)
+# (109078728, 109077320)
 
+hash(())  # hash(tuple())
+# 3527539
 
-# Python Riddle: 👻 it is a mystery
-# What will this expression evaluate to?
-{True: 'yes', 1: 'no', 1.0: 'maybe'}
-# {True: 'maybe'}
-True == 1 == 1.0    # True
-hash(True), hash(1), hash(1.0)    # (1, 1, 1)
-
-print(id(False), id(True))
-print(id(1 != 1), id(1 == 1))
-print(id(bool()), id(bool(1)))
 
 from copy import deepcopy
 x = [[0, 0], [1, 1]]
@@ -148,7 +137,56 @@ print('x', x, id(x), id(x[0]), id(x[1]))
 print('y', y, id(y), id(y[0]), id(y[1]))
 
 
+li = ['spam', 'egg', 'spam']
+li.clear()
 
+
+# Since Python 3.5
+[1, 2, *[3, 4]]
+# [1, 2, 3, 4]
+
+
+a, b, c = range(3)
+values = range(5)
+a, b, _, _, _ = values
+a, b, *rest = values
+a, *rest, b = range(5)
+*rest, a, b = range(5)
+
+
+[*iterable]
+# iterable -> list
+(*iterable,)
+# iterable -> tuple
+
+import array
+a = array.array('c', s)
+print(a)
+# array('c', 'Hello, world')
+a[0] = 'y'
+print(a)
+# array('c', 'yello, world')
+a.tostring()
+# 'yello, world'
+
+
+
+
+# Python Riddle: 👻 it is a mystery
+# What will this expression evaluate to?
+{True: 'yes', 1: 'no', 1.0: 'maybe'}
+# {True: 'maybe'}
+True == 1 == 1.0
+# True
+hash(True), hash(1), hash(1.0)
+# (1, 1, 1)
+
+print(id(False), id(True))
+# 8791482468720 8791482468688
+print(id(1 != 1), id(1 == 1))
+# 8791482468720 8791482468688
+print(id(bool()), id(bool(1)))
+# 8791482468720 8791482468688
 
 
 bool(bool)          # True
@@ -162,21 +200,12 @@ answer is None      # True
 answer is not None  # True
 
 
-
-
-
-# Since Python 3.5
-[1, 2, *[3, 4]]
-# [1, 2, 3, 4]
-
-
-
-a, b, c = range(3)
-values = range(5)
-a, b, _, _, _ = values
-a, b, *rest = values
-a, *rest, b = range(5)
-*rest, a, b = range(5)
+assert issubclass(bool, int)
+assert isinstance(lst, list)
+assert isinstance(my_dict, abc.Mapping)
+assert isinstance(lst, tuple), 'TypeError'
+assert id(obj1) == id(obj2)  # obj1 is obj2
+assert el in seq
 
 
 
@@ -184,21 +213,14 @@ a, *rest, b = range(5)
 
 
 # [expression]?[on_true]:[on_false]
-[on_true] if [expression] else [on_false]
+[on_true] if [expression] else [on_false]  # Ternary operator
 
 result = process(x) if is_valid(x) else print('invalid item: ', x)
-
-score_1, score_2 = 5, 0
-winner = "Argentina" if score_1 > score_2 else "Jamaica"    # Ternary operator
 
 number = count if count % 2 else count - 1
 name = user.name() if user is not None else 'Guest'
 
 xP == hP and text[:m] == P and print(0, end=' ')
-
-
-
-
 
 
 
@@ -211,21 +233,6 @@ results = cursor.fetchall()
 for row in results:
     print(row[0] + row[1])
 db.close()
-
-
-
-
-import array
-a = array.array('c', s)
-print(a)
-# array('c', 'Hello, world')
-a[0] = 'y'
-print(a)
-# array('c', 'yello, world')
-a.tostring()
-# 'yello, world'
-
-
 
 
 
@@ -272,38 +279,7 @@ timeit.timeit('sorted(int(s) for s in set(arr))', number=1000000, globals=global
 
 
 
-
-
-assert issubclass(bool, int)
-assert isinstance(lst, list)
-assert isinstance(lst, tuple), 'TypeError'
-assert id(obj1) == id(obj2) # obj1 is obj2
-assert el in seq
-
-
-# amount different mutable/immutable elements
-objects = [1, [2], 1, [2], 3]
-len({id(el) for el in objects})  # len(set(id(el) for el in objects))
-# 4
-
-
-
-hasattr(a, 'attr')
-
-getattr(d, cmd)(*args)
-tuple(getattr(deq, el[0])() if len(el) == 1 else getattr(deq, el[0])(el[1])
-      for el in raw_commands)
-
-
-func.__closure__.cell_contents
-
 __all__ = []
-
-
-
-
-[*iterable]
-(*iterable,)
 
 
 
@@ -320,6 +296,43 @@ class Bunch:
         self.__dict__.update(kwds)
 
 point = Bunch(datum=y, squared=y*y, coord=x)
+
+
+
+
+def f1(): print("True"); return True
+def f2(): print("False"); return False
+def f3(): print("True"); return True
+
+
+any((f1(), f2(), f3()))
+# True
+# False
+# True
+# True
+
+all((f1(), f2(), f3()))
+# True
+# False
+# True
+# False
+
+f1() or f2() or f3()
+# True
+# True
+
+f1() and f2() and f3()
+# True
+# False
+# False
+
+
+
+# amount different mutable/immutable elements
+objects = [1, [2], 1, [2], 3]
+len({id(el) for el in objects})  # len(set(id(el) for el in objects))
+# 4
+
 
 
 # s = ''
@@ -351,6 +364,9 @@ print(pattern_in_string(t, s) if t in s else 0)
 # if c > 0:
 #     res += 1
 res = (a > 0) + (b > 0) + (c > 0)
+
+
+
 
 
 

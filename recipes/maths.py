@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
+# @Author: razor87
+# @Date:   2019-10-04 19:52:29
+# @Last Modified by:   razor87
+# @Last Modified time: 2019-10-11 17:02:18
 import math
 
 1.5e2    # == 1.5 * (10 ** 2)
 100_000_000   # Only >=3.6
+
+num = 13
+num.__add__(2)
+# 15
 
 # cubic root
 round(x**(1/3))
@@ -32,7 +40,6 @@ pow(3, 4, 5)
 # 1
 
 
-
 # integer quotient of division with rounding up
 (m + n - 1) // n
 
@@ -40,14 +47,11 @@ n / 9
 # 0.nnnnnnnnnnn
 
 
-
-
 n, k = 52, 2
 permutations = math.factorial(n) // math.factorial(n - k)  # nPk
 # 2652
 combinations = permutations // math.factorial(k)  # nCk
 # 1326
-
 
 
 # Return True if the values a and b are close to each other and False otherwise.
@@ -62,7 +66,6 @@ math.log2(x)  # -> float
 math.frexp(x)[1] - 1  # -> int
 # faster
 n.bit_length() - 1  # -> int
-
 
 
 def last_digit(n):

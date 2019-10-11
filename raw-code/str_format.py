@@ -6,6 +6,14 @@ ord('f')
 chr(102)
 # 'f'
 
+bytes("hello", "ascii")
+# b'hello'
+
+bytes.hex()
+
+import binascii
+binascii.hexlify(data)
+
 
 word.strip('.,!').lower()
 
@@ -121,8 +129,7 @@ print('\n'.join(['0', '1', '2']))
 # 2
 
 
-bytes("hello", "ascii")
-# b'hello'
+
 
 
 ''.join(reversed('aaabbb'))
