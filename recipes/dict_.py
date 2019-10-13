@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:15:19
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-11 16:49:00
+# @Last Modified time: 2019-10-13 18:05:24
 import collections
 
 
@@ -101,6 +101,26 @@ c.most_common()[:-n-1:-1]       # n least common elements
 # for word in arr:
 #     d_words[word] += 1
 d_words = collections.Counter(arr)  # two times faster
+
+
+# Iterator over elements repeating each as many times as its count.
+c = Counter('ABCABC')
+sorted(c.elements())
+# ['A', 'A', 'B', 'B', 'C', 'C']
+
+# Knuth's example for prime factors of 1836:  2**2 * 3**3 * 17**1
+prime_factors = Counter({2: 2, 3: 3, 17: 1})
+product = 1
+for factor in prime_factors.elements():     # loop over factors
+    product *= factor                       # and multiply them
+product
+# 1836
+# Note, if an element's count has been set to zero or is a negative
+# number, elements() will ignore it.
+
+
+
+
 
 
 # The get() method on dicts

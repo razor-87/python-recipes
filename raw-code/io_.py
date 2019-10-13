@@ -22,8 +22,11 @@ sys.stdin.readlines()
 
 
 sys.stdin = io.StringIO("1\n2\n3\n4\n5\n6\n7\n8\n9")
+sys.stdin.getvalue()
+# '1\n2\n3\n4\n5\n6\n7\n8\n9'
 
 
+print(data, file=out, flush=True)
 
 
 f = open('data.txt')
@@ -151,6 +154,38 @@ f.close()
 
 
 
+def countdown(num_sec=3):
+    import time
+    for countdown in reversed(range(num_sec + 1)):
+        if countdown > 0:
+            print(countdown, end='...')
+            time.sleep(1)
+        else:
+            print('Go!')
+
+
+def spinning_wheel():
+    from itertools import cycle
+    from time import sleep
+    try:
+        for frame in cycle(r'-\|/-\|/'):
+            print('\r', frame, sep='', end='', flush=True)
+            sleep(0.2)
+    except KeyboardInterrupt:
+        return
+
+
+def progress(width=30):
+    from time import sleep
+    for percent in range(101):
+        left = width * percent // 100
+        right = width - left
+        print('\r[', '#' * left, ' ' * right, ']',
+              f' {percent:.0f}%',
+              sep='', end='', flush=True)
+        sleep(0.1)
+
+
 def f_open(filename='input.txt', mock=False):
     try:
         with open(filename) as f:
@@ -166,3 +201,26 @@ def f_open(filename='input.txt', mock=False):
 
 fake = '2\nA\nB : A\n1\nC C'
 print(f_open(mock=fake).read())
+
+
+
+def download(url, log=print):
+    log(f'Downloading {url}')
+    # ...
+
+def mock_print(message):
+    mock_print.last_message = message
+
+download('resource', mock_print)
+# assert 'Downloading resource' == mock_print.last_message
+
+
+def download_(url, stream=None):
+    print(f'Downloading {url}', file=stream)
+    # ...
+
+memory_buffer = io.StringIO()
+download_('app.js', memory_buffer)
+download_('style.css', memory_buffer)
+memory_buffer.getvalue()
+# 'Downloading app.js\nDownloading style.css\n'

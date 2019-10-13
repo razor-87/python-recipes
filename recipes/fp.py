@@ -2,16 +2,10 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-11 17:01:15
+# @Last Modified time: 2019-10-12 17:34:13
 import functools
 import operator
 
-
-func.__closure__.cell_contents
-hasattr(a, 'attr')
-getattr(d, cmd)(*args)
-
-(int)(num) == int(num)
 
 # Math operations: add(), sub(), mul(), floordiv(), abs(), …
 # Logical operations: not_(), truth().

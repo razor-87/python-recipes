@@ -21,6 +21,12 @@ abs.__doc__
 dis.dis(func)
 func.__code__.co_code
 
+func.__closure__.cell_contents
+hasattr(a, 'attr')
+getattr(d, cmd)(*args)
+
+(int)(num) == int(num)
+
 dis.dis(compile("(10, 'abc')", '', 'eval'))
 dis.dis(compile("[10, 'abc']", '', 'eval'))
 
@@ -548,9 +554,6 @@ list(range(*args))
 
 
 
-
-
-
 # Python 3.3+ has a std
 # lib module for displaying
 # tracebacks even when Python
@@ -645,3 +648,173 @@ process_data(**x, **y)
 # 1 2 3 4
 process_data(**x, c=23, d=42)
 # 1 2 23 42
+
+
+
+
+# Append[1]        O(1)
+# Pop last         O(1)
+# Pop intermediate O(k)
+# Insert           O(n)
+# Delete Item      O(n)
+# How to use a Python list as a stack (LIFO):
+myStack = []
+myStack.append('a')
+myStack.append('b')
+myStack.append('c')
+myStack
+# ['a', 'b', 'c']
+myStack.pop()
+# 'c'
+myStack.pop()
+# 'b'
+myStack.pop()
+# 'a'
+myStack.pop()
+# Traceback (most recent call last):
+#   File "<console>", line 1, in <module>
+# IndexError: pop from empty list
+
+
+
+
+# append     O(1)
+# appendleft O(1)
+# pop        O(1)
+# popleft    O(1)
+# remove     O(1)
+from collections import deque
+
+# How to use collections.deque as a stack (LIFO):
+myStack = deque()
+myStack.append('a')
+myStack.append('b')
+myStack.append('c')
+myStack
+# deque(['a', 'b', 'c'])
+myStack.pop()
+# 'c'
+myStack.pop()
+# 'b'
+myStack.pop()
+# 'a'
+myStack.pop()
+# Traceback (most recent call last):
+#   File "<console>", line 1, in <module>
+# IndexError: pop from an empty deque
+
+# How to use collections.deque as a FIFO queue:
+q = deque()
+q.append('eat')
+q.append('sleep')
+q.append('code')
+q
+# deque(['eat', 'sleep', 'code'])
+q.popleft()
+# 'eat'
+q.popleft()
+# 'sleep'
+q.popleft()
+# 'code'
+q.popleft()
+# IndexError: "pop from an empty deque"
+
+
+
+# Support Threading
+from queue import LifoQueue
+
+# How to use queue.LifoQueue as a stack:
+myStack = LifoQueue()
+myStack.put('a')
+myStack.put('b')
+myStack.put('c')
+myStack
+# <queue.LifoQueue object at 0x7f408885e2b0>
+myStack.get()
+# 'c'
+myStack.get()
+# 'b'
+myStack.get()
+# 'a'
+myStack.get_nowait()  # myStack.get() <--- Blocks / waits forever...
+# Traceback (most recent call last):
+# File "<console>", line 1, in <module>
+# File "/usr/lib/python3.7/queue.py", line 198, in get_nowait
+#   return self.get(block=False)
+# File "/usr/lib/python3.7/queue.py", line 167, in get
+#   raise Empty
+# queue.Empty
+
+# How to use queue.Queue as a FIFO queue:
+q = Queue()
+q.put('eat')
+q.put('sleep')
+q.put('code')
+q
+# <queue.Queue object at 0x1070f5b38>
+q.get()
+# 'eat'
+q.get()
+# 'sleep'
+q.get()
+# 'code'
+q.get_nowait()
+# queue.Empty
+q.get()
+# Blocks / waits forever...
+
+
+# How to use multiprocessing.Queue as a FIFO queue:
+from multiprocessing import Queue
+q = Queue()
+q.put('eat')
+q.put('sleep')
+q.put('code')
+q
+# <multiprocessing.queues.Queue object at 0x1081c12b0>
+q.get()
+# 'eat'
+q.get()
+# 'sleep'
+q.get()
+# 'code'
+q.get()
+# Blocks / waits forever...
+
+
+
+
+
+
+# Avoiding branch prediction failure
+# There are many ways to help your code avoid branch prediction failure.
+# One way is to re-structure code so that conditional statements don’t appear
+# inside of loops. This can be done with clever bitwise operations or simple
+# code re-writes, e.g. changing
+for x in data:
+    if f(z):
+        g(x)
+    else:
+        g(x)
+
+# into
+if f(z):
+    for x in data:
+        g(x)
+else:
+    for x in data:
+        h(x)
+
+# This is somewhat cumbersome because we are duplicating logic
+# (i.e. the for-loop) but even this can be abstracted away:
+def loop_with(data, func):
+    for x in data:
+        func(x)
+
+loop_with(data, g if f(z) else h)
+
+
+
+
+
