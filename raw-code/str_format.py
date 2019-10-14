@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+
+from string import ascii_lowercase, punctuation
+ascii_lowercase
+# 'abcdefghijklmnopqrstuvwxyz'
+punctuation
+# '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+
 ord('f')
 # 102
 
@@ -20,19 +27,12 @@ word.strip('.,!').lower()
 ''.swapcase()
 "-".join(s.split())
 
-from string import ascii_lowercase
-list(ascii_lowercase)
-# ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-# 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
-
-width = len("{0:b}".format(number))
-print("{0:{w}n} {0:{w}o} {0:{w}X} {0:{w}b}".format(n, w=width))
-
 
 s.split('', 1)
 s.rsplit()
 string.splitlines()
+
+"111".zfill(10)
 
 
 example_string = r'File on disk C:\\'   # Raw string
@@ -44,11 +44,16 @@ print(word.count('e'))    # 5
 
 "3.14" in "3.1415926"   # True
 
+100_000_000   # Only >=3.6
+
 template = "%s (%s)"
 template % ("word")
 
 "{}".format("word")
 "{word}".format(word="word")
+
+width = len("{0:b}".format(number))
+print("{0:{w}n} {0:{w}o} {0:{w}X} {0:{w}b}".format(n, w=width))
 
 # Only >=3.6
 word = "word"
@@ -127,8 +132,6 @@ print('\n'.join(['0', '1', '2']))
 # 0
 # 1
 # 2
-
-
 
 
 

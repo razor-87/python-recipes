@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-11 15:26:46
+# @Last Modified time: 2019-10-14 16:07:08
 
 bin(0x7F)
 # '0b1111111'
@@ -64,7 +64,7 @@ bin(100).count('1')
 hex(1_234_987)
 # 0x12d82b
 
-hex(sys.maxsize)
+hex(9223372036854775807)  # sys.maxsize
 # '0x7fffffffffffffff'
 
 ''.join(
@@ -80,12 +80,14 @@ hex(sys.maxsize)
     )))
 # '11001010'
 
-1 << 1
+
+# n << b -> n * (2**b)
+1 << 1  # 1 * (2**1)
 # 2
-4 << 3  # 4 * (2**3) -> 4 * 8
-# 32
-64 >> 1  # 64 // (2**1)
-# 32
+
+# n >> b -> n // (2**b)
+64 >> 2  # 64 // (2**2) -> 64 // 4
+# 16
 
 2 << 1  # 2**2 == 1 << 2
 # 4 / 0b10 << 0b1 -> 0b100
@@ -110,21 +112,10 @@ hex(sys.maxsize)
 (11 << 3) + (11 << 1) + 11  # 11**2
 # 121
 
-
-
-
-def reverse_bits(x):
-    inp_bits = bin(x)[2:]
-    return f"{inp_bits} -> {inp_bits[::-1]}"
-
-
-def add_by_bits_rec(i, j):
-    assert i >= 0 and j >= 0
-    uncommon_bits_from_both = i ^ j
-    common_bits_from_both = i & j
-    if common_bits_from_both == 0:
-        return uncommon_bits_from_both
-    return add_by_bits_rec(uncommon_bits_from_both, common_bits_from_both << 1)
+# a, b = 5, 10
+# a ^= b -> (15, 5)
+# b ^= a -> (15, 10)
+# a ^= b -> (5, 10)
 
 
 def add_by_bits(a, b):
@@ -136,39 +127,14 @@ def add_by_bits(a, b):
     return a
 
 
-def bits_rotate_left(byte):
-    """
-    Rotate bits left.
-    """
-    bit = byte & 0x80
-    byte <<= 1
-    if bit:
-        byte |= 0x01
-    byte &= 0xFF
-    return byte
+def add_by_bits_r(x, y):
+    assert x >= 0 and y >= 0
+    if not y:
+        return x
+    return add_by_bits_r(x ^ y, (x & y) << 1)
 
 
-def bits_rotate_right(byte):
-    """
-    Rotate bits right.
-    """
-    byte &= 0xFF
-    bit = byte & 0x01
-    byte >>= 1
-    if bit:
-        byte |= 0x80
-    return byte
-
-
-def number_of_set_bits(i):
-    # https://en.wikipedia.org/wiki/Hamming_weight
-    assert 0 <= i < 0x100000000
-    i -= ((i >> 1) & 0x55555555)
-    i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
-    return (((i + (i >> 4) & 0xF0F0F0F) * 0x1010101) & 0xffffffff) >> 24
-
-
-def check_num_is_power_of_two(n):
+def is_power_of_two(n):
     return n & (n - 1) == 0
 
 
@@ -215,6 +181,47 @@ def power_by_bits(a, b):
     return result
 
 
+def reverse_bits(x):
+    inp_bits = bin(x)[2:]
+    # return int(f"0b{inp_bits[::-1]}", 2)
+    return f"0b{inp_bits} -> 0b{inp_bits[::-1]}"
+
+
+def swap_bits(x, i, j):
+    x_old = bin(x)
+    low = (x >> i) & 1
+    high = (x >> j) & 1
+    if low ^ high:
+        x ^= (1 << i) | (1 << j)
+    return f"{x_old} -> {bin(x)}"
+
+
+def bits_rotate_left(byte):
+    bit = byte & 0x80
+    byte <<= 1
+    if bit:
+        byte |= 0x01
+    byte &= 0xFF
+    return byte
+
+
+def bits_rotate_right(byte):
+    byte &= 0xFF
+    bit = byte & 0x01
+    byte >>= 1
+    if bit:
+        byte |= 0x80
+    return byte
+
+
+def number_of_set_bits(i):
+    # https://en.wikipedia.org/wiki/Hamming_weight
+    assert 0 <= i < 0x100000000
+    i -= ((i >> 1) & 0x55555555)
+    i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
+    return (((i + (i >> 4) & 0xF0F0F0F) * 0x1010101) & 0xffffffff) >> 24
+
+
 def find_position_of_msb(n):
     high = 31
     low = 0
@@ -228,13 +235,20 @@ def find_position_of_msb(n):
     print(f"{n} : MSB at {low}. Between {pow(2, low)} and {pow(2, low + 1)}")
 
 
-def swap_bits(x, i, j):
-    x_old = bin(x)
-    low = (x >> i) & 1
-    high = (x >> j) & 1
-    if low ^ high:
-        x ^= (1 << i) | (1 << j)
-    return f"{x_old} -> {bin(x)}"
+def invert_bits(a):
+    """
+    >>> bin(1 << invert_bits(0b1100101100101).bit_length())
+    '0b100000000000'
+    """
+    return a ^ ((1 << a.bit_length()) - 1)
+
+
+def low_nibble(b):
+    return b & 0x0F
+
+
+def high_nibble(b):
+    return (b >> 4) & 0x0F
 
 
 # https://catonmat.net/low-level-bit-hacks
@@ -272,7 +286,7 @@ def test_nth_bit_is_set(i: int, n: int) -> bool:
     False
     >>> test_nth_bit_is_set(10, 1)
     True
-    >>> test_nth_bit_is_set(10, 4)
+    >>> test_nth_bit_is_set(10, 3)
     True
     >>> test_nth_bit_is_set(10, 5)
     False

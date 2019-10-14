@@ -11,6 +11,14 @@ def unique(seq, idfun=repr):
     return [seen.setdefault(idfun(e), e) for e in seq if idfun(e) not in seen]
 
 
+def unique_stable(arr):
+    dupes = {}
+    for val in arr:
+        if val not in dupes:
+            dupes.add(val)
+            yield val
+
+
 def chunks(g, n=2):
     # Collect data into chunks of a maximum size
     # chunks('ABCDEFG', 3) --> ABC DEF G
@@ -60,7 +68,6 @@ def pattern_in_string(pattern, string):
                for sub_string in (string[i:i + len(pattern)] for i in range(n)))
 
 
-
 def moving_average(iterable, n=3):
     # moving_average([40, 30, 50, 46, 39, 44]) --> 40.0 42.0 45.0 43.0
     # http://en.wikipedia.org/wiki/Moving_average
@@ -75,12 +82,12 @@ def moving_average(iterable, n=3):
 
 
 # shift a list in python
-def collections_deque(data):
+def collections_deque(data, shift):
     items = collections.deque(data)
     items.rotate(-shift)
     return items
 
-def pop_append(data):
+def pop_append(data, shift):
     for _ in range(shift):
         data.append(data.pop(0))
     return data
@@ -101,7 +108,6 @@ list(filter(vowel, 'Aardvark'))
 
 def get_magic_number(cond):
     return 666 if cond else 999
-
 
 
 
@@ -505,3 +511,9 @@ def bytes2human(n):
             return '%.1f%s' % (value, s)
     return "%sB" % n
 
+
+def majority_element(arr):
+    # from collections import Counter
+    # return Counter(arr).most_common()[0][0]
+    arr.sort()
+    return arr[len(arr)//2]

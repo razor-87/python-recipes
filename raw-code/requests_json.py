@@ -71,7 +71,6 @@ root['Page']['Java'] = None
 print(json.dumps(root, indent=4))
 
 # The "json" module can do a much better job:
-import json
 print(json.dumps(my_mapping, indent=4, sort_keys=True))
 {
     "a": 23,

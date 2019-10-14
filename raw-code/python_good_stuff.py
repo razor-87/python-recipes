@@ -73,6 +73,8 @@ sys.path
 sys.platform
 sys.modules
 
+sys.maxsize
+# 9223372036854775807
 
 
 sys.getrefcount
@@ -785,8 +787,6 @@ q.get()
 
 
 
-
-
 # Avoiding branch prediction failure
 # There are many ways to help your code avoid branch prediction failure.
 # One way is to re-structure code so that conditional statements don’t appear
@@ -817,4 +817,8 @@ loop_with(data, g if f(z) else h)
 
 
 
-
+# A simple way to choose one of two possible values
+L1 = [1, 2, 0, 3, 0, 5]
+L2 = [(p, 0xFF)[p == 0] for p in L1]  # [0xFF if p == 0 else p for p in L1]
+L2
+# [1, 2, 255, 3, 255, 5]

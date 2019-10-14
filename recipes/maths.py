@@ -2,18 +2,15 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:52:29
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-11 17:02:18
+# @Last Modified time: 2019-10-14 19:21:05
 import math
 
-1.5e2    # == 1.5 * (10 ** 2)
-100_000_000   # Only >=3.6
+1.5e2  # == 1.5 * (10 ** 2)
 
-num = 13
-num.__add__(2)
+(13).__add__(2)
 # 15
 
-# cubic root
-round(x**(1/3))
+round(x**(1/3))  # cubic root
 
 math.gcd(100, 75)  # gcd
 # 25
@@ -24,21 +21,21 @@ math.gcd(100, 75)  # gcd
 sum(range(101))
 # 5050
 
-t = (20, 8)
-divmod(*t)
 
 divmod(x, y)  # (x // y, x % y)
 divmod(177, 10)
 # (17, 7)
 
+t = (20, 8)
+divmod(*t)
+# (2, 4)
+
 pow(x, y, m)  # x**y mod m - Modular exponentiation
 pow(3, 4, 5)
 # 1
 
-
 3**200 % 50
 # 1
-
 
 # integer quotient of division with rounding up
 (m + n - 1) // n
@@ -148,3 +145,13 @@ def tower_of_powers(arr):
 def approx_pi2(n=10000000):
     val = sum(1/k**2 for k in range(1, n+1))
     return (6 * val)**0.5
+
+
+def a078633(n):
+    """
+    https://oeis.org/A078633
+    Smallest number of sticks of length 1 needed to construct n squares
+    with sides of length 1
+    """
+    import math
+    return (2 * n) + math.ceil(2 * math.sqrt(n))
