@@ -2,9 +2,8 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:15:19
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-13 18:05:24
+# @Last Modified time: 2019-10-18 19:22:40
 import collections
-
 
 collections.defaultdict(int)
 collections.defaultdict(list)
@@ -53,8 +52,7 @@ print(z)
 # The standard string repr for dicts is hard to read:
 my_mapping = {'a': 23, 'b': 42, 'c': 0xc0ffee}
 my_mapping
-{'b': 42, 'c': 12648430. 'a': 23}  # 😞
-
+# {'b': 42, 'c': 12648430. 'a': 23}
 
 
 # How to merge two dicts
@@ -70,7 +68,7 @@ z
 # use this:
 z = dict(x, **y)
 z
-{'a': 1, 'c': 4, 'b': 3}
+# {'a': 1, 'c': 4, 'b': 3}
 
 
 
@@ -192,3 +190,20 @@ class LRU(OrderedDict):
         if len(self) > self.maxsize:
             oldest = next(iter(self))
             del self[oldest]
+
+
+
+def shorthand_dict(names):
+    import inspect
+    lcls = inspect.currentframe().f_back.f_locals
+    return {k: lcls[k] for k in names}
+
+context = dict(user_id=42, user_ip='1.2.3.4')
+mode = 'force'
+action_type = 7
+shorthand_dict([
+    'context',
+    'mode',
+    'action_type',
+])
+# {'context': {'user_id': 42, 'user_ip': '1.2.3.4'}, 'mode': 'force', 'action_type': 7}

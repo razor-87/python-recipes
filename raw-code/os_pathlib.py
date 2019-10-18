@@ -34,6 +34,8 @@ for name in listOfFileNames:
         print(name)
 
 
+filename, file_extension = os.path.splitext('/path/to/somefile.ext')
+
 
 
 from pathlib import Path

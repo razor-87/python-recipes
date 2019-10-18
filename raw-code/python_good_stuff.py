@@ -28,7 +28,6 @@ getattr(d, cmd)(*args)
 (int)(num) == int(num)
 
 dis.dis(compile("(10, 'abc')", '', 'eval'))
-dis.dis(compile("[10, 'abc']", '', 'eval'))
 
 a = ()
 b = ()
@@ -142,7 +141,6 @@ from copy import deepcopy
 x = [[0, 0], [1, 1]]
 y = deepcopy(x)
 print('x', x, id(x), id(x[0]), id(x[1]))
-print('y', y, id(y), id(y[0]), id(y[1]))
 
 
 li = ['spam', 'egg', 'spam']
@@ -162,10 +160,13 @@ a, *rest, b = range(5)
 *rest, a, b = range(5)
 
 
+
 [*iterable]
 # iterable -> list
 (*iterable,)
 # iterable -> tuple
+[*"string"]
+# ['s', 't', 'r', 'i', 'n', 'g']
 
 import array
 a = array.array('c', s)
@@ -308,6 +309,7 @@ point = Bunch(datum=y, squared=y*y, coord=x)
 
 
 
+
 def f1(): print("True"); return True
 def f2(): print("False"); return False
 def f3(): print("True"); return True
@@ -336,10 +338,28 @@ f1() and f2() and f3()
 
 
 
+
+
+
 # amount different mutable/immutable elements
 objects = [1, [2], 1, [2], 3]
 len({id(el) for el in objects})  # len(set(id(el) for el in objects))
 # 4
+
+
+# Pythonic ways of checking if all
+# items in a list are equal:
+lst = ['a', 'a', 'a']
+# I ordered those from "most Pythonic" to "least Pythonic"
+# and  "least efficient" to "most efficient".
+# The len(set()) solution is idiomatic,  but constructing
+# a set is less efficient memory and speed-wise.
+len(set(lst)) == 1
+# True
+all(x == lst[0] for x in lst)
+# True
+lst.count(lst[0]) == len(lst)
+# True
 
 
 
@@ -452,9 +472,7 @@ l = l[i:]
 d = {'a': 1, ...}
 l = sorted(d)
 
-# Single-character match
-def valid_sign(sign):
-    return sign in ('+', '-')
+
 
 # Building a string
 s = ''.join(f(x) for x in l)
@@ -505,7 +523,6 @@ False
 
 
 
-
 # Functions are first-class citizens in Python.
 # They can be passed as arguments to other functions,
 # returned as values from other functions, and
@@ -515,9 +532,9 @@ def myfunc(a, b):
 
 funcs = [myfunc]
 funcs[0]
-<function myfunc at 0x107012230>
+# <function myfunc at 0x107012230>
 funcs[0](2, 3)
-5
+# 5
 
 
 
@@ -571,20 +588,6 @@ faulthandler.enable()
 # https://docs.python.org/3/library/faulthandler.html
 
 
-
-# Pythonic ways of checking if all
-# items in a list are equal:
-lst = ['a', 'a', 'a']
-# I ordered those from "most Pythonic" to "least Pythonic"
-# and  "least efficient" to "most efficient".
-# The len(set()) solution is idiomatic,  but constructing
-# a set is less efficient memory and speed-wise.
-len(set(lst)) == 1
-# True
-all(x == lst[0] for x in lst)
-# True
-lst.count(lst[0]) == len(lst)
-# True
 
 
 
@@ -797,7 +800,6 @@ for x in data:
         g(x)
     else:
         g(x)
-
 # into
 if f(z):
     for x in data:
@@ -805,7 +807,6 @@ if f(z):
 else:
     for x in data:
         h(x)
-
 # This is somewhat cumbersome because we are duplicating logic
 # (i.e. the for-loop) but even this can be abstracted away:
 def loop_with(data, func):
@@ -813,6 +814,7 @@ def loop_with(data, func):
         func(x)
 
 loop_with(data, g if f(z) else h)
+
 
 
 

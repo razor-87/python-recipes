@@ -176,3 +176,7 @@ print(f'{correct:<10}|{phonetic_correct:<20}|{typo:<10}|{phonetic_typo:<20}|{pho
 print(f'Centre Aligned:')
 print(f'{correct:^10}|{phonetic_correct:^20}|{typo:^10}|{phonetic_typo:^20}|{phonetic_distance:^20}|')
 # Centre Aligned:
+
+
+def __repr__(self):
+    return f"<{type(self).__name__}(id={self.id})>"

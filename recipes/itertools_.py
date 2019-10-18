@@ -2,12 +2,11 @@
 # @Author: razor87
 # @Date:   2019-08-01 11:08:22
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-11 17:01:43
+# @Last Modified time: 2019-10-18 19:23:00
 import collections
 import itertools
 import operator
 import random
-
 
 print(*itertools.combinations([1, 2, 3], 2))
 # (1, 2) (1, 3) (2, 3)
@@ -37,9 +36,6 @@ list(itertools.starmap(pow, data))
 list(itertools.compress('abcd', [0, 1, 1, 0]))
 # ['b', 'c']
 
-list(itertools.accumulate(range(1, 11), operator.mul))  # list of factorials
-# [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
-
 list(itertools.chain.from_iterable([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
 list(itertools.chain.from_iterable((range(1, 4), range(4, 7), range(7, 10))))
 # [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -68,7 +64,7 @@ list(itertools.accumulate(sample, max))
 # [5, 5, 5, 8, 8, 8, 8, 8, 9, 9]
 list(itertools.accumulate(sample, operator.mul))
 # [5, 20, 40, 320, 2240, 13440, 40320, 0, 0, 0]
-list(itertools.accumulate(range(1, 11), operator.mul))
+list(itertools.accumulate(range(1, 11), operator.mul))  # list of factorials
 # [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
 list(enumerate('albatroz', 1))
 # [(1, 'a'), (2, 'l'), (3, 'b'), (4, 'a'), (5, 't'), (6, 'r'), (7, 'o'), (8, 'z')]
@@ -159,9 +155,6 @@ list(itertools.combinations_with_replacement('ABC', 2))
 # [('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C')]
 list(itertools.permutations('ABC', 2))
 # [('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]
-list(itertools.product('ABC', repeat=2))
-# [('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'B'), ('B', 'C'),
-# ('C', 'A'), ('C', 'B'), ('C', 'C')]
 list(itertools.groupby('LLLLAAGGG'))
 # [('L', <itertools._grouper object at 0x102227cc0>),
 # ('A', <itertools._grouper object at 0x102227b38>),

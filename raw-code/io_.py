@@ -35,7 +35,7 @@ f.close()
 
 
 
-lines = list(map(str.strip, sys.stdin.readlines()))
+
 
 a = []
 a = list(map(int, input().split()))
@@ -59,7 +59,7 @@ ls = [[*map(int, i.split())] for i in sys.stdin]
 _, arr = (tuple(map(int, lst))
           for lst in map(str.split, map(str.strip, sys.stdin.readlines())))
 _, arr = sys.stdin.readline(), tuple(sys.stdin.readline().split())
-
+lines = list(map(str.strip, sys.stdin.readlines()))
 
 
 
@@ -68,19 +68,14 @@ name, price = ' '.join(inp[:-1]), int(inp[-1])
 
 
 
-arr = tuple(
-    tuple(map(float, lst))
-    for lst in map(str.split, map(str.strip, sys.stdin.readlines()[1:])))
+tuple(tuple(map(float, lst)) for lst in map(str.split,
+                                            map(str.strip, sys.stdin.readlines()[1:])))
 
+(tuple(map(int, row.strip().split())) for row in sys.stdin.readlines())
 
 [tuple(map(int, el.split())) for el in map(str.strip, sys.stdin.readlines()[1:])]
 
 
-*n, m = (tuple(map(float, row.strip().split())) for row in sys.stdin.readlines())
-print(np.polyval(*n, *m))
-
-
-a, b = (tuple(map(int, row.strip().split())) for row in sys.stdin.readlines())
 
 
 _, *arr = map(int, sys.stdin.read().split())

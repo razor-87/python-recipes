@@ -2,10 +2,9 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-12 17:34:13
+# @Last Modified time: 2019-10-18 19:22:51
 import functools
 import operator
-
 
 # Math operations: add(), sub(), mul(), floordiv(), abs(), …
 # Logical operations: not_(), truth().
@@ -22,16 +21,9 @@ prints()
 
 somelist = [(1, 5, 8), (6, 2, 4), (9, 7, 5)]
 somelist.sort(key=operator.itemgetter(0))
-somelist
 # [(1, 5, 8), (6, 2, 4), (9, 7, 5)]
-
 somelist.sort(key=operator.itemgetter(1))
-somelist
 # [(6, 2, 4), (1, 5, 8), (9, 7, 5)]
-
-somelist.sort(key=operator.itemgetter(2))
-somelist
-# [(6, 2, 4), (9, 7, 5), (1, 5, 8)]
 
 list_a = [(0, 1), (0, 1), (0, 1)]
 items = sorted(list_a, key=operator.itemgetter(1), reverse=True)
@@ -41,10 +33,9 @@ items = sorted(list_a, key=operator.itemgetter(1), reverse=True)
 # (== get a representation sorted by value)
 xs = {'a': 4, 'b': 3, 'c': 2, 'd': 1}
 sorted(xs.items(), key=lambda x: x[1])
-[('d', 1), ('c', 2), ('b', 3), ('a', 4)]
 # Or:
 sorted(xs.items(), key=operator.itemgetter(1))
-[('d', 1), ('c', 2), ('b', 3), ('a', 4)]
+# [('d', 1), ('c', 2), ('b', 3), ('a', 4)]
 
 
 pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
@@ -66,9 +57,25 @@ lst_sort = sorted(lst, reverse=True, key=len)
 # Sort 2D array using 2nd column
 sorted(movie_year, key=lambda row: row[1], reverse=True)
 
-
 sorted(range(-5, 6), key=lambda x: x ** 2)
 # [0, -1, 1, -2, 2, -3, 3, -4, 4, -5, 5]
+
+arr = [*"Sorting1234"]
+sorted(arr, key=lambda c: (c.isdigit(), c in '02468', c.isupper(), c))
+# ['g', 'i', 'n', 'o', 'r', 't', 'S', '1', '3', '2', '4']
+sorted((int(c.isdigit()), int(c in '02468'), int(c.isupper()), c) for c in arr)
+# [(0, 0, 0, 'g'),
+#  (0, 0, 0, 'i'),
+#  (0, 0, 0, 'n'),
+#  (0, 0, 0, 'o'),
+#  (0, 0, 0, 'r'),
+#  (0, 0, 0, 't'),
+#  (0, 0, 1, 'S'),
+#  (1, 0, 0, '1'),
+#  (1, 0, 0, '3'),
+#  (1, 1, 0, '2'),
+#  (1, 1, 0, '4')]
+
 
 [*filter(lambda x: x % 2 == 0, range(16))]
 # [0, 2, 4, 6, 8, 10, 12, 14]
@@ -83,13 +90,7 @@ sorted(range(-5, 6), key=lambda x: x ** 2)
 
 (func1 if expression else func2)(args)
 
-sorted(range(-5, 6), key=lambda x: x ** 2)
-# [0, -1, 1, -2, 2, -3, 3, -4, 4, -5, 5
 
-
-
-# squarity
-[*map(lambda a: a**2, range(5))]
 
 # is_positive
 [*filter(lambda a: a > 0, range(-2, 3))]
@@ -181,7 +182,6 @@ sum(text.encode('utf-8'))
 
 sum(sub == 'CDC' for sub in ("ABCDCDC"[i:i+len('CDC')] for i in range(len("ABCDCDC"))))
 # 2
-sum(sub_string == pattern for sub_string in (string[i:i + len(pattern)] for i in range(n)))
 
 
 sum((i in a) - (i in b) for i in n)

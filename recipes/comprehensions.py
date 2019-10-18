@@ -2,8 +2,7 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:47:20
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-11 16:44:33
-
+# @Last Modified time: 2019-10-18 19:22:15
 
 squares = [value**2 for value in range(1, 11)]
 x_labels = [str(num) for num in range(1, 7)]
@@ -36,16 +35,7 @@ subjects = {subject: teacher for teacher, subject in teachers.items()}
 [[i * j for j in range(m)] for i in range(n)]
 {i: [] for i in range(n)}
 
-[[0] * 3 for _ in range(3)]
-# [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-[[0 for j in range(3)] for i in range(3)]
-# [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-[[[0] * 2] * 2 for _ in range(2)]
-# [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]
-[[i * j for j in range(4)] for i in range(4)]
-# [[0, 0, 0, 0], [0, 1, 2, 3], [0, 2, 4, 6], [0, 3, 6, 9]]
-[[((j**i) // (j * i)) for j in range(1, 5)] for i in range(1, 5)]
-# [[1, 1, 1, 1], [0, 1, 1, 2], [0, 1, 3, 5], [0, 2, 6, 16]]
+
 {i: [i**2] for i in range(5)}
 # {0: [0], 1: [1], 2: [4], 3: [9], 4: [16]}
 {i: tuple(j**i for j in range(1, 5)) for i in range(1, 5)}
@@ -74,16 +64,16 @@ matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 matrix = [[0 for col in range(4)] for row in range(3)]
 # [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-even_squares = [x * x for x in range(10) if not x % 2]
-# [0, 4, 16, 36, 64]
-
-type(number**2 for number in range(5))
-# generator
-
-
-squares = [x**2 for x in range(10)]
-[(x, y) for x in [1, 2, 3] for y in [3, 1, 4] if x != y]
-# [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+[[0] * 3 for _ in range(3)]
+# [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+[[0 for j in range(3)] for i in range(3)]
+# [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+[[[0] * 2] * 2 for _ in range(2)]
+# [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]
+[[i * j for j in range(4)] for i in range(4)]
+# [[0, 0, 0, 0], [0, 1, 2, 3], [0, 2, 4, 6], [0, 3, 6, 9]]
+[[((j**i) // (j * i)) for j in range(1, 5)] for i in range(1, 5)]
+# [[1, 1, 1, 1], [0, 1, 1, 2], [0, 1, 3, 5], [0, 2, 6, 16]]
 
 vec = [-4, -2, 0, 2, 4]
 [x * 2 for x in vec]
@@ -93,16 +83,29 @@ vec = [-4, -2, 0, 2, 4]
 [abs(x) for x in vec]
 # [4, 2, 0, 2, 4]
 
-freshfruit = ['  banana', '  loganberry ', 'passion fruit  ']
-[weapon.strip() for weapon in freshfruit]
-# ['banana', 'loganberry', 'passion fruit']
+vec = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+[num for elem in vec for num in elem]
+# [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+even_squares = [x * x for x in range(10) if not x % 2]
+# [0, 4, 16, 36, 64]
+
+type(number**2 for number in range(5))
+# generator
 
 [(x, x**2) for x in range(6)]
 # [(0, 0), (1, 1), (2, 4), (3, 9), (4, 16), (5, 25)]
 
-vec = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-[num for elem in vec for num in elem]
-# [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+squares = [x**2 for x in range(10)]
+[(x, y) for x in [1, 2, 3] for y in [3, 1, 4] if x != y]
+# [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+
+
+freshfruit = ['  banana', '  loganberry ', 'passion fruit  ']
+[weapon.strip() for weapon in freshfruit]
+# ['banana', 'loganberry', 'passion fruit']
+
 
 kilometer = [39.2, 36.5, 37.3, 37.8]
 feet = [float(3280.8399) * x for x in kilometer]

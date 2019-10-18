@@ -136,76 +136,6 @@ f(3)
 
 
 
-def my_decorator(f):
-    from functools import wraps
-    @wraps(f)
-    def wrapper(*args, **kwds):
-        print('Calling decorated function')
-        return f(*args, **kwds)
-    return wrapper
-
-@my_decorator
-def example():
-    """Docstring"""
-    print('Called example function')
-
-
-def first_decorator(func):
-    def wrapped():
-        print('Inside first_decorator product')
-        return func()
-    return wrapped
-
-
-def second_decorator(func):
-    def wrapped():
-        print('Inside second_decorator product')
-        return func()
-    return wrapped
-
-@first_decorator
-@second_decorator
-def decorated():
-    print('Finally called...')
-
-# decorated = first_decorator(second_decorator(decorated))
-decorated()
-
-
-
-def bool_or_nothing(func):
-    def wrapper(arg):
-        # if arg in {0, 1}:
-        #     return func(arg)
-        # return None
-        return (func(arg)
-                if isinstance(arg, bool)
-                else None)
-    return wrapper
-
-@bool_or_nothing
-def foo(arg):
-    return not arg
-
-
-def get_multiplier(number):
-    def inner(a):
-        return a * number
-    return inner
-
-
-def logger(func):    # decorator
-    @functools.wraps(func)    # import functools
-    def wrapped(*args, **kwargs):
-        result = func(num_list)
-        result *= 2
-        return result
-    return wrapped
-
-@logger
-def summator(num_list):
-    return sum(num_list)
-print('Summator: {}'.format(summator(list(range(6)))))
 
 
 def fibonacci(number):
@@ -277,7 +207,7 @@ def numbers(x):
     for i in range(x):
         if i % 2 == 0:
             yield i
-print(list(numbers(11)))
+print([*numbers(11)])
 # [0, 2, 4, 6, 8, 10]
 
 
@@ -302,6 +232,7 @@ type_stats(list)
 
 
 def rand():
+    import random
     c = random.randint(1, 100000)
     a = c * random.randint(1, 100000)
     b = c * random.randint(1, 100000)
@@ -369,26 +300,13 @@ print(maximum_sum(list_of_lists))  # -> 33
 
 
 
-def solution(args):
-    # write the code
-    pass
-
-def main():
-    # write the input logic to take the input from STDIN
-    input_args = ""
-    solution(input_args)
-
-if __name__ == "__main__":
-    main()
-
-
 
 
 
 def fact(x, cache={0: 1}):
-   if x not in cache:
-       cache[x] = x * fact(x - 1)
-   return cache[x]
+    if x not in cache:
+        cache[x] = x * fact(x - 1)
+    return cache[x]
 
 
 
@@ -410,21 +328,6 @@ d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
 parrot(**d)
 # This parrot wouldn't VOOM if you put four million volts through it. E's bleedin' demised !
 
-
-def shorthand_dict(names):
-    import inspect
-    lcls = inspect.currentframe().f_back.f_locals
-    return {k: lcls[k] for k in names}
-
-context = dict(user_id=42, user_ip='1.2.3.4')
-mode = 'force'
-action_type = 7
-shorthand_dict([
-    'context',
-    'mode',
-    'action_type',
-])
-# {'context': {'user_id': 42, 'user_ip': '1.2.3.4'}, 'mode': 'force', 'action_type': 7}
 
 
 
@@ -512,8 +415,25 @@ def bytes2human(n):
     return "%sB" % n
 
 
+
 def majority_element(arr):
     # from collections import Counter
     # return Counter(arr).most_common()[0][0]
     arr.sort()
     return arr[len(arr)//2]
+
+
+# Single-character match
+def valid_sign(sign):
+    return sign in {'+', '-'}
+
+
+def fib_seq(n):
+    seq = []
+    if n > 0:
+        seq.extend(fib_seq(n - 1))
+    seq.append(fib(n))
+    return seq
+
+if __name__ == '__main__':
+    profile.run('print(fib_seq(20)); print()')
