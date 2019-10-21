@@ -219,3 +219,8 @@ download_('app.js', memory_buffer)
 download_('style.css', memory_buffer)
 memory_buffer.getvalue()
 # 'Downloading app.js\nDownloading style.css\n'
+
+
+def seek_next_line(f):
+    for c in iter(lambda: f.read(1), '\n'):
+        pass

@@ -383,11 +383,6 @@ def sum_nest_elem(lst: List[List[int]], i: int) -> int:
 
 
 
-def seek_next_line(f):
-    for c in iter(lambda: f.read(1), '\n'):
-        pass
-
-
 
 
 def goodbye(name, adjective):
