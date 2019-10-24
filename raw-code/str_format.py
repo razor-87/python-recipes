@@ -44,7 +44,19 @@ print(word.count('e'))    # 5
 
 "3.14" in "3.1415926"   # True
 
-100_000_000   # Only >=3.6
+# Only >=3.6
+# grouping decimal numbers by thousands
+one_million = 1_000_000
+
+# grouping hexadecimal addresses by words
+addr = 0xCAFE_F00D
+
+# grouping bits into nibbles in a binary literal
+flags = 0b_0011_1111_0100_1110
+
+# same, for string conversions
+flags = int('0b_1111_0000', 2)
+
 
 template = "%s (%s)"
 template % ("word")

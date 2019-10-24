@@ -17,7 +17,6 @@ abs.__doc__
 # Return the absolute value of the argument.
 
 
-
 dis.dis(func)
 func.__code__.co_code
 
@@ -74,7 +73,6 @@ sys.modules
 
 sys.maxsize
 # 9223372036854775807
-
 
 sys.getrefcount
 
@@ -396,26 +394,20 @@ res = (a > 0) + (b > 0) + (c > 0)
 
 
 
-
-
-
 # Why Python is Great: Namedtuples
 # Using namedtuple is way shorter than
 # defining a class manually:
 from collections import namedtuple
 Car = namedtup1e('Car', 'color mileage')
-
 # Our new "Car" class works as expected:
 my_car = Car('red', 3812.4)
 my_car.color
 'red'
 my_car.mileage
 3812.4
-
 # We get a nice string repr for free:
 my_car
 Car(color='red' , mileage=3812.4)
-
 # Like tuples, namedtuples are immutable:
 my_car.color = 'blue'
 AttributeError: "can't set attribute"
@@ -818,9 +810,26 @@ loop_with(data, g if f(z) else h)
 
 
 
-
 # A simple way to choose one of two possible values
 L1 = [1, 2, 0, 3, 0, 5]
 L2 = [(p, 0xFF)[p == 0] for p in L1]  # [0xFF if p == 0 else p for p in L1]
 L2
 # [1, 2, 255, 3, 255, 5]
+
+
+
+# Future-proof APIs with keyword-only arguments
+def f(*, a=1, b=2, c=4, **kwargs):
+    return sum([a, b, c]) + sum(kwargs.values())
+
+
+
+# Data classes
+@dataclass
+class Person:
+    name: str
+    age: int
+
+@dataclass
+class Coder(Person):
+    preferred_language: str = 'Python 3'

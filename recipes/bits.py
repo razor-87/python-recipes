@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-14 16:07:08
+# @Last Modified time: 2019-10-24 16:21:58
 
 bin(0x7F)
 # '0b1111111'
@@ -66,6 +66,12 @@ hex(1_234_987)
 
 hex(9223372036854775807)  # sys.maxsize
 # '0x7fffffffffffffff'
+
+hex(0b0010), hex(0b0100), hex(0b1010)
+# ('0x2', '0x4', '0xa')
+bin(0x24A)
+# '0b1001001010'
+
 
 ''.join(
     map(str, (
@@ -150,11 +156,11 @@ def is_div_by_17(n):
 def divide_by_bits(x, y):
     power_y = y
     power = 1
-    loopCount = 0
+    loop_count = 0
     while power_y < x:
         power_y <<= 1
         power <<= 1
-        loopCount += 1
+        loop_count += 1
     quotient = 0
     while power_y > 0:
         power_y >>= 1
@@ -162,7 +168,7 @@ def divide_by_bits(x, y):
         if x >= power_y:
             x -= power_y
             quotient += power
-    print(f"loopCount = {2*loopCount}")
+    print(f"loop_count = {2*loop_count}")
     return quotient
 
 

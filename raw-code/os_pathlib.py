@@ -78,3 +78,9 @@ FILE_PATTERN = "*.txt"
 path_list = cur_path.glob(FILE_PATTERN)
 print(list(path_list))
 
+
+
+import glob
+found_images = glob.glob('/path/**/*.jpg', recursive=True)
+# A better option is to use pathlib in python3 (minus one import!):
+found_images = Path('/path/').glob('**/*.jpg')
