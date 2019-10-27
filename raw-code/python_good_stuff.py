@@ -833,3 +833,37 @@ class Person:
 @dataclass
 class Coder(Person):
     preferred_language: str = 'Python 3'
+
+
+
+from collections import namedtuple
+Person = namedtuple(
+        'Person',
+        ['name', 'age', 'height', 'ears', 'eyes'],
+        defaults=(2, 2,)
+)
+Person('Milton', 25, 174)
+# Person(name='Milton', age=25, height=174, ears=2, eyes=2)
+
+
+
+from typing import NamedTuple
+
+class Person(NamedTuple):
+    # Type hints are optional, you don't have to use them but they are great!
+    # I encorage you to learn more about them :)
+    name: str
+    age: int
+    height: int
+    ears: int = 2
+    eyes: int = 2
+
+milton = Person('Milton', 25, 174)
+milton
+# Person(name='Milton', age=25, height=174, ears=2, eyes=2)
+caitlyn = Person(name='Caitlyn', age=25, height=174, ears=1)
+caitlyn
+# Person(name='Caitlyn', age=25, height=174, ears=1, eyes=2)
+
+# Immutability
+milton.name = 'Miguel'

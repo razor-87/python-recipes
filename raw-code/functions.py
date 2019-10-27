@@ -432,3 +432,84 @@ def fib_seq(n):
 
 if __name__ == '__main__':
     profile.run('print(fib_seq(20)); print()')
+
+
+
+def iter_except(func, exception, first=None):
+    """ Call a function repeatedly until an exception is raised.
+
+    Converts a call-until-exception interface to an iterator interface.
+    Like builtins.iter(func, sentinel) but uses an exception instead
+    of a sentinel to end the loop.
+
+    Examples:
+        iter_except(functools.partial(heappop, h), IndexError)   # priority queue iterator
+        iter_except(d.popitem, KeyError)                         # non-blocking dict iterator
+        iter_except(d.popleft, IndexError)                       # non-blocking deque iterator
+        iter_except(q.get_nowait, Queue.Empty)                   # loop over a producer Queue
+        iter_except(s.pop, KeyError)                             # non-blocking set iterator
+
+    """
+    try:
+        if first is not None:
+            yield first(
+            )  # For database APIs needing an initial cast to db.first()
+        while True:
+            yield func()
+    except exception:
+        pass
+
+
+def first_true(iterable, default=False, pred=None):
+    """Returns the first true value in the iterable.
+
+    If no true value is found, returns *default*
+
+    If *pred* is not None, returns the first item
+    for which pred(item) is true.
+
+    """
+    # first_true([a,b,c], x) --> a or b or c or x
+    # first_true([a,b], x, f) --> a if f(a) else b if f(b) else x
+    return next(filter(pred, iterable), default)
+
+
+def random_product(*args, repeat=1):
+    """Random selection from itertools.product(*args, **kwds)"""
+    pools = [tuple(pool) for pool in args] * repeat
+    return tuple(random.choice(pool) for pool in pools)
+
+
+def random_permutation(iterable, r=None):
+    """Random selection from itertools.permutations(iterable, r)"""
+    pool = tuple(iterable)
+    r = len(pool) if r is None else r
+    return tuple(random.sample(pool, r))
+
+
+def random_combination(iterable, r):
+    """Random selection from itertools.combinations(iterable, r)"""
+    pool = tuple(iterable)
+    n = len(pool)
+    indices = sorted(random.sample(range(n), r))
+    return tuple(pool[i] for i in indices)
+
+
+def random_combination_with_replacement(iterable, r):
+    """Random selection from itertools.combinations_with_replacement(iterable, r)"""
+    pool = tuple(iterable)
+    n = len(pool)
+    indices = sorted(random.randrange(n) for i in range(r))
+    return tuple(pool[i] for i in indices)
+
+
+def quantify(iterable, pred=bool):
+    """Count how many times the predicate is true"""
+    return sum(map(pred, iterable))
+
+
+def most_amount_sub(string, sub):
+    n = 1
+    while b*n in string:
+        n += 1
+    return n - 1

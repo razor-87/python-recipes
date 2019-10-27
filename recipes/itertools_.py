@@ -2,36 +2,34 @@
 # @Author: razor87
 # @Date:   2019-08-01 11:08:22
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-18 19:23:00
+# @Last Modified time: 2019-10-25 18:10:57
 import collections
 import itertools
 import operator
 import random
 
-print(*itertools.combinations([1, 2, 3], 2))
-# (1, 2) (1, 3) (2, 3)
-print(*itertools.permutations([1, 2, 3]))
-# (1, 2, 3) (1, 3, 2) (2, 1, 3) (2, 3, 1) (3, 1, 2) (3, 2, 1)
-print(*itertools.accumulate([1, 4, 3, 5], max))
-# 1 4 4 5
+[*itertools.combinations([1, 2, 3], 2)]
+# [(1, 2), (1, 3), (2, 3)]
+[*itertools.permutations([1, 2, 3])]
+# [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]
+[*itertools.accumulate([1, 4, 3, 5], max)]
+# [1, 4, 4, 5]
+
 for i in itertools.count(3):
     print(i)
     if i >= 11:
         break
 
 nums = list(itertools.accumulate(range(8)))
-print(nums)
-print(list(itertools.takewhile(lambda x: x <= 6, nums)))
+list(itertools.takewhile(lambda x: x <= 6, nums))
+# [0, 1, 3, 6]
 
-nums = [2, 4, 6, 7, 9, 8]
-a = itertools.takewhile(lambda x: x % 2 == 0, nums)
+itertools.takewhile(lambda x: x % 2 == 0, [2, 4, 6, 7, 9, 8])
 
-# itertools.starmap
-list(map(pow, [(2, 5), (3, 2), (10, 3)]))
+# list(map(pow, [(2, 5), (3, 2), (10, 3)]))
 # -> TypeError: pow expected at least 2 arguments, got 1
-
-list(itertools.starmap(pow, data))
-# -> [32, 9, 1000]
+list(itertools.starmap(pow, [(2, 5), (3, 2), (10, 3)]))
+# [32, 9, 1000]
 
 list(itertools.compress('abcd', [0, 1, 1, 0]))
 # ['b', 'c']
@@ -283,11 +281,6 @@ def all_equal(iterable):
     return next(g, True) and not next(g, False)
 
 
-def quantify(iterable, pred=bool):
-    """Count how many times the predicate is true"""
-    return sum(map(pred, iterable))
-
-
 def padnone(iterable):
     """Returns the sequence elements and then returns None indefinitely.
 
@@ -305,9 +298,9 @@ def dotproduct(vec1, vec2):
     return sum(map(operator.mul, vec1, vec2))
 
 
-def flatten(listOfLists):
+def flatten(nested_lists):
     """Flatten one level of nesting"""
-    return itertools.chain.from_iterable(listOfLists)
+    return itertools.chain.from_iterable(nested_lists)
 
 
 def repeatfunc(func, times=None, *args):
@@ -387,95 +380,3 @@ def unique_justseen(iterable, key=None):
     # unique_justseen('ABBCcAD', str.lower) --> A B C A D
     return map(next,
                map(operator.itemgetter(1), itertools.groupby(iterable, key)))
-
-
-def iter_except(func, exception, first=None):
-    """ Call a function repeatedly until an exception is raised.
-
-    Converts a call-until-exception interface to an iterator interface.
-    Like builtins.iter(func, sentinel) but uses an exception instead
-    of a sentinel to end the loop.
-
-    Examples:
-        iter_except(functools.partial(heappop, h), IndexError)   # priority queue iterator
-        iter_except(d.popitem, KeyError)                         # non-blocking dict iterator
-        iter_except(d.popleft, IndexError)                       # non-blocking deque iterator
-        iter_except(q.get_nowait, Queue.Empty)                   # loop over a producer Queue
-        iter_except(s.pop, KeyError)                             # non-blocking set iterator
-
-    """
-    try:
-        if first is not None:
-            yield first(
-            )  # For database APIs needing an initial cast to db.first()
-        while True:
-            yield func()
-    except exception:
-        pass
-
-
-def first_true(iterable, default=False, pred=None):
-    """Returns the first true value in the iterable.
-
-    If no true value is found, returns *default*
-
-    If *pred* is not None, returns the first item
-    for which pred(item) is true.
-
-    """
-    # first_true([a,b,c], x) --> a or b or c or x
-    # first_true([a,b], x, f) --> a if f(a) else b if f(b) else x
-    return next(filter(pred, iterable), default)
-
-
-def random_product(*args, repeat=1):
-    """Random selection from itertools.product(*args, **kwds)"""
-    pools = [tuple(pool) for pool in args] * repeat
-    return tuple(random.choice(pool) for pool in pools)
-
-
-def random_permutation(iterable, r=None):
-    """Random selection from itertools.permutations(iterable, r)"""
-    pool = tuple(iterable)
-    r = len(pool) if r is None else r
-    return tuple(random.sample(pool, r))
-
-
-def random_combination(iterable, r):
-    """Random selection from itertools.combinations(iterable, r)"""
-    pool = tuple(iterable)
-    n = len(pool)
-    indices = sorted(random.sample(range(n), r))
-    return tuple(pool[i] for i in indices)
-
-
-def random_combination_with_replacement(iterable, r):
-    """Random selection from itertools.combinations_with_replacement(iterable, r)"""
-    pool = tuple(iterable)
-    n = len(pool)
-    indices = sorted(random.randrange(n) for i in range(r))
-    return tuple(pool[i] for i in indices)
-
-
-def nth_combination(iterable, r, index):
-    """Equivalent to list(combinations(iterable, r))[index]"""
-    pool = tuple(iterable)
-    n = len(pool)
-    if r < 0 or r > n:
-        raise ValueError
-    c = 1
-    k = min(r, n - r)
-    for i in range(1, k + 1):
-        c = c * (n - k + i) // i
-    if index < 0:
-        index += c
-    if index < 0 or index >= c:
-        raise IndexError
-    result = []
-    while r:
-        c, n, r = c * r // n, n - 1, r - 1
-        while index >= c:
-            index -= c
-            c, n = c * (n - r) // n, n - 1
-        result.append(pool[-1 - n])
-    return tuple(result)
