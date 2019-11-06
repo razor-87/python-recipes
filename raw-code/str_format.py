@@ -58,15 +58,6 @@ flags = 0b_0011_1111_0100_1110
 flags = int('0b_1111_0000', 2)
 
 
-template = "%s (%s)"
-template % ("word")
-
-"{}".format("word")
-"{word}".format(word="word")
-
-width = len("{0:b}".format(number))
-print("{0:{w}n} {0:{w}o} {0:{w}X} {0:{w}b}".format(n, w=width))
-
 # Only >=3.6
 word = "word"
 f"{word}"
@@ -109,11 +100,19 @@ f"{.10:.0%}"
 f"{100:+}"
 # '+100'
 
-foo = 'foo'
-bar = 'bar'
-foobar = '%s%s' % (foo, bar)  # It is OK
-foobar = '{0}{1}'.format(foo, bar)  # It is better
-foobar = '{foo}{bar}'.format(foo=foo, bar=bar)  # It is best
+
+"{0}".format("word")
+"{word}".format(word="word")
+
+width = len("{0:b}".format(5))
+"{0:{w}n} {0:{w}o} {0:{w}X} {0:{w}b}".format(5, w=width)
+f"{5:{width}n} {5:{width}o} {5:{width}X} {5:{width}b}"
+
+foo, bar = "foo", "bar"
+"{0}{1}".format(foo, bar)  # It is better
+"{foo}{bar}".format(foo=foo, bar=bar)  # It is best
+"{1}{0}".format(*(foo, bar))
+# 'barfoo'
 
 
 s = 'abc acd abc'

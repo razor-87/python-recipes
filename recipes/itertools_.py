@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-08-01 11:08:22
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-25 18:10:57
+# @Last Modified time: 2019-11-06 17:05:00
 import collections
 import itertools
 import operator
@@ -96,7 +96,7 @@ list(itertools.zip_longest('ABC', range(5), fillvalue='?'))
 # [('A', 0), ('B', 1), ('C', 2), ('?', 3), ('?', 4)]
 list(itertools.product('ABC', range(2)))
 # [('A', 0), ('A', 1), ('B', 0), ('B', 1), ('C', 0), ('C', 1)]
-# suits = 'spades hearts diamonds clubs'.split()
+suits = 'spades hearts diamonds clubs'.split()
 list(itertools.product('AK', suits))
 # [('A', 'spades'), ('A', 'hearts'), ('A', 'diamonds'), ('A', 'clubs'),
 # ('K', 'spades'), ('K', 'hearts'), ('K', 'diamonds'), ('K', 'clubs')]
@@ -294,12 +294,16 @@ def ncycles(iterable, n):
     return itertools.chain.from_iterable(itertools.repeat(tuple(iterable), n))
 
 
-def dotproduct(vec1, vec2):
+def dot_product(vec1, vec2):
     return sum(map(operator.mul, vec1, vec2))
 
 
 def flatten(nested_lists):
-    """Flatten one level of nesting"""
+    """Flatten one level of nesting.
+
+    >>> list(flatten([[0, 1], [2, 3]]))
+    [0, 1, 2, 3]
+    """
     return itertools.chain.from_iterable(nested_lists)
 
 

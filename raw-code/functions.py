@@ -27,13 +27,15 @@ def chunks(g, n=2):
     yield from map(slicer, itertools.repeat(iter(g)))
 
 
-def chunks(string, k):
+def chunks_(string, k):
     yield from zip(*(iter(string),) * k)
 
 
-def chunks(string: str, k: int) -> Generator:
+def chunks__(string: str, k: int) -> Generator:
     n = len(string)//k
     return (sub_s for sub_s in (string[i:i + k:] for i in range(len(string))[::n]))
+
+
 
 
 def grouper(iterable, n, fillvalue=''):
@@ -45,8 +47,14 @@ def grouper(iterable, n, fillvalue=''):
     yield from zip_longest(fillvalue=fillvalue, *args)
 
 big_string = 'gfdgfgdgdbvcgjkjhddfgr hfghfgf kjhkhjtgg ghfvbvcbcvfhjhgjkhljhkh'
-output = '\n'.join(''.join(chunk) for chunk in grouper(big_string, 10, '_'))
+'\n'.join(''.join(chunk) for chunk in grouper(big_string, 10, '_'))
+# 'gfdgfgdgdb\nvcgjkjhddf\ngr hfghfgf\n kjhkhjtgg\n ghfvbvcbc\nvfhjhgjkhl\njhkh______'
 
+
+def grouper_(iterable, n, fillvalue=None):
+    from itertools import zip_longest
+    args = [iter(iterable)] * n
+    return zip_longest(*args, fillvalue=fillvalue)
 
 
 def wrap(string: str, k: int) -> List[str]:
@@ -87,6 +95,7 @@ def collections_deque(data, shift):
     items.rotate(-shift)
     return items
 
+
 def pop_append(data, shift):
     for _ in range(shift):
         data.append(data.pop(0))
@@ -108,7 +117,6 @@ list(filter(vowel, 'Aardvark'))
 
 def get_magic_number(cond):
     return 666 if cond else 999
-
 
 
 def make_closure(x):
@@ -136,8 +144,6 @@ f(3)
 
 
 
-
-
 def fibonacci(number):
     a = b = 1
     for _ in range(number):
@@ -157,13 +163,11 @@ generator = accumulator()
 generator.send(1)
 
 
-
 def check(seq, elem):
     # if elem in seq:
     #     return True
     # return False
     return elem in seq
-
 
 
 def gen(a, b):
@@ -176,22 +180,20 @@ def make_adder(n):
     return lambda x: x + n
 
 
-
 def rev(lst):
     return lst[::-1]
 b = [1, 2, 3]
 rev(b)
 # [3, 2, 1]
 
+
 # fastest reversing string in Python
 def rev_s(s):
     return s[::-1]
 
 
-
 def remove_spaces(x: str) -> str:
     return x.replace(' ', '')
-
 
 
 def my_range(n):
@@ -209,7 +211,6 @@ def numbers(x):
             yield i
 print([*numbers(11)])
 # [0, 2, 4, 6, 8, 10]
-
 
 
 def type_stats(type_obj):
@@ -238,6 +239,7 @@ def rand():
     b = c * random.randint(1, 100000)
     return a, b
 
+
 def compare(fs, args):
     from matplotlib import pyplot as plt
     for f in fs:
@@ -262,10 +264,9 @@ def find_(required_el, lst):
     return -1
 
 
-
-
 def stringify_list(num_list):
     return list(map(str, num_list))
+
 
 def multiply(a, b):    # from functools import reduce
     return a * b
@@ -275,12 +276,6 @@ reduce(multiply, [1, 2, 3, 4, 5])
 def greeter(person, greeting):    # from functools import partial
     return '{}, {}!'.format(greeting, person)
 hier = partial(greeter, greeting='Hi')
-
-
-def grouper(iterable, n, fillvalue=None):
-    from itertools import zip_longest
-    args = [iter(iterable)] * n
-    return zip_longest(*args, fillvalue=fillvalue)
 
 
 def smth_loops(width, height, depth, ...):
@@ -298,16 +293,10 @@ list_of_lists = [[1, 2, 3], [4, 5, 6], [10, 11, 12], [7, 8, 9]]
 print(maximum_sum(list_of_lists))  # -> 33
 
 
-
-
-
-
-
 def fact(x, cache={0: 1}):
     if x not in cache:
         cache[x] = x * fact(x - 1)
     return cache[x]
-
 
 
 def f(a, L=None):
@@ -330,14 +319,6 @@ parrot(**d)
 
 
 
-
-def do_something(string, start_position=0, end_position=None):
-    ...
-
-do_something(start_position=1, string='abc')
-
-
-
 # Personally, I'm not a fan of the `else`
 # "completion clause" in loops because
 # I find it confusing. I'd rather do
@@ -354,7 +335,6 @@ def better_contains(haystack, needle):
         raise ValueError('Needle not found')
 
 
-
 def info(object, spacing=10, collapse=1): #1 2
     """Print methods and doc strings.
     Takes module, class, list, dictionary, or string."""
@@ -368,8 +348,6 @@ def info(object, spacing=10, collapse=1): #1 2
 
 if __name__ == "__main__":
     print info.__doc__
-
-
 
 
 def sum_nest_elem(lst: List[List[int]], i: int) -> int:

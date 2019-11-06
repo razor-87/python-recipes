@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-18 19:22:51
+# @Last Modified time: 2019-11-06 16:47:43
 import functools
 import operator
 
@@ -12,8 +12,8 @@ import operator
 # Comparisons: eq(), ne(), lt(), le(), gt(), and ge().
 # Object identity: is_(), is_not().
 
-operatot.itemgetter(-1)
-operatot.attrgetter('sort')
+operator.itemgetter(-1)
+operator.attrgetter('sort')
 operator.xor
 
 prints = functools.partial(print, end=' ')
@@ -28,7 +28,6 @@ somelist.sort(key=operator.itemgetter(1))
 list_a = [(0, 1), (0, 1), (0, 1)]
 items = sorted(list_a, key=operator.itemgetter(1), reverse=True)
 
-
 # How to sort a Python dict by value
 # (== get a representation sorted by value)
 xs = {'a': 4, 'b': 3, 'c': 2, 'd': 1}
@@ -37,7 +36,6 @@ sorted(xs.items(), key=lambda x: x[1])
 sorted(xs.items(), key=operator.itemgetter(1))
 # [('d', 1), ('c', 2), ('b', 3), ('a', 4)]
 
-
 pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
 pairs.sort(key=lambda pair: pair[1])
 pairs
@@ -45,7 +43,6 @@ pairs
 
 sorted(arr, key=lambda x: (len(x), x))
 sorted(collections.Counter(s).most_common(), key=lambda x: (-x[1], x))
-
 
 list_b = [28, 14, '28', 5, '9', '1']
 sorted(list_b, key=int)
@@ -76,7 +73,6 @@ sorted((int(c.isdigit()), int(c in '02468'), int(c.isupper()), c) for c in arr)
 #  (1, 1, 0, '2'),
 #  (1, 1, 0, '4')]
 
-
 [*filter(lambda x: x % 2 == 0, range(16))]
 # [0, 2, 4, 6, 8, 10, 12, 14]
 
@@ -90,8 +86,6 @@ sorted((int(c.isdigit()), int(c in '02468'), int(c.isupper()), c) for c in arr)
 
 (func1 if expression else func2)(args)
 
-
-
 # is_positive
 [*filter(lambda a: a > 0, range(-2, 3))]
 
@@ -100,48 +94,35 @@ sorted((int(c.isdigit()), int(c in '02468'), int(c.isupper()), c) for c in arr)
 "".join(map(str, range(20)))
 
 
-
 mod_checker = lambda x, mod=0: lambda y: True if y % x == mod else False
 
-
-reversed(list)
 (0, 1, 2, 3) == tuple(reversed([3, 2, 1, 0]))
 # True
 
 half_size = len(numbers) // 2
 median = sum(numbers[half_size - 1:half_size + 1]) / 2
 
-
+tuple(filter(lambda x: x.isdigit(), ['d', '1', 'f', '5']))
+# ('1', '5')
 
 for i, item in enumerate(iterable):
     print(i, item)
 
-list(enumerate('abc'))
+[*enumerate('abc')]
 # [(0, 'a'), (1, 'b'), (2, 'c')]
-list(enumerate('abc', 1))
+[*enumerate('abc', 1)]
 # [(1, 'a'), (2, 'b'), (3, 'c')]
+[*enumerate('abcde')]
+# [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd'), (4, 'e')]
 
-
-tuple(filter(lambda x: x.isdigit(), ['d', '1', 'f', '5']))
-# ('1', '5')
-
-
-
-
-print(min([i for i in nums if i % 2 != 0]))
-
-enumerate(list)
-print(*enumerate('abcde'))
-
-
-reduce(lambda x, y: x*(y**5), map(int, input().split()), 1)
+functools.reduce(lambda x, y: x*(y**5), map(int, input().split()), 1)
 print(*map(lambda x, y: x ^ y,
            map(int, input().split()), map(int, input().split())))
 
 
 max([min(map(int, tuple(s.split()))) for s in input_])
 
-
+min([i for i in nums if i % 2 != 0])
 min([i for i in map(int, input().split()) if i % 2 != 0])
 min(filter(lambda x: x % 2 != 0, map(int, input().split())))
 min(map(int, input().split()), key=lambda x: (not x % 2, x))
@@ -159,12 +140,10 @@ any([i % 3 for i in [3, 3, 4, 4, 3]])
 
 # Matching partial list
 any(i in files_batch_val for i in yileded_list)
-
-any(True, False, False)
-all(True, True, True)
-
 any(map(lambda x: int(input()) == 0, range(int(input()))))
+any(True, False, False)
 
+all(True, True, True)
 all({x**3: x == round((x**3)**(1/3)) for x in range(21)}.values())
 all(x == round((x**3)**(1/3)) for x in range(21))
 
@@ -179,9 +158,6 @@ sum(1 for i in [3, 3, 4, 4, 3] if i == 4)
 sum(nums[i]**nums[i+1] for i in range(len(nums))[::2])
 
 sum(text.encode('utf-8'))
-
-sum(sub == 'CDC' for sub in ("ABCDCDC"[i:i+len('CDC')] for i in range(len("ABCDCDC"))))
-# 2
 
 
 sum((i in a) - (i in b) for i in n)
@@ -201,11 +177,9 @@ list(zip(*zip(eng, ger)))
 # [('one', 'two', 'three'), ('eins', 'zwei', 'drei')]
 
 map(lambda i: map(lambda x, y: x + y, matr_a[i], matr_b[i]), range(len(matr_a)))
-map(add, c[i], d[i]) for i in range(len(c))
-[map(sum, zip(*t)) for t in zip(X, Y)]
-
-list(map(list, zip(*matrix.lists)))
-
+(map(add, c[i], d[i]) for i in range(len(c)))
+(map(sum, zip(*t)) for t in zip(X, Y))
+map(list, zip(*matrix.lists))
 
 A = [1, 2, 3, 4]
 B = [2, 3, 5, 7]
@@ -215,14 +189,14 @@ list(map(operator.add, A, B))
 # [3, 5, 8, 11]
 
 L = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-reduce(operator.add, L)
+functools.reduce(operator.add, L)
 # 55
 sum(L)
 # 55
 
 U = [1, 2, 3]
 V = [2, 3, 5]
-reduce(operator.add, map(operator.mul, U, V))
+functools.reduce(operator.add, map(operator.mul, U, V))
 # 23
 sum(map(operator.mul, U, V))
 # 23
@@ -301,5 +275,5 @@ if all((x, y, z)):
 # Note, many of the above recipes can be optimized by replacing global lookups
 # with local variables defined as default values. For example,
 # the dotproduct recipe can be written as:
-def dotproduct_(vec1, vec2, sum=sum, map=map, mul=operator.mul):
+def dot_product_(vec1, vec2, sum=sum, map=map, mul=operator.mul):
     return sum(map(mul, vec1, vec2))

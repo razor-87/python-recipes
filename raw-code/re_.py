@@ -38,7 +38,8 @@ if m:
     current = m.group(0)
 
 # email
-re.compile(r"^[\w-]{1,}@[a-zA-Z0-9]{1,}\.\w{1,3}")
+r"[a-z][\w._-]*@[a-z]+\.[a-z]{1,3}$"
+r"^[\w-]{1,}@[a-zA-Z0-9]{1,}\.\w{1,3}$"
 
 
 print(re.escape('http://www.python.org'))

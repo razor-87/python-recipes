@@ -6,9 +6,6 @@ import numpy as np
 
 
 help(5)
-# Help on int object:
-# (etc etc)
-
 dir(5)
 # ['__abs__', '__add__', ...]
 
