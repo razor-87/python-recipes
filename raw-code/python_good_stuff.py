@@ -155,13 +155,13 @@ a, *rest, b = range(5)
 *rest, a, b = range(5)
 
 
-
 [*iterable]
 # iterable -> list
 (*iterable,)
 # iterable -> tuple
 [*"string"]
 # ['s', 't', 'r', 'i', 'n', 'g']
+
 
 import array
 a = array.array('c', s)
@@ -172,8 +172,6 @@ print(a)
 # array('c', 'yello, world')
 a.tostring()
 # 'yello, world'
-
-
 
 
 # Python Riddle: 👻 it is a mystery

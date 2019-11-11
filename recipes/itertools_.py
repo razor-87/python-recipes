@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-08-01 11:08:22
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-06 17:05:00
+# @Last Modified time: 2019-11-11 19:11:40
 import collections
 import itertools
 import operator
@@ -12,8 +12,6 @@ import random
 # [(1, 2), (1, 3), (2, 3)]
 [*itertools.permutations([1, 2, 3])]
 # [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]
-[*itertools.accumulate([1, 4, 3, 5], max)]
-# [1, 4, 4, 5]
 
 for i in itertools.count(3):
     print(i)
@@ -31,13 +29,11 @@ itertools.takewhile(lambda x: x % 2 == 0, [2, 4, 6, 7, 9, 8])
 list(itertools.starmap(pow, [(2, 5), (3, 2), (10, 3)]))
 # [32, 9, 1000]
 
-list(itertools.compress('abcd', [0, 1, 1, 0]))
-# ['b', 'c']
-
 list(itertools.chain.from_iterable([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
 list(itertools.chain.from_iterable((range(1, 4), range(4, 7), range(7, 10))))
 # [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+vowel = lambda char: char.lower() in "aeiou"
 list(itertools.filterfalse(vowel, 'Aardvark'))
 # ['r', 'd', 'v', 'r', 'k']
 list(itertools.dropwhile(vowel, 'Aardvark'))
@@ -60,6 +56,10 @@ list(itertools.accumulate(sample, min))
 # [5, 4, 2, 2, 2, 2, 2, 0, 0, 0]
 list(itertools.accumulate(sample, max))
 # [5, 5, 5, 8, 8, 8, 8, 8, 9, 9]
+[*itertools.accumulate([1, 4, 3, 5], max)]
+# [1, 4, 4, 5]
+[*itertools.accumulate([1, -1, -1, -1, 1, -1, 1, 1], operator.add)]
+# [1, 0, -1, -2, -1, -2, -1, 0]
 list(itertools.accumulate(sample, operator.mul))
 # [5, 20, 40, 320, 2240, 13440, 40320, 0, 0, 0]
 list(itertools.accumulate(range(1, 11), operator.mul))  # list of factorials
@@ -199,6 +199,12 @@ list(zip(*itertools.tee('ABC')))
 
 for c in itertools.chain(range(3), range(12, 15)):
     print(c)
+# 0
+# 1
+# 2
+# 12
+# 13
+# 14
 
 # itertools.permutations() generates permutations
 # for an iterable. Time to brute-force those passwords ;-)
