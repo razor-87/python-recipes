@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:47:20
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-24 18:28:35
+# @Last Modified time: 2019-11-15 18:29:46
 
 [[0] * 3 for _ in range(3)]
 # [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
@@ -62,6 +62,8 @@ lists = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 # {0: [0], 1: [1], 2: [4], 3: [9], 4: [16]}
 {i: (*(j**i for j in range(1, 5)),) for i in range(1, 5)}
 # {1: (1, 2, 3, 4), 2: (1, 4, 9, 16), 3: (1, 8, 27, 64), 4: (1, 16, 81, 256)}
+{x**3: x == round((x**3)**(1/3)) for x in range(5)}
+# {0: True, 1: True, 8: True, 27: True, 64: True}
 {str(i): i for i in range(5)}
 # {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
 {i: [] for i in range(5)}

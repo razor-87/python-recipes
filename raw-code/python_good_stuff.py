@@ -142,6 +142,9 @@ li = ['spam', 'egg', 'spam']
 li.clear()
 
 
+half_size = len(numbers) // 2
+median = sum(numbers[half_size - 1:half_size + 1]) / 2
+
 # Since Python 3.5
 [1, 2, *[3, 4]]
 # [1, 2, 3, 4]
@@ -224,7 +227,7 @@ name = user.name() if user is not None else 'Guest'
 
 xP == hP and text[:m] == P and print(0, end=' ')
 
-
+(func1 if expression else func2)(args)
 
 
 db = MySQLdb.connect("localhost", "username", "password", "dbname")
@@ -643,6 +646,93 @@ process_data(**x, c=23, d=42)
 
 
 
+# Avoiding branch prediction failure
+# There are many ways to help your code avoid branch prediction failure.
+# One way is to re-structure code so that conditional statements don’t appear
+# inside of loops. This can be done with clever bitwise operations or simple
+# code re-writes, e.g. changing
+for x in data:
+    if f(z):
+        g(x)
+    else:
+        g(x)
+# into
+if f(z):
+    for x in data:
+        g(x)
+else:
+    for x in data:
+        h(x)
+# This is somewhat cumbersome because we are duplicating logic
+# (i.e. the for-loop) but even this can be abstracted away:
+def loop_with(data, func):
+    for x in data:
+        func(x)
+
+loop_with(data, g if f(z) else h)
+
+
+
+
+# A simple way to choose one of two possible values
+L1 = [1, 2, 0, 3, 0, 5]
+L2 = [(p, 0xFF)[p == 0] for p in L1]  # [0xFF if p == 0 else p for p in L1]
+L2
+# [1, 2, 255, 3, 255, 5]
+
+
+
+# Future-proof APIs with keyword-only arguments
+def f(*, a=1, b=2, c=4, **kwargs):
+    return sum([a, b, c]) + sum(kwargs.values())
+
+
+
+# Data classes
+@dataclass
+class Person:
+    name: str
+    age: int
+
+@dataclass
+class Coder(Person):
+    preferred_language: str = 'Python 3'
+
+
+
+from collections import namedtuple
+Person = namedtuple(
+        'Person',
+        ['name', 'age', 'height', 'ears', 'eyes'],
+        defaults=(2, 2,)
+)
+Person('Milton', 25, 174)
+# Person(name='Milton', age=25, height=174, ears=2, eyes=2)
+
+
+
+from typing import NamedTuple
+
+class Person(NamedTuple):
+    # Type hints are optional, you don't have to use them but they are great!
+    # I encorage you to learn more about them :)
+    name: str
+    age: int
+    height: int
+    ears: int = 2
+    eyes: int = 2
+
+milton = Person('Milton', 25, 174)
+milton
+# Person(name='Milton', age=25, height=174, ears=2, eyes=2)
+caitlyn = Person(name='Caitlyn', age=25, height=174, ears=1)
+caitlyn
+# Person(name='Caitlyn', age=25, height=174, ears=1, eyes=2)
+
+# Immutability
+milton.name = 'Miguel'
+
+
 
 # Append[1]        O(1)
 # Pop last         O(1)
@@ -777,88 +867,16 @@ q.get()
 
 
 
-# Avoiding branch prediction failure
-# There are many ways to help your code avoid branch prediction failure.
-# One way is to re-structure code so that conditional statements don’t appear
-# inside of loops. This can be done with clever bitwise operations or simple
-# code re-writes, e.g. changing
-for x in data:
-    if f(z):
-        g(x)
-    else:
-        g(x)
-# into
-if f(z):
-    for x in data:
-        g(x)
-else:
-    for x in data:
-        h(x)
-# This is somewhat cumbersome because we are duplicating logic
-# (i.e. the for-loop) but even this can be abstracted away:
-def loop_with(data, func):
-    for x in data:
-        func(x)
-
-loop_with(data, g if f(z) else h)
-
-
-
-
-# A simple way to choose one of two possible values
-L1 = [1, 2, 0, 3, 0, 5]
-L2 = [(p, 0xFF)[p == 0] for p in L1]  # [0xFF if p == 0 else p for p in L1]
-L2
-# [1, 2, 255, 3, 255, 5]
-
-
-
-# Future-proof APIs with keyword-only arguments
-def f(*, a=1, b=2, c=4, **kwargs):
-    return sum([a, b, c]) + sum(kwargs.values())
-
-
-
-# Data classes
-@dataclass
-class Person:
-    name: str
-    age: int
-
-@dataclass
-class Coder(Person):
-    preferred_language: str = 'Python 3'
-
-
-
-from collections import namedtuple
-Person = namedtuple(
-        'Person',
-        ['name', 'age', 'height', 'ears', 'eyes'],
-        defaults=(2, 2,)
-)
-Person('Milton', 25, 174)
-# Person(name='Milton', age=25, height=174, ears=2, eyes=2)
-
-
-
-from typing import NamedTuple
-
-class Person(NamedTuple):
-    # Type hints are optional, you don't have to use them but they are great!
-    # I encorage you to learn more about them :)
-    name: str
-    age: int
-    height: int
-    ears: int = 2
-    eyes: int = 2
-
-milton = Person('Milton', 25, 174)
-milton
-# Person(name='Milton', age=25, height=174, ears=2, eyes=2)
-caitlyn = Person(name='Caitlyn', age=25, height=174, ears=1)
-caitlyn
-# Person(name='Caitlyn', age=25, height=174, ears=1, eyes=2)
-
-# Immutability
-milton.name = 'Miguel'
+import heapq
+laptop_costs = {
+    "Compaq": 499,
+    "Dell": 530,
+    "Apple": 999,
+    "HP": 750,
+    "ASUS": 650
+}
+key_values = [*zip(laptop_costs.values(), laptop_costs.keys())]
+heapq.nsmallest(2, key_values)  # The 2 cheapest laptops
+# [(499, 'Compaq'), (530, 'Dell')]
+heapq.nlargest(2, key_values)  # The 2 expensive laptops
+# [(999, 'Apple'), (750, 'HP')]
