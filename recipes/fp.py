@@ -2,12 +2,13 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-15 18:30:22
+# @Last Modified time: 2019-11-16 16:20:39
 import collections
 import functools
 import itertools
 import math
 import operator
+from typing import List
 
 
 # Math operations: add(), sub(), mul(), floordiv(), abs(), …
@@ -78,11 +79,17 @@ sorted((int(c.isdigit()), int(c in '02468'), int(c.isupper()), c) for c in arr)
 # 4
 (lambda x, y: x + y)(5, 3)
 # 8
-
 mod_checker = lambda x, mod=0: lambda y: True if y % x == mod else False
+
 
 (0, 1, 2, 3) == (*reversed([3, 2, 1, 0]),)
 # True
+
+[*enumerate('albatroz', 1)]
+# [(1, 'a'), (2, 'l'), (3, 'b'), (4, 'a'), (5, 't'), (6, 'r'), (7, 'o'), (8, 'z')]
+[*map(lambda a, b: (a, b), range(11), [2, 4, 8])]
+# [(0, 2), (1, 4), (2, 8)]
+
 
 [*enumerate('abc')]
 # [(0, 'a'), (1, 'b'), (2, 'c')]
@@ -191,6 +198,10 @@ prints = functools.partial(print, end='end')
 prints()
 # end
 
+[*zip('ABC', range(5))]
+# [('A', 0), ('B', 1), ('C', 2)]
+[*zip('ABC', range(5), [10, 20, 30, 40])]
+# [('A', 0, 10), ('B', 1, 20), ('C', 2, 30)]
 [*zip(range(7), [x ** 2 for x in range(7)])]
 # [(0, 0), (1, 1), (2, 4), (3, 9), (4, 16), (5, 25), (6, 36)]
 
@@ -258,8 +269,83 @@ if all((x, y, z)):
     print('passed')
 
 
-# Note, many of the above recipes can be optimized by replacing global lookups
-# with local variables defined as default values. For example,
-# the dotproduct recipe can be written as:
 def dot_product_(vec1, vec2, sum=sum, map=map, mul=operator.mul):
+    """
+    Note, many of the above recipes can be optimized by replacing global lookups
+    with local variables defined as default values. For example,
+    the dotproduct recipe can be written as:
+    """
     return sum(map(mul, vec1, vec2))
+
+
+def vowel(char):
+    """
+    >>> [*filter(vowel, 'Aardvark')]
+    ['A', 'a', 'a']
+    """
+    return char.lower() in "aeiou"
+
+
+def make_adder(n):
+    return lambda x: x + n
+
+
+def stringify_list(num_list):
+    return [*map(str, num_list)]
+
+
+def multiply(a, b):
+    """
+    >>> functools.reduce(multiply, [1, 2, 3, 4, 5])
+    """
+    return a * b
+
+
+def maximum_sum(list_of_lists):
+    """
+    >>> list_of_lists = [[1, 2, 3], [4, 5, 6], [10, 11, 12], [7, 8, 9]]
+    >>> maximum_sum(list_of_lists)
+    33
+    """
+    # return max(sum(l) for l in list_of_lists)
+    return sum(max(list_of_lists, key=sum))
+
+
+def sum_nest_elem(lst: List[List[int]], i: int) -> int:
+    """
+    >>> lst, i = [[1, 2, 3], [40, 50, 60], [9, 8, 7]], 1
+    >>> sum_nest_elem(lst, i)
+    60
+    """
+    return sum(sub[i] for sub in lst)
+
+
+def first_true(iterable, default=False, pred=None):
+    """Returns the first true value in the iterable.
+
+    If no true value is found, returns *default*
+
+    If *pred* is not None, returns the first item
+    for which pred(item) is true.
+
+    """
+    # first_true([a,b,c], x) --> a or b or c or x
+    # first_true([a,b], x, f) --> a if f(a) else b if f(b) else x
+    return next(filter(pred, iterable), default)
+
+
+def quantify(iterable, pred=bool):
+    """Count how many times the predicate is true"""
+    return sum(map(pred, iterable))
+
+
+def pattern_in_string(pattern, string):
+    n = len(string) - len(pattern) + 1
+    # return sum(string[i:].startswith(pattern) for i in range(n))
+    return sum(sub_string == pattern
+               for sub_string in (string[i:i + len(pattern)] for i in range(n)))
+
+
+def greeter(person, greeting):    # from functools import partial
+    return '{}, {}!'.format(greeting, person)
+hier = functools.partial(greeter, greeting='Hi')

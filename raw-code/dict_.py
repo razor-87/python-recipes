@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-10-04 19:15:19
-# @Last Modified by:   razor87
-# @Last Modified time: 2019-10-18 19:22:40
 import collections
 
 collections.defaultdict(int)
@@ -207,3 +203,11 @@ shorthand_dict([
     'action_type',
 ])
 # {'context': {'user_id': 42, 'user_ip': '1.2.3.4'}, 'mode': 'force', 'action_type': 7}
+
+
+
+
+def fact(x, cache={0: 1}):
+    if x not in cache:
+        cache[x] = x * fact(x - 1)
+    return cache[x]

@@ -2,7 +2,8 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:47:20
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-15 18:29:46
+# @Last Modified time: 2019-11-16 15:39:57
+
 
 [[0] * 3 for _ in range(3)]
 # [[0, 0, 0], [0, 0, 0], [0, 0, 0]]

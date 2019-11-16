@@ -304,6 +304,9 @@ point = Bunch(datum=y, squared=y*y, coord=x)
 
 
 
+def __repr__(self):
+    return f"<{type(self).__name__}(id={self.id})>"
+
 
 
 def f1(): print("True"); return True
@@ -759,7 +762,6 @@ myStack.pop()
 
 
 
-
 # append     O(1)
 # appendleft O(1)
 # pop        O(1)
@@ -863,7 +865,6 @@ q.get()
 # 'code'
 q.get()
 # Blocks / waits forever...
-
 
 
 

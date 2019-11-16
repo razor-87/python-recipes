@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-
-
+import binascii
 from string import ascii_lowercase, punctuation
+from typing import List
+
+
 ascii_lowercase
 # 'abcdefghijklmnopqrstuvwxyz'
 punctuation
@@ -18,7 +20,7 @@ bytes("hello", "ascii")
 
 bytes.hex()
 
-import binascii
+
 binascii.hexlify(data)
 
 
@@ -189,5 +191,29 @@ print(f'{correct:^10}|{phonetic_correct:^20}|{typo:^10}|{phonetic_typo:^20}|{pho
 # Centre Aligned:
 
 
-def __repr__(self):
-    return f"<{type(self).__name__}(id={self.id})>"
+def wrap(string: str, k: int) -> List[str]:
+    # textwrap.wrap('AABCAAADA', 3) -> ['AAB', 'CAA', 'ADA']
+    import textwrap
+    return textwrap.wrap(string, k)
+
+
+def fill(string: str, max_width: int) -> str:
+    # textwrap.fill('AABCAAADA', 3) -> 'AAB\nCAA\nADA'
+    import textwrap
+    return textwrap.fill(string, width=max_width)
+
+
+def most_amount_sub(string, sub):
+    n = 1
+    while b*n in string:
+        n += 1
+    return n - 1
+
+
+def rev_s(s: str) -> str:
+    # fastest reversing string in Python
+    return s[::-1]
+
+
+def remove_spaces(x: str) -> str:
+    return x.replace(' ', '')

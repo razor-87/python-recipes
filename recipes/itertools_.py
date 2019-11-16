@@ -2,110 +2,98 @@
 # @Author: razor87
 # @Date:   2019-08-01 11:08:22
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-11 19:11:40
+# @Last Modified time: 2019-11-16 16:41:13
 import collections
 import itertools
 import operator
-import random
 
 [*itertools.combinations([1, 2, 3], 2)]
 # [(1, 2), (1, 3), (2, 3)]
 [*itertools.permutations([1, 2, 3])]
 # [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]
 
-for i in itertools.count(3):
-    print(i)
-    if i >= 11:
-        break
-
-nums = list(itertools.accumulate(range(8)))
-list(itertools.takewhile(lambda x: x <= 6, nums))
-# [0, 1, 3, 6]
-
-itertools.takewhile(lambda x: x % 2 == 0, [2, 4, 6, 7, 9, 8])
-
-# list(map(pow, [(2, 5), (3, 2), (10, 3)]))
-# -> TypeError: pow expected at least 2 arguments, got 1
-list(itertools.starmap(pow, [(2, 5), (3, 2), (10, 3)]))
-# [32, 9, 1000]
-
-list(itertools.chain.from_iterable([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
-list(itertools.chain.from_iterable((range(1, 4), range(4, 7), range(7, 10))))
+[*itertools.chain.from_iterable([[1, 2, 3], [4, 5, 6], [7, 8, 9]])]
+[*itertools.chain.from_iterable((range(1, 4), range(4, 7), range(7, 10)))]
 # [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+s = "Aardvark"
 vowel = lambda char: char.lower() in "aeiou"
-list(itertools.filterfalse(vowel, 'Aardvark'))
+[*itertools.filterfalse(vowel, s)]
 # ['r', 'd', 'v', 'r', 'k']
-list(itertools.dropwhile(vowel, 'Aardvark'))
-# ['r', 'd', 'v', 'a', 'r', 'k']
-list(itertools.takewhile(vowel, 'Aardvark'))
-# ['A', 'a']
-list(itertools.compress('Aardvark', (1, 0, 1, 1, 0, 1)))
+[*itertools.compress(s, (1, 0, 1, 1, 0, 1))]
 # ['A', 'r', 'd', 'a']
-list(itertools.islice('Aardvark', 4))
+[*itertools.dropwhile(vowel, s)]
+# ['r', 'd', 'v', 'a', 'r', 'k']
+[*itertools.takewhile(vowel, s)]
+# ['A', 'a']
+[*itertools.takewhile(lambda x: x <= 6, [0, 1, 3, 6, 10, 15, 21, 28])]
+# [0, 1, 3, 6]
+[*itertools.takewhile(lambda x: x % 2 == 0, [2, 4, 6, 7, 9, 8])]
+# [2, 4, 6]
+
+[*itertools.islice(s, 4)]
 # ['A', 'a', 'r', 'd']
-list(itertools.islice('Aardvark', 4, 7))
+[*itertools.islice(s, 4, 7)]
 # ['v', 'a', 'r']
-list(itertools.islice('Aardvark', 1, 7, 2))
+[*itertools.islice(s, 1, 7, 2)]
 # ['a', 'd', 'a']
 
 sample = [5, 4, 2, 8, 7, 6, 3, 0, 9, 1]
-list(itertools.accumulate(sample))
+[*itertools.accumulate(sample)]
 # [5, 9, 11, 19, 26, 32, 35, 35, 44, 45]
-list(itertools.accumulate(sample, min))
+[*itertools.accumulate(sample, min)]
 # [5, 4, 2, 2, 2, 2, 2, 0, 0, 0]
-list(itertools.accumulate(sample, max))
+[*itertools.accumulate(sample, max)]
 # [5, 5, 5, 8, 8, 8, 8, 8, 9, 9]
 [*itertools.accumulate([1, 4, 3, 5], max)]
 # [1, 4, 4, 5]
 [*itertools.accumulate([1, -1, -1, -1, 1, -1, 1, 1], operator.add)]
 # [1, 0, -1, -2, -1, -2, -1, 0]
-list(itertools.accumulate(sample, operator.mul))
+[*itertools.accumulate(range(8))]
+# [0, 1, 3, 6, 10, 15, 21, 28]
+[*itertools.accumulate(sample, operator.mul)]
 # [5, 20, 40, 320, 2240, 13440, 40320, 0, 0, 0]
-list(itertools.accumulate(range(1, 11), operator.mul))  # list of factorials
+[*itertools.accumulate(range(1, 11), operator.mul)]  # list of factorials
 # [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
-list(enumerate('albatroz', 1))
-# [(1, 'a'), (2, 'l'), (3, 'b'), (4, 'a'), (5, 't'), (6, 'r'), (7, 'o'), (8, 'z')]
-list(map(operator.mul, range(11), range(11)))
+[*map(operator.mul, range(11), range(11))]
 # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
-list(map(operator.mul, range(11), [2, 4, 8]))
+[*map(operator.mul, range(11), [2, 4, 8])]
 # [0, 4, 16]
-list(map(lambda a, b: (a, b), range(11), [2, 4, 8]))
-# [(0, 2), (1, 4), (2, 8)]
-list(itertools.starmap(operator.mul, enumerate('albatroz', 1)))
+
+# [*map(pow, [(2, 5), (3, 2), (10, 3)]))
+# -> TypeError: pow expected at least 2 arguments, got 1
+[*itertools.starmap(pow, [(2, 5), (3, 2), (10, 3)])]
+# [32, 9, 1000]
+[*itertools.starmap(operator.mul, enumerate('albatroz', 1))]
 # ['a', 'll', 'bbb', 'aaaa', 'ttttt', 'rrrrrr', 'ooooooo', 'zzzzzzzz']
-# sample = [5, 4, 2, 8, 7, 6, 3, 0, 9, 1]
-list(
-    itertools.starmap(lambda a, b: b / a,
-                      enumerate(itertools.accumulate(sample), 1)))
+[*itertools.starmap(lambda a, b: b / a,
+                    enumerate(itertools.accumulate(sample), 1))]
 # [5.0, 4.5, 3.6666666666666665, 4.75, 5.2, 5.333333333333333,
 # 5.0, 4.375, 4.888888888888889, 4.5]
-list(itertools.chain('ABC', range(2)))
+
+[*itertools.chain('ABC', range(2))]
 # ['A', 'B', 'C', 0, 1]
-list(itertools.chain(enumerate('ABC')))
+[*itertools.chain(enumerate('ABC'))]
 # [(0, 'A'), (1, 'B'), (2, 'C')]
-list(itertools.chain.from_iterable(enumerate('ABC')))
+[*itertools.chain.from_iterable(enumerate('ABC'))]
 # [0, 'A', 1, 'B', 2, 'C']
-list(zip('ABC', range(5)))
-# [('A', 0), ('B', 1), ('C', 2)]
-list(zip('ABC', range(5), [10, 20, 30, 40]))
-# [('A', 0, 10), ('B', 1, 20), ('C', 2, 30)]
-list(itertools.zip_longest('ABC', range(5)))
+
+[*itertools.zip_longest('ABC', range(5))]
 # [('A', 0), ('B', 1), ('C', 2), (None, 3), (None, 4)]
-list(itertools.zip_longest('ABC', range(5), fillvalue='?'))
+[*itertools.zip_longest('ABC', range(5), fillvalue='?')]
 # [('A', 0), ('B', 1), ('C', 2), ('?', 3), ('?', 4)]
-list(itertools.product('ABC', range(2)))
+[*itertools.product('ABC', range(2))]
 # [('A', 0), ('A', 1), ('B', 0), ('B', 1), ('C', 0), ('C', 1)]
 suits = 'spades hearts diamonds clubs'.split()
-list(itertools.product('AK', suits))
+[*itertools.product('AK', suits)]
 # [('A', 'spades'), ('A', 'hearts'), ('A', 'diamonds'), ('A', 'clubs'),
 # ('K', 'spades'), ('K', 'hearts'), ('K', 'diamonds'), ('K', 'clubs')]
-list(itertools.product('ABC'))
+[*itertools.product('ABC')]
 # [('A',), ('B',), ('C',)]
-list(itertools.product('ABC', repeat=2))
+[*itertools.product('ABC', repeat=2)]
 # [('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'B'),
 # ('B', 'C'), ('C', 'A'), ('C', 'B'), ('C', 'C')]
-list(itertools.product(range(2), repeat=3))
+[*itertools.product(range(2), repeat=3)]
 # [(0, 0, 0), (0, 0, 1), (0, 1, 0), (0, 1, 1), (1, 0, 0),
 # (1, 0, 1), (1, 1, 0), (1, 1, 1)]
 rows = itertools.product('AB', range(2), repeat=2)
@@ -128,37 +116,46 @@ for row in rows:
 # ('B', 1, 'B', 0)
 # ('B', 1, 'B', 1)
 
+for i in itertools.count(3):
+    print(i)
+    if i >= 6:
+        break
+# 3
+# 4
+# 5
+# 6
+
 ct = itertools.count()
 next(ct)
 # 0
 next(ct), next(ct), next(ct)
 # (1, 2, 3)
-list(itertools.islice(itertools.count(1, .3), 3))
+[*itertools.islice(itertools.count(1, .3), 3)]
 # [1, 1.3, 1.6]
 cy = itertools.cycle('ABC')
 next(cy)
 # 'A'
-list(itertools.islice(cy, 7))
+[*itertools.islice(cy, 7)]
 # ['B', 'C', 'A', 'B', 'C', 'A', 'B']
 rp = itertools.repeat(7)
 next(rp), next(rp)
 # (7, 7)
-list(itertools.repeat(8, 4))
+[*itertools.repeat(8, 4)]
 # [8, 8, 8, 8]
-list(map(operator.mul, range(11), itertools.repeat(5)))
+[*map(operator.mul, range(11), itertools.repeat(5))]
 # [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
-list(itertools.combinations('ABC', 2))
+[*itertools.combinations('ABC', 2)]
 # [('A', 'B'), ('A', 'C'), ('B', 'C')]
-list(itertools.combinations_with_replacement('ABC', 2))
+[*itertools.combinations_with_replacement('ABC', 2)]
 # [('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C')]
-list(itertools.permutations('ABC', 2))
+[*itertools.permutations('ABC', 2)]
 # [('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]
-list(itertools.groupby('LLLLAAGGG'))
+[*itertools.groupby('LLLLAAGGG')]
 # [('L', <itertools._grouper object at 0x102227cc0>),
 # ('A', <itertools._grouper object at 0x102227b38>),
 # ('G', <itertools._grouper object at 0x102227b70>)]
 for char, group in itertools.groupby('LLLLAAAGG'):
-    print(char, '->', list(group))
+    print(char, '->', [*group])
 # L -> ['L', 'L', 'L', 'L']
 # A -> ['A', 'A',]
 # G -> ['G', 'G', 'G']
@@ -170,18 +167,18 @@ animals.sort(key=len)
 animals
 # ['rat', 'bat', 'duck', 'bear', 'lion', 'eagle', 'shark', 'giraffe', 'dolphin']
 for length, group in itertools.groupby(animals, len):
-    print(length, '->', list(group))
+    print(length, '->', [*group])
 # 3 -> ['rat', 'bat']
 # 4 -> ['duck', 'bear', 'lion']
 # 5 -> ['eagle', 'shark']
 # 7 -> ['giraffe', 'dolphin']
 for length, group in itertools.groupby(reversed(animals), len):
-    print(length, '->', list(group))
+    print(length, '->', [*group])
 # 7 -> ['dolphin', 'giraffe']
 # 5 -> ['shark', 'eagle']
 # 4 -> ['lion', 'bear', 'duck']
 # 3 -> ['bat', 'rat']
-list(itertools.tee('ABC'))
+[*itertools.tee('ABC')]
 # [<itertools._tee object at 0x10222abc8>, <itertools._tee object at 0x10222ac08>]
 g1, g2 = itertools.tee('ABC')
 next(g1)
@@ -190,11 +187,11 @@ next(g2)
 # 'A'
 next(g2)
 # 'B'
-list(g1)
+[*g1]
 # ['B', 'C']
-list(g2)
+[*g2]
 # ['C']
-list(zip(*itertools.tee('ABC')))
+[*zip(*itertools.tee('ABC'))]
 # [('A', 'A'), ('B', 'B'), ('C', 'C')]
 
 for c in itertools.chain(range(3), range(12, 15)):
@@ -235,7 +232,7 @@ for p in itertools.permutations('ABCD'):
 # ('D', 'C', 'A', 'B')
 # ('D', 'C', 'B', 'A')
 
-lst = list(itertools.zip_longest('ABCD', 'xy', fillvalue='-'))
+lst = [*itertools.zip_longest('ABCD', 'xy', fillvalue='-')]
 # Ax By C- D-
 
 (*itertools.combinations_with_replacement('ABC', 2),)
@@ -245,7 +242,7 @@ lst = list(itertools.zip_longest('ABCD', 'xy', fillvalue='-'))
 # https://docs.python.org/3/library/itertools.html#itertools-recipes
 def take(n, iterable):
     """Return first n items of the iterable as a list"""
-    return list(itertools.islice(iterable, n))
+    return [*itertools.islice(iterable, n)]
 
 
 def prepend(value, iterator):
@@ -307,7 +304,7 @@ def dot_product(vec1, vec2):
 def flatten(nested_lists):
     """Flatten one level of nesting.
 
-    >>> list(flatten([[0, 1], [2, 3]]))
+    >>> [*flatten([[0, 1], [2, 3]]))
     [0, 1, 2, 3]
     """
     return itertools.chain.from_iterable(nested_lists)
@@ -330,28 +327,6 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-def grouper(iterable, n, fillvalue=None):
-    """Collect data into fixed-length chunks or blocks"""
-    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"""
-    args = [iter(iterable)] * n
-    return itertools.zip_longest(*args, fillvalue=fillvalue)
-
-
-def roundrobin(*iterables):
-    """roundrobin('ABC', 'D', 'EF') --> A D E B F C"""
-    # Recipe credited to George Sakkis
-    num_active = len(iterables)
-    nexts = itertools.cycle(iter(it).__next__ for it in iterables)
-    while num_active:
-        try:
-            for next in nexts:
-                yield next()
-        except StopIteration:
-            # Remove the iterator we just exhausted from the cycle.
-            num_active -= 1
-            nexts = itertools.cycle(itertools.islice(nexts, num_active))
-
-
 def partition(pred, iterable):
     """Use a predicate to partition entries into false entries and true entries"""
     # partition(is_odd, range(10)) --> 0 2 4 6 8   and  1 3 5 7 9
@@ -361,27 +336,9 @@ def partition(pred, iterable):
 
 def powerset(iterable):
     """powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"""
-    s = list(iterable)
+    s = [*iterable]
     return itertools.chain.from_iterable(
         itertools.combinations(s, r) for r in range(len(s) + 1))
-
-
-def unique_everseen(iterable, key=None):
-    """List unique elements, preserving order. Remember all elements ever seen."""
-    # unique_everseen('AAAABBBCCDAABBB') --> A B C D
-    # unique_everseen('ABBCcAD', str.lower) --> A B C D
-    seen = set()
-    seen_add = seen.add
-    if key is None:
-        for element in itertools.filterfalse(seen.__contains__, iterable):
-            seen_add(element)
-            yield element
-    else:
-        for element in iterable:
-            k = key(element)
-            if k not in seen:
-                seen_add(k)
-                yield element
 
 
 def unique_justseen(iterable, key=None):
@@ -390,3 +347,34 @@ def unique_justseen(iterable, key=None):
     # unique_justseen('ABBCcAD', str.lower) --> A B C A D
     return map(next,
                map(operator.itemgetter(1), itertools.groupby(iterable, key)))
+
+
+def grouper(iterable, n, fillvalue=None):
+    """Collect data into fixed-length chunks or blocks"""
+    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"""
+    args = [iter(iterable)] * n
+    return itertools.zip_longest(*args, fillvalue=fillvalue)
+
+
+def grouper_(iterable, n, fillvalue=None):
+    from itertools import zip_longest
+    args = [iter(iterable)] * n
+    return zip_longest(*args, fillvalue=fillvalue)
+
+
+def smth_loops(width, height, depth):
+    """
+    >>> smth_loops(2, 2, 2)
+    [(0, 0, 0),
+     (0, 0, 1),
+     (0, 1, 0),
+     (0, 1, 1),
+     (1, 0, 0),
+     (1, 0, 1),
+     (1, 1, 0),
+     (1, 1, 1)]
+    """
+    from itertools import product
+    shape = [width, height, depth]
+    ret = [(i, j, k) for (i, j, k) in product(*map(range, shape))]
+    return ret
