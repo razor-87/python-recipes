@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-11-16 15:27:00
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-16 16:21:37
+# @Last Modified time: 2019-11-26 15:16:25
 
 
 def gen_eq(a, b):
@@ -85,8 +85,10 @@ def unique_stable(arr):
 
 
 def chunks(g, n=2):
-    # Collect data into chunks of a maximum size
-    # chunks('ABCDEFG', 3) --> ABC DEF G
+    """
+    Collect data into chunks of a maximum size
+    chunks('ABCDEFG', 3) --> ABC DEF G
+    """
     from itertools import islice, repeat
     yield from map(lambda it: islice(it, n), repeat(iter(g)))
 
@@ -96,23 +98,24 @@ def chunks_(string, k):
 
 
 def grouper(iterable, n, fillvalue=''):
-    """Collect data into fixed-length chunks or blocks
+    """
+    Collect data into fixed-length chunks or blocks
     grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
 
-    >>> big_string = 'gfdgfgdgdbvcgjkjhddfgr hfghfgf kjhkhjtgg ghfvbvcbcvfhjhgjkhljhkh'
+    >>> big_string = "gfdgfgdgdbvcgjkjhddfgr hfghfgf kjhkhjtgg ghfvbvcbcvfhjkh"
     >>> '\n'.join(''.join(chunk) for chunk in grouper(big_string, 10, '_'))
-    'gfdgfgdgdb\nvcgjkjhddf\ngr hfghfgf\n kjhkhjtgg\n ghfvbvcbc\nvfhjhgjkhl\njhkh______'
+    'gfdgfgdgdb\nvcgjkjhddf\ngr hfghfgf\n kjhkhjtgg\n ghfvbvcbc\nvfhjkh____'
     """
-    #
     from itertools import zip_longest
     args = (iter(iterable),) * n
-    # return zip_longest(fillvalue=fillvalue, *args)
     yield from zip_longest(fillvalue=fillvalue, *args)
 
 
 def moving_average(iterable, n=3):
-    # moving_average([40, 30, 50, 46, 39, 44]) --> 40.0 42.0 45.0 43.0
-    # http://en.wikipedia.org/wiki/Moving_average
+    """
+    http://en.wikipedia.org/wiki/Moving_average
+    moving_average([40, 30, 50, 46, 39, 44]) --> 40.0 42.0 45.0 43.0
+    """
     from collections import deque
     from itertools import islice
     it = iter(iterable)
@@ -126,24 +129,22 @@ def moving_average(iterable, n=3):
 
 
 def iter_except(func, exception, first=None):
-    """ Call a function repeatedly until an exception is raised.
-
+    """
+    Call a function repeatedly until an exception is raised.
     Converts a call-until-exception interface to an iterator interface.
     Like builtins.iter(func, sentinel) but uses an exception instead
     of a sentinel to end the loop.
 
-    Examples:
-        iter_except(functools.partial(heappop, h), IndexError)   # priority queue iterator
-        iter_except(d.popitem, KeyError)                         # non-blocking dict iterator
-        iter_except(d.popleft, IndexError)                       # non-blocking deque iterator
-        iter_except(q.get_nowait, Queue.Empty)                   # loop over a producer Queue
-        iter_except(s.pop, KeyError)                             # non-blocking set iterator
-
+    priority queue - iter_except(functools.partial(heappop, h), IndexError)
+    non-blocking dict - iter_except(d.popitem, KeyError)
+    non-blocking set -  iter_except(s.pop, KeyError)
+    non-blocking deque - iter_except(d.popleft, IndexError)
+    loop over a producer Queue - iter_except(q.get_nowait, Queue.Empty)
     """
     try:
         if first is not None:
-            yield first(
-            )  # For database APIs needing an initial cast to db.first()
+            # For database APIs needing an initial cast to db.first()
+            yield first()
         while True:
             yield func()
     except exception:
@@ -151,8 +152,10 @@ def iter_except(func, exception, first=None):
 
 
 def roundrobin(*iterables):
-    """roundrobin('ABC', 'D', 'EF') --> A D E B F C"""
-    # Recipe credited to George Sakkis
+    """
+    Recipe credited to George Sakkis
+    roundrobin('ABC', 'D', 'EF') --> A D E B F C
+    """
     import itertools
     num_active = len(iterables)
     nexts = itertools.cycle(iter(it).__next__ for it in iterables)

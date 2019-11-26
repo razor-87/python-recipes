@@ -2,8 +2,7 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:47:20
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-16 15:39:57
-
+# @Last Modified time: 2019-11-26 14:59:28
 
 [[0] * 3 for _ in range(3)]
 # [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
@@ -46,6 +45,9 @@ lists = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 # ['banana', 'loganberry', 'passion fruit']
 [s for s in ['fsd', 'gf', '  ', 'dsf', ' '] if s.strip()]
 # ['fsd', 'gf', 'dsf']
+n, arr = 2, range(10)
+[{*arr[i:i+n]} for i in arr[::n]]  # cut on sets
+# [{0, 1}, {2, 3}, {4, 5}, {6, 7}, {8, 9}]
 
 (*(x for x in range(21) if not x & 1),)  # if x % 2 == 0
 # (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20)

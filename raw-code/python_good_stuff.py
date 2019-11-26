@@ -8,11 +8,11 @@ import numpy as np
 help(5)
 dir(5)
 # ['__abs__', '__add__', ...]
+dir(sys)
+# ['__breakpointhook__', '__displayhook__', '__doc__', ...]
 
-abs.__doc__
-# 'abs(number) -> number
+abs.__doc__  # 'abs(number) -> number
 # Return the absolute value of the argument.
-
 
 dis.dis(func)
 func.__code__.co_code
@@ -59,7 +59,7 @@ b = []
 id(b)
 # 4465566792
 
-dir(sys)
+
 sys.argv
 sys.executable
 sys.exit
@@ -116,7 +116,8 @@ asizeof.asizeof(set(range(10)))
 
 
 class SameHash():
-    def __hash__(self): return 1
+    def __hash__(self):
+        return 1
 
 a, b = SameHash(), SameHash()
 a == b
@@ -132,22 +133,10 @@ hash(())  # hash(tuple())
 # 3527539
 
 
-from copy import deepcopy
-x = [[0, 0], [1, 1]]
-y = deepcopy(x)
-print('x', x, id(x), id(x[0]), id(x[1]))
-
-
-li = ['spam', 'egg', 'spam']
-li.clear()
-
 
 half_size = len(numbers) // 2
 median = sum(numbers[half_size - 1:half_size + 1]) / 2
 
-# Since Python 3.5
-[1, 2, *[3, 4]]
-# [1, 2, 3, 4]
 
 
 a, b, c = range(3)
@@ -158,23 +147,21 @@ a, *rest, b = range(5)
 *rest, a, b = range(5)
 
 
-[*iterable]
-# iterable -> list
-(*iterable,)
-# iterable -> tuple
-[*"string"]
-# ['s', 't', 'r', 'i', 'n', 'g']
+animals = [
+   'bird',
+   'fish',
+   'elephant',
+]
+for (first_char, *_, last_char) in animals:
+    print(first_char, last_char)
+# b d
+# f h
+# e t
 
 
-import array
-a = array.array('c', s)
-print(a)
-# array('c', 'Hello, world')
-a[0] = 'y'
-print(a)
-# array('c', 'yello, world')
-a.tostring()
-# 'yello, world'
+
+
+
 
 
 # Python Riddle: 👻 it is a mystery
@@ -186,13 +173,8 @@ True == 1 == 1.0
 hash(True), hash(1), hash(1.0)
 # (1, 1, 1)
 
-print(id(False), id(True))
-# 8791482468720 8791482468688
-print(id(1 != 1), id(1 == 1))
-# 8791482468720 8791482468688
-print(id(bool()), id(bool(1)))
-# 8791482468720 8791482468688
-
+(id(False), id(True)) == (id(1 != 1), id(1 == 1)) == (id(bool()), id(bool(1)))
+# True
 
 bool(bool)          # True
 bool(12)            # True
@@ -215,8 +197,6 @@ assert el in seq
 
 
 
-
-
 # [expression]?[on_true]:[on_false]
 [on_true] if [expression] else [on_false]  # Ternary operator
 
@@ -228,17 +208,6 @@ name = user.name() if user is not None else 'Guest'
 xP == hP and text[:m] == P and print(0, end=' ')
 
 (func1 if expression else func2)(args)
-
-
-db = MySQLdb.connect("localhost", "username", "password", "dbname")
-cursor = db.cursor()
-sql = "SELECT `name`, `age` FROM `ursers` ORDER BY `age` DESC"
-cursor.execute(sql)
-results = cursor.fetchall()
-for row in results:
-    print(row[0] + row[1])
-db.close()
-
 
 
 
@@ -395,23 +364,6 @@ res = (a > 0) + (b > 0) + (c > 0)
 
 
 
-# Why Python is Great: Namedtuples
-# Using namedtuple is way shorter than
-# defining a class manually:
-from collections import namedtuple
-Car = namedtup1e('Car', 'color mileage')
-# Our new "Car" class works as expected:
-my_car = Car('red', 3812.4)
-my_car.color
-'red'
-my_car.mileage
-3812.4
-# We get a nice string repr for free:
-my_car
-Car(color='red' , mileage=3812.4)
-# Like tuples, namedtuples are immutable:
-my_car.color = 'blue'
-AttributeError: "can't set attribute"
 
 
 
@@ -461,17 +413,6 @@ del l[:i]
 l = l[:j]
 l = l[i:]
 
-# Sorted list from an iterable
-d = {'a': 1, ...}
-l = sorted(d)
-
-
-
-# Building a string
-s = ''.join(f(x) for x in l)
-
-# Dict from parallel sequences of keys and values
-dict(zip(keys, values))
 
 # Data type choice
 set1 = set([tuple(entry.items()) for entry in list1])
@@ -583,6 +524,12 @@ faulthandler.enable()
 
 
 
+import atexit
+def goodbye(name, adjective):
+    print('Goodbye, %s, it was %s to meet you.' % (name, adjective))
+atexit.register(goodbye, 'Donny', 'nice')
+
+
 
 
 # In Python 3.4+ you can use
@@ -666,6 +613,7 @@ if f(z):
 else:
     for x in data:
         h(x)
+
 # This is somewhat cumbersome because we are duplicating logic
 # (i.e. the for-loop) but even this can be abstracted away:
 def loop_with(data, func):
@@ -685,199 +633,26 @@ L2
 
 
 
-# Future-proof APIs with keyword-only arguments
+
 def f(*, a=1, b=2, c=4, **kwargs):
+    # Future-proof APIs with keyword-only arguments
     return sum([a, b, c]) + sum(kwargs.values())
 
 
 
-# Data classes
-@dataclass
-class Person:
-    name: str
-    age: int
 
-@dataclass
-class Coder(Person):
-    preferred_language: str = 'Python 3'
+# Because Python has first-class functions they can
+# be used to emulate switch/case statements
+def dispatch_dict(operator, x, y):
+    return {
+        'add': lambda: x + y,
+        'sub': lambda: x - y,
+        'mul': lambda: x * y,
+        'div': lambda: x / y,
+    }.get(operator, lambda: None)()
 
+dispatch_dict('mul', 2, 8)
+# 16
 
-
-from collections import namedtuple
-Person = namedtuple(
-        'Person',
-        ['name', 'age', 'height', 'ears', 'eyes'],
-        defaults=(2, 2,)
-)
-Person('Milton', 25, 174)
-# Person(name='Milton', age=25, height=174, ears=2, eyes=2)
-
-
-
-from typing import NamedTuple
-
-class Person(NamedTuple):
-    # Type hints are optional, you don't have to use them but they are great!
-    # I encorage you to learn more about them :)
-    name: str
-    age: int
-    height: int
-    ears: int = 2
-    eyes: int = 2
-
-milton = Person('Milton', 25, 174)
-milton
-# Person(name='Milton', age=25, height=174, ears=2, eyes=2)
-caitlyn = Person(name='Caitlyn', age=25, height=174, ears=1)
-caitlyn
-# Person(name='Caitlyn', age=25, height=174, ears=1, eyes=2)
-
-# Immutability
-milton.name = 'Miguel'
-
-
-
-# Append[1]        O(1)
-# Pop last         O(1)
-# Pop intermediate O(k)
-# Insert           O(n)
-# Delete Item      O(n)
-# How to use a Python list as a stack (LIFO):
-myStack = []
-myStack.append('a')
-myStack.append('b')
-myStack.append('c')
-myStack
-# ['a', 'b', 'c']
-myStack.pop()
-# 'c'
-myStack.pop()
-# 'b'
-myStack.pop()
-# 'a'
-myStack.pop()
-# Traceback (most recent call last):
-#   File "<console>", line 1, in <module>
-# IndexError: pop from empty list
-
-
-
-# append     O(1)
-# appendleft O(1)
-# pop        O(1)
-# popleft    O(1)
-# remove     O(1)
-from collections import deque
-
-# How to use collections.deque as a stack (LIFO):
-myStack = deque()
-myStack.append('a')
-myStack.append('b')
-myStack.append('c')
-myStack
-# deque(['a', 'b', 'c'])
-myStack.pop()
-# 'c'
-myStack.pop()
-# 'b'
-myStack.pop()
-# 'a'
-myStack.pop()
-# Traceback (most recent call last):
-#   File "<console>", line 1, in <module>
-# IndexError: pop from an empty deque
-
-# How to use collections.deque as a FIFO queue:
-q = deque()
-q.append('eat')
-q.append('sleep')
-q.append('code')
-q
-# deque(['eat', 'sleep', 'code'])
-q.popleft()
-# 'eat'
-q.popleft()
-# 'sleep'
-q.popleft()
-# 'code'
-q.popleft()
-# IndexError: "pop from an empty deque"
-
-
-
-# Support Threading
-from queue import LifoQueue
-
-# How to use queue.LifoQueue as a stack:
-myStack = LifoQueue()
-myStack.put('a')
-myStack.put('b')
-myStack.put('c')
-myStack
-# <queue.LifoQueue object at 0x7f408885e2b0>
-myStack.get()
-# 'c'
-myStack.get()
-# 'b'
-myStack.get()
-# 'a'
-myStack.get_nowait()  # myStack.get() <--- Blocks / waits forever...
-# Traceback (most recent call last):
-# File "<console>", line 1, in <module>
-# File "/usr/lib/python3.7/queue.py", line 198, in get_nowait
-#   return self.get(block=False)
-# File "/usr/lib/python3.7/queue.py", line 167, in get
-#   raise Empty
-# queue.Empty
-
-# How to use queue.Queue as a FIFO queue:
-q = Queue()
-q.put('eat')
-q.put('sleep')
-q.put('code')
-q
-# <queue.Queue object at 0x1070f5b38>
-q.get()
-# 'eat'
-q.get()
-# 'sleep'
-q.get()
-# 'code'
-q.get_nowait()
-# queue.Empty
-q.get()
-# Blocks / waits forever...
-
-
-# How to use multiprocessing.Queue as a FIFO queue:
-from multiprocessing import Queue
-q = Queue()
-q.put('eat')
-q.put('sleep')
-q.put('code')
-q
-# <multiprocessing.queues.Queue object at 0x1081c12b0>
-q.get()
-# 'eat'
-q.get()
-# 'sleep'
-q.get()
-# 'code'
-q.get()
-# Blocks / waits forever...
-
-
-
-import heapq
-laptop_costs = {
-    "Compaq": 499,
-    "Dell": 530,
-    "Apple": 999,
-    "HP": 750,
-    "ASUS": 650
-}
-key_values = [*zip(laptop_costs.values(), laptop_costs.keys())]
-heapq.nsmallest(2, key_values)  # The 2 cheapest laptops
-# [(499, 'Compaq'), (530, 'Dell')]
-heapq.nlargest(2, key_values)  # The 2 expensive laptops
-# [(999, 'Apple'), (750, 'HP')]
+dispatch_dict('unknown', 2, 8)
+# None

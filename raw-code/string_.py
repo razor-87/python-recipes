@@ -1,8 +1,18 @@
 # -*- coding: utf-8 -*-
 import binascii
-from string import ascii_lowercase, punctuation
+import re
+from string import ascii_lowercase, digits, punctuation
 from typing import List
 
+
+
+str.encode()  # text/unicode -> bytes/utf-8
+bytes.decode()  # bytes/utf-8 -> text/unicode
+
+bytes("hello", "ascii")
+# b'hello'
+
+bytes.hex()
 
 ascii_lowercase
 # 'abcdefghijklmnopqrstuvwxyz'
@@ -15,27 +25,40 @@ ord('f')
 chr(102)
 # 'f'
 
-bytes("hello", "ascii")
-# b'hello'
-
-bytes.hex()
-
+ascii()
 
 binascii.hexlify(data)
-
 
 word.strip('.,!').lower()
 
 ''.swapcase()
 "-".join(s.split())
 
+# Building a string
+s = ''.join(f(x) for x in l)
+
+''.join(reversed('TURBO'))
+
+'_'.join('hello')
+# 'h_e_l_l_o'
+
+print('\n'.join(['0', '1', '2']))
+# 0
+# 1
+# 2
+
+''.join(reversed('aaabbb'))
+# bbbaaa
+''.join(reversed('aabbaa')) == 'aabbaa'
+# True
+
 
 s.split('', 1)
 s.rsplit()
-string.splitlines()
+str.splitlines()
 
 "111".zfill(10)
-
+# '0000000111'
 
 example_string = r'File on disk C:\\'   # Raw string
 
@@ -134,24 +157,6 @@ raw.translate(table)
                               "cdefghijklmnopqrstuvwxyzab"))
 
 
-''.join(reversed('TURBO'))
-
-'_'.join('hello')
-# 'h_e_l_l_o'
-
-print(', '.join(list))    # str.join()
-
-print('\n'.join(['0', '1', '2']))
-# 0
-# 1
-# 2
-
-
-
-''.join(reversed('aaabbb'))
-# bbbaaa
-''.join(reversed('aabbaa')) == 'aabbaa'
-# True
 
 "0123456789"[6:3:-1]
 # "654"
@@ -217,3 +222,59 @@ def rev_s(s: str) -> str:
 
 def remove_spaces(x: str) -> str:
     return x.replace(' ', '')
+
+
+
+
+
+
+
+
+# "[^"\s,):]
+# [^"\s,):]"
+# leap([\s\w+])year
+
+re.I  # re.IGNORECASE
+re.DEBUG
+
+
+len(max(re.findall(r'(1+)', '3441153111154354113111111')))
+# 6
+
+bool(re.findall(r'c{1}(\w*)w{1}(\w*)h{1}(\w*)', 'dcsdgfwgdh'))
+# True
+
+# +-float
+pattern = re.compile(r'^[-+]?[0-9]*\.[0-9]+$')
+pattern.match('text')
+print(bool(pattern.match('text')))
+
+# split
+regex_pattern = r"[,.]"
+re.split(regex_pattern, '100,000,000.000')
+# ['100', '000', '000', '000']
+
+
+sentence = "this is a test, not testing."
+it = re.finditer('\\btest\\b', sentence)
+for match in it:
+    print("match position: " + str(match.start()) + "-" + str(match.end()))
+
+# search 123-123 like strings
+m = re.search(r'\d+-\d+', line)
+if m:
+    current = m.group(0)
+
+# email
+r"[a-z][\w._-]*@[a-z]+\.[a-z]{1,3}$"
+r"^[\w-]{1,}@[a-zA-Z0-9]{1,}\.\w{1,3}$"
+
+
+print(re.escape('http://www.python.org'))
+# http://www\.python\.org
+legal_chars = ascii_lowercase + digits + "!#$%&'*+-.^_`|~:"
+print('[%s]+' % re.escape(legal_chars))
+# [abcdefghijklmnopqrstuvwxyz0123456789!\#\$%\&'\*\+\-\.\^_`\|\~:]+
+operators = ['+', '-', '*', '/', '**']
+print('|'.join(map(re.escape, sorted(operators, reverse=True))))
+# /|\-|\+|\*\*|\*

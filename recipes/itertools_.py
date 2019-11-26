@@ -2,15 +2,11 @@
 # @Author: razor87
 # @Date:   2019-08-01 11:08:22
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-16 16:41:13
+# @Last Modified time: 2019-11-18 10:11:13
 import collections
 import itertools
 import operator
 
-[*itertools.combinations([1, 2, 3], 2)]
-# [(1, 2), (1, 3), (2, 3)]
-[*itertools.permutations([1, 2, 3])]
-# [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]
 
 [*itertools.chain.from_iterable([[1, 2, 3], [4, 5, 6], [7, 8, 9]])]
 [*itertools.chain.from_iterable((range(1, 4), range(4, 7), range(7, 10)))]
@@ -77,11 +73,22 @@ sample = [5, 4, 2, 8, 7, 6, 3, 0, 9, 1]
 # [(0, 'A'), (1, 'B'), (2, 'C')]
 [*itertools.chain.from_iterable(enumerate('ABC'))]
 # [0, 'A', 1, 'B', 2, 'C']
+for c in itertools.chain(range(3), range(12, 15)):
+    print(c)
+# 0
+# 1
+# 2
+# 12
+# 13
+# 14
 
 [*itertools.zip_longest('ABC', range(5))]
 # [('A', 0), ('B', 1), ('C', 2), (None, 3), (None, 4)]
 [*itertools.zip_longest('ABC', range(5), fillvalue='?')]
 # [('A', 0), ('B', 1), ('C', 2), ('?', 3), ('?', 4)]
+[*itertools.zip_longest('ABCD', 'xy', fillvalue='-')]
+# [('A', 'x'), ('B', 'y'), ('C', '-'), ('D', '-')]
+
 [*itertools.product('ABC', range(2))]
 # [('A', 0), ('A', 1), ('B', 0), ('B', 1), ('C', 0), ('C', 1)]
 suits = 'spades hearts diamonds clubs'.split()
@@ -124,19 +131,20 @@ for i in itertools.count(3):
 # 4
 # 5
 # 6
-
+[*itertools.islice(itertools.count(1, .3), 3)]
+# [1, 1.3, 1.6]
 ct = itertools.count()
 next(ct)
 # 0
 next(ct), next(ct), next(ct)
 # (1, 2, 3)
-[*itertools.islice(itertools.count(1, .3), 3)]
-# [1, 1.3, 1.6]
+
 cy = itertools.cycle('ABC')
 next(cy)
 # 'A'
 [*itertools.islice(cy, 7)]
 # ['B', 'C', 'A', 'B', 'C', 'A', 'B']
+
 rp = itertools.repeat(7)
 next(rp), next(rp)
 # (7, 7)
@@ -144,12 +152,47 @@ next(rp), next(rp)
 # [8, 8, 8, 8]
 [*map(operator.mul, range(11), itertools.repeat(5))]
 # [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+
+[*itertools.permutations([1, 2, 3])]
+# [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]
+[*itertools.permutations('ABC', 2)]
+# [('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]
+for p in itertools.permutations('ABCD'):
+    print(p)
+# ('A', 'B', 'C', 'D')
+# ('A', 'B', 'D', 'C')
+# ('A', 'C', 'B', 'D')
+# ('A', 'C', 'D', 'B')
+# ('A', 'D', 'B', 'C')
+# ('A', 'D', 'C', 'B')
+# ('B', 'A', 'C', 'D')
+# ('B', 'A', 'D', 'C')
+# ('B', 'C', 'A', 'D')
+# ('B', 'C', 'D', 'A')
+# ('B', 'D', 'A', 'C')
+# ('B', 'D', 'C', 'A')
+# ('C', 'A', 'B', 'D')
+# ('C', 'A', 'D', 'B')
+# ('C', 'B', 'A', 'D')
+# ('C', 'B', 'D', 'A')
+# ('C', 'D', 'A', 'B')
+# ('C', 'D', 'B', 'A')
+# ('D', 'A', 'B', 'C')
+# ('D', 'A', 'C', 'B')
+# ('D', 'B', 'A', 'C')
+# ('D', 'B', 'C', 'A')
+# ('D', 'C', 'A', 'B')
+# ('D', 'C', 'B', 'A')
+
+[*itertools.combinations([1, 2, 3], 2)]
+# [(1, 2), (1, 3), (2, 3)]
 [*itertools.combinations('ABC', 2)]
 # [('A', 'B'), ('A', 'C'), ('B', 'C')]
 [*itertools.combinations_with_replacement('ABC', 2)]
 # [('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C')]
-[*itertools.permutations('ABC', 2)]
-# [('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]
+(*itertools.combinations_with_replacement('ABC', 2),)
+# (('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C'))
+
 [*itertools.groupby('LLLLAAGGG')]
 # [('L', <itertools._grouper object at 0x102227cc0>),
 # ('A', <itertools._grouper object at 0x102227b38>),
@@ -178,6 +221,7 @@ for length, group in itertools.groupby(reversed(animals), len):
 # 5 -> ['shark', 'eagle']
 # 4 -> ['lion', 'bear', 'duck']
 # 3 -> ['bat', 'rat']
+
 [*itertools.tee('ABC')]
 # [<itertools._tee object at 0x10222abc8>, <itertools._tee object at 0x10222ac08>]
 g1, g2 = itertools.tee('ABC')
@@ -193,50 +237,6 @@ next(g2)
 # ['C']
 [*zip(*itertools.tee('ABC'))]
 # [('A', 'A'), ('B', 'B'), ('C', 'C')]
-
-for c in itertools.chain(range(3), range(12, 15)):
-    print(c)
-# 0
-# 1
-# 2
-# 12
-# 13
-# 14
-
-# itertools.permutations() generates permutations
-# for an iterable. Time to brute-force those passwords ;-)
-for p in itertools.permutations('ABCD'):
-    print(p)
-# ('A', 'B', 'C', 'D')
-# ('A', 'B', 'D', 'C')
-# ('A', 'C', 'B', 'D')
-# ('A', 'C', 'D', 'B')
-# ('A', 'D', 'B', 'C')
-# ('A', 'D', 'C', 'B')
-# ('B', 'A', 'C', 'D')
-# ('B', 'A', 'D', 'C')
-# ('B', 'C', 'A', 'D')
-# ('B', 'C', 'D', 'A')
-# ('B', 'D', 'A', 'C')
-# ('B', 'D', 'C', 'A')
-# ('C', 'A', 'B', 'D')
-# ('C', 'A', 'D', 'B')
-# ('C', 'B', 'A', 'D')
-# ('C', 'B', 'D', 'A')
-# ('C', 'D', 'A', 'B')
-# ('C', 'D', 'B', 'A')
-# ('D', 'A', 'B', 'C')
-# ('D', 'A', 'C', 'B')
-# ('D', 'B', 'A', 'C')
-# ('D', 'B', 'C', 'A')
-# ('D', 'C', 'A', 'B')
-# ('D', 'C', 'B', 'A')
-
-lst = [*itertools.zip_longest('ABCD', 'xy', fillvalue='-')]
-# Ax By C- D-
-
-(*itertools.combinations_with_replacement('ABC', 2),)
-# (('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C'))
 
 
 # https://docs.python.org/3/library/itertools.html#itertools-recipes
@@ -254,12 +254,6 @@ def prepend(value, iterator):
 def tabulate(function, start=0):
     """Return function(0), function(1), ..."""
     return map(function, itertools.count(start))
-
-
-def tail(n, iterable):
-    """Return an iterator over the last n items"""
-    # tail(3, 'ABCDEFG') --> E F G
-    return iter(collections.deque(iterable, maxlen=n))
 
 
 def consume(iterator, n=None):
@@ -285,8 +279,8 @@ def all_equal(iterable):
 
 
 def padnone(iterable):
-    """Returns the sequence elements and then returns None indefinitely.
-
+    """
+    Returns the sequence elements and then returns None indefinitely.
     Useful for emulating the behavior of the built-in map() function.
     """
     return itertools.chain(iterable, itertools.repeat(None))
@@ -321,15 +315,18 @@ def repeatfunc(func, times=None, *args):
 
 
 def pairwise(iterable):
-    """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
+    """s -> (s0, s1), (s1, s2), (s2, s3), ..."""
     a, b = itertools.tee(iterable)
     next(b, None)
     return zip(a, b)
 
 
 def partition(pred, iterable):
-    """Use a predicate to partition entries into false entries and true entries"""
-    # partition(is_odd, range(10)) --> 0 2 4 6 8   and  1 3 5 7 9
+    """
+    Use a predicate to partition entries into false entries and true entries
+    partition(is_odd, range(10)) --> 0 2 4 6 8   and  1 3 5 7 9
+
+    """
     t1, t2 = itertools.tee(iterable)
     return itertools.filterfalse(pred, t1), filter(pred, t2)
 
@@ -342,21 +339,22 @@ def powerset(iterable):
 
 
 def unique_justseen(iterable, key=None):
-    """List unique elements, preserving order. Remember only the element just seen."""
-    # unique_justseen('AAAABBBCCDAABBB') --> A B C D A B
-    # unique_justseen('ABBCcAD', str.lower) --> A B C A D
+    """
+    List unique elements, preserving order. Remember only the element just seen.
+    unique_justseen('AAAABBBCCDAABBB') --> A B C D A B
+    unique_justseen('ABBCcAD', str.lower) --> A B C A D
+
+    """
     return map(next,
                map(operator.itemgetter(1), itertools.groupby(iterable, key)))
 
 
 def grouper(iterable, n, fillvalue=None):
-    """Collect data into fixed-length chunks or blocks"""
-    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"""
-    args = [iter(iterable)] * n
-    return itertools.zip_longest(*args, fillvalue=fillvalue)
+    """
+    Collect data into fixed-length chunks or blocks
+    grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
 
-
-def grouper_(iterable, n, fillvalue=None):
+    """
     from itertools import zip_longest
     args = [iter(iterable)] * n
     return zip_longest(*args, fillvalue=fillvalue)
@@ -378,3 +376,14 @@ def smth_loops(width, height, depth):
     shape = [width, height, depth]
     ret = [(i, j, k) for (i, j, k) in product(*map(range, shape))]
     return ret
+
+
+def spinning_wheel():
+    from itertools import cycle
+    from time import sleep
+    try:
+        for frame in cycle(r'-\|/-\|/'):
+            print('\r', frame, sep='', end='', flush=True)
+            sleep(0.2)
+    except KeyboardInterrupt:
+        return

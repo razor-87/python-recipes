@@ -148,39 +148,6 @@ for e in aList:
 f.close()
 
 
-
-def countdown(num_sec=3):
-    import time
-    for countdown in reversed(range(num_sec + 1)):
-        if countdown > 0:
-            print(countdown, end='...')
-            time.sleep(1)
-        else:
-            print('Go!')
-
-
-def spinning_wheel():
-    from itertools import cycle
-    from time import sleep
-    try:
-        for frame in cycle(r'-\|/-\|/'):
-            print('\r', frame, sep='', end='', flush=True)
-            sleep(0.2)
-    except KeyboardInterrupt:
-        return
-
-
-def progress(width=30):
-    from time import sleep
-    for percent in range(101):
-        left = width * percent // 100
-        right = width - left
-        print('\r[', '#' * left, ' ' * right, ']',
-              f' {percent:.0f}%',
-              sep='', end='', flush=True)
-        sleep(0.1)
-
-
 def f_open(filename='input.txt', mock=False):
     try:
         with open(filename) as f:
@@ -220,7 +187,3 @@ download_('style.css', memory_buffer)
 memory_buffer.getvalue()
 # 'Downloading app.js\nDownloading style.css\n'
 
-
-def seek_next_line(f):
-    for c in iter(lambda: f.read(1), '\n'):
-        pass

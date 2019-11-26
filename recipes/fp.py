@@ -2,14 +2,42 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-16 16:20:39
+# @Last Modified time: 2019-11-26 17:40:27
+
+"""
+all()
+any()
+bool()
+callable()
+delattr()
+enumerate()
+filter()
+getattr()
+hasattr()
+isinstance()
+issubclass()
+iter()
+len()
+map()
+max()
+min()
+next()
+pow()
+range()
+reversed()
+setattr()
+sorted()
+sum()
+type()
+vars()
+zip()
+"""
 import collections
 import functools
 import itertools
 import math
 import operator
 from typing import List
-
 
 # Math operations: add(), sub(), mul(), floordiv(), abs(), …
 # Logical operations: not_(), truth().
@@ -26,9 +54,6 @@ somelist.sort(key=operator.itemgetter(0))
 somelist.sort(key=operator.itemgetter(1))
 # [(6, 2, 4), (1, 5, 8), (9, 7, 5)]
 
-list_a = [(0, 1), (0, 1), (0, 1)]
-items = sorted(list_a, key=operator.itemgetter(1), reverse=True)
-
 # How to sort a Python dict by value
 # (== get a representation sorted by value)
 xs = {'a': 4, 'b': 3, 'c': 2, 'd': 1}
@@ -42,8 +67,9 @@ pairs.sort(key=lambda pair: pair[1])
 pairs
 # [(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
 
-# sort by len
-sorted([[1], [1, 1, 1], [1, 1]], reverse=True, key=len)
+sorted([(0, 1), (0, 1), (0, 1)], key=operator.itemgetter(1), reverse=True)
+# [(0, 1), (0, 1), (0, 1)]
+sorted([[1], [1, 1, 1], [1, 1]], reverse=True, key=len)  # sort by len
 # [[1, 1, 1], [1, 1], [1]]
 sorted(["ba", "ab", "aa", "aaa"], key=lambda x: (len(x), x))
 # ['aa', 'ab', 'ba', 'aaa']
@@ -55,7 +81,6 @@ sorted(list_b, key=int)
 # ['1', 5, '9', 14, 28, '28']
 sorted(list_b, key=str)
 # ['1', 14, 28, '28', 5, '9']
-
 sorted(range(-5, 6), key=lambda x: x ** 2)
 # [0, -1, 1, -2, 2, -3, 3, -4, 4, -5, 5]
 
@@ -79,17 +104,9 @@ sorted((int(c.isdigit()), int(c in '02468'), int(c.isupper()), c) for c in arr)
 # 4
 (lambda x, y: x + y)(5, 3)
 # 8
-mod_checker = lambda x, mod=0: lambda y: True if y % x == mod else False
-
 
 (0, 1, 2, 3) == (*reversed([3, 2, 1, 0]),)
 # True
-
-[*enumerate('albatroz', 1)]
-# [(1, 'a'), (2, 'l'), (3, 'b'), (4, 'a'), (5, 't'), (6, 'r'), (7, 'o'), (8, 'z')]
-[*map(lambda a, b: (a, b), range(11), [2, 4, 8])]
-# [(0, 2), (1, 4), (2, 8)]
-
 
 [*enumerate('abc')]
 # [(0, 'a'), (1, 'b'), (2, 'c')]
@@ -97,10 +114,14 @@ mod_checker = lambda x, mod=0: lambda y: True if y % x == mod else False
 # [(1, 'a'), (2, 'b'), (3, 'c')]
 [*enumerate('abcde')]
 # [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd'), (4, 'e')]
+[*enumerate('albatroz', 1)]
+# [(1, 'a'), (2, 'l'), (3, 'b'), (4, 'a'), (5, 't'), (6, 'r'), (7, 'o'), (8, 'z')]
 
 # create a concatenated string from 0 to 19 (e.g. "012..1819")
 "".join(map(str, range(20)))
 
+[*map(lambda a, b: (a, b), range(11), [2, 4, 8])]
+# [(0, 2), (1, 4), (2, 8)]
 [*map(lambda x: x**2, range(10))]
 # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
 
@@ -194,23 +215,24 @@ functools.reduce(lambda x, y: x*(y**5), map(int, input().split()), 1)
 print(*map(lambda x, y: x ^ y,
            map(int, input().split()), map(int, input().split())))
 
-prints = functools.partial(print, end='end')
-prints()
-# end
-
 [*zip('ABC', range(5))]
 # [('A', 0), ('B', 1), ('C', 2)]
 [*zip('ABC', range(5), [10, 20, 30, 40])]
 # [('A', 0, 10), ('B', 1, 20), ('C', 2, 30)]
-[*zip(range(7), [x ** 2 for x in range(7)])]
+[*zip(range(7), [x**2 for x in range(7)])]
 # [(0, 0), (1, 1), (2, 4), (3, 9), (4, 16), (5, 25), (6, 36)]
-
+nums = range(10)
+[*zip(nums[::2], nums[1::2])]
+# [(0, 1), (2, 3), (4, 5), (6, 7), (8, 9)]
+d = {}
+d.update(zip(nums[::2], nums[1::2]))  # dict(zip(nums[::2], nums[1::2]))
+d
+# {0: 1, 2: 3, 4: 5, 6: 7, 8: 9}
 eng, ger = ['one', 'two', 'three'], ['eins', 'zwei', 'drei']
 [*zip(eng, ger)]
 # [('one', 'eins'), ('two', 'zwei'), ('three', 'drei')]
 [*zip(*zip(eng, ger))]
 # [('one', 'two', 'three'), ('eins', 'zwei', 'drei')]
-
 matrix = [
     [1, 2, 3, 4],
     [5, 6, 7, 8],
@@ -218,7 +240,6 @@ matrix = [
 ]
 [*zip(*matrix)]
 # [(1, 5, 9), (2, 6, 10), (3, 7, 11), (4, 8, 12)]
-
 s = 'abcdefghi'
 [*zip(s, s, s)]
 # [('a', 'a', 'a'), ('b', 'b', 'b'), ('c', 'c', 'c'),
@@ -294,13 +315,6 @@ def stringify_list(num_list):
     return [*map(str, num_list)]
 
 
-def multiply(a, b):
-    """
-    >>> functools.reduce(multiply, [1, 2, 3, 4, 5])
-    """
-    return a * b
-
-
 def maximum_sum(list_of_lists):
     """
     >>> list_of_lists = [[1, 2, 3], [4, 5, 6], [10, 11, 12], [7, 8, 9]]
@@ -346,6 +360,37 @@ def pattern_in_string(pattern, string):
                for sub_string in (string[i:i + len(pattern)] for i in range(n)))
 
 
-def greeter(person, greeting):    # from functools import partial
-    return '{}, {}!'.format(greeting, person)
-hier = functools.partial(greeter, greeting='Hi')
+def greeter(person, greeting):
+    """
+    >>> hier = functools.partial(greeter, greeting='Hi')
+    >>> hier("man")
+    'Hi, man!'
+    """
+    return f"{greeting}, {person}!"
+
+
+def file_processing(file_name, processing):
+    with open(f"{file_name}") as f:
+        for line in iter(f.readline, ''):
+            processing(line)
+
+
+def seek_next_line(f):
+    for _ in iter(lambda: f.read(1), '\n'):
+        pass
+
+
+def tail(n, iterable):
+    """Return an iterator over the last n items"""
+    # tail(3, 'ABCDEFG') --> E F G
+    return iter(collections.deque(iterable, maxlen=n))
+
+
+def zip_(*iterables):
+    """
+    >>> [*zip_([1, 3, 5], [2, 4, 6])]
+    [(1, 2), (3, 4), (5, 6)]
+    >>> [*zip([1, 3, 5], [2, 4, 6])] == [*zip_([1, 3, 5], [2, 4, 6])]
+    True
+    """
+    return map(lambda *args: tuple(args), *iterables)

@@ -3,8 +3,8 @@ import random
 from typing import Generator
 
 
-def collections_deque(data, shift):
-    # shift a list in python
+def array_shift(data, shift):
+    # left rotation
     from collections import deque
     items = deque(data)
     items.rotate(-shift)
@@ -206,20 +206,26 @@ def rand():
 
 
 def random_product(*args, repeat=1):
-    """Random selection from itertools.product(*args, **kwds)"""
+    """
+    Random selection from itertools.product(*args, **kwds)
+    """
     pools = [tuple(pool) for pool in args] * repeat
     return tuple(random.choice(pool) for pool in pools)
 
 
 def random_permutation(iterable, r=None):
-    """Random selection from itertools.permutations(iterable, r)"""
+    """
+    Random selection from itertools.permutations(iterable, r)
+    """
     pool = tuple(iterable)
     r = len(pool) if r is None else r
     return tuple(random.sample(pool, r))
 
 
 def random_combination(iterable, r):
-    """Random selection from itertools.combinations(iterable, r)"""
+    """
+    Random selection from itertools.combinations(iterable, r)
+    """
     pool = tuple(iterable)
     n = len(pool)
     indices = sorted(random.sample(range(n), r))
@@ -227,15 +233,50 @@ def random_combination(iterable, r):
 
 
 def random_combination_with_replacement(iterable, r):
-    """Random selection from itertools.combinations_with_replacement(iterable, r)"""
+    """
+    Random selection from itertools.combinations_with_replacement(iterable, r)
+    """
     pool = tuple(iterable)
     n = len(pool)
     indices = sorted(random.randrange(n) for i in range(r))
     return tuple(pool[i] for i in indices)
 
 
-def goodbye(name, adjective):
-    print('Goodbye, %s, it was %s to meet you.' % (name, adjective))
+def countdown(num_sec=3):
+    from time import sleep
+    for countdown in reversed(range(num_sec + 1)):
+        if countdown > 0:
+            print(countdown, end='...')
+            sleep(1)
+        else:
+            print('Go!')
 
-import atexit
-atexit.register(goodbye, 'Donny', 'nice')
+
+def progress(width=30):
+    from time import sleep
+    for percent in range(101):
+        left = width * percent // 100
+        right = width - left
+        print('\r[', '#' * left, ' ' * right, ']',
+              f' {percent:.0f}%',
+              sep='', end='', flush=True)
+        sleep(0.1)
+
+
+def shorthand_dict(names):
+    """
+    >>> context = {"user_id": 42, "user_ip": "1.2.3.4"}
+    >>> mode, action_type = "force", 7
+    >>> shorthand_dict(["context", "mode", "action_type"])
+    {'context': {'user_id': 42, 'user_ip': '1.2.3.4'},
+    ... 'mode': 'force', 'action_type': 7}
+    """
+    from inspect import currentframe
+    lcls = currentframe().f_back.f_locals
+    return {k: lcls[k] for k in names}
+
+
+def fact(x, cache={0: 1}):
+    if x not in cache:
+        cache[x] = x * fact(x - 1)
+    return cache[x]

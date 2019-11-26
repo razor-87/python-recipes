@@ -2,15 +2,17 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:52:29
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-10-21 11:12:44
+# @Last Modified time: 2019-11-26 16:46:51
 import math
 
-1.5e2  # == 1.5 * (10 ** 2)
+1.5e2  # 1.5 * 10**2
+# 150.0
 
 (13).__add__(2)
 # 15
 
-round(x**(1 / 3))  # cubic root
+round(1000**(1 / 3))  # cubic root
+# 10
 
 # n(n+1)/2
 (100 * 101) // 2  # sum 1..100
@@ -18,12 +20,17 @@ round(x**(1 / 3))  # cubic root
 sum(range(101))
 # 5050
 
+abs(-1)
+# 1
 
 divmod(177, 10)  # (x // y, x % y)
 # (17, 7)
 
 pow(3, 4, 5)  # x**y mod m - Modular exponentiation
 # 1
+
+complex(1, 2)
+# (1+2j)
 
 3**200 % 50
 # 1
@@ -44,16 +51,21 @@ math.gcd(100, 75)  # gcd
 # 25
 
 # Return True if the values a and b are close to each other and False otherwise.
-math.isclose(a, b, rel_tol=1e-09, abs_tol=0.0)
+math.isclose(1.000000002, 1.000000001)
+# True
+math.isclose(1.000000003, 1.000000001)
+# False
 
 # base-2 logarithm of x
-# slow
-math.log(x, 2.0)  # -> float
-math.log2(x)  # -> float
-# fast
-math.frexp(x)[1] - 1  # -> int
-# faster
-n.bit_length() - 1  # -> int
+x = 2
+# -> float
+math.log(x, 2.0)  # slow
+math.log2(x)
+# 1.0
+# -> int
+math.frexp(x)[1] - 1  # fast
+x.bit_length() - 1  # faster
+# 1
 
 
 def last_digit(n):
@@ -97,9 +109,12 @@ def reverse_digits(n):
     return s
 
 
-def rotate(vector, angle):
-    from warnings import simplefilter
-    simplefilter('ignore')  # Fix NumPy issues.
+def rotate_vec(vector, angle):
+    """
+    >>> rotate_vec([[1, 2], [3, 5]], 45)
+    array([[-2.02738858, -3.20387365],
+           [ 2.42686949,  4.32841699]])
+    """
     from numpy import array, cos, sin
     θ = angle
     mat = [[cos(θ), -sin(θ)],
@@ -109,15 +124,20 @@ def rotate(vector, angle):
 
 
 def struct_inverse_sqrt(number):
+    """
+    https://en.wikipedia.org/wiki/Fast_inverse_square_root
+    http://ajcr.net/fast-inverse-square-root-python/
+
+    """
     from struct import pack, unpack
     threehalfs = 1.5
     x2 = number * 0.5
     y = number
     packed_y = pack('f', y)
-    i = unpack('i', packed_y)[0]  # treat float's bytes as int
+    i = unpack('i', packed_y)[0]         # treat float's bytes as int
     i = 0x5f3759df - (i >> 1)            # arithmetic with magic number
     packed_i = pack('i', i)
-    y = unpack('f', packed_i)[0]  # treat int's bytes as float
+    y = unpack('f', packed_i)[0]         # treat int's bytes as float
     y = y * (threehalfs - (x2 * y * y))  # Newton's method
     return y
 
