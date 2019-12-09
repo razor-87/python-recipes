@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
+# @Author: razor87
+# @Date:   2019-09-29 19:29:38
+# @Last Modified by:   razor87
+# @Last Modified time: 2019-12-05 19:21:57
 import os
+
+
 for key in os.environ:
     print(key, ':', os.environ[key])
 for key in os.environ:
@@ -49,6 +55,21 @@ test_path = datasets_root / dataset / 'test'
 for image_path in train_path.iterdir():
     with image_path.open() as f:
         ...
+
+
+<bool> = <Path>.exists()
+<bool> = <Path>.is_file()
+<bool> = <Path>.is_dir()
+<iter> = <Path>.iterdir()           # Returns dir contents as Path objects.
+<iter> = <Path>.glob('<pattern>')   # Returns Paths matching the wildcard pattern.
+<str>  = str(<Path>)                # Path as a string.
+<str>  = <Path>.name                # Final component.
+<str>  = <Path>.stem                # Final component without extension.
+<str>  = <Path>.suffix              # Final component's extension.
+<tup.> = <Path>.parts               # All components as strings.
+<Path> = <Path>.resolve()           # Returns absolute path without symlinks.
+<Path> = <Path>.parent              # Returns path without final component.
+<file> = open(<Path>)               # Opens the file and returns a file object.
 
 
 p.exists()

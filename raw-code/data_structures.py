@@ -48,7 +48,7 @@ myStack.pop()
 
 
 
-# https://docs.python.org/3/tutorial/datastructures.html
+# https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences
 (*iterable,)
 # iterable -> tuple
 *[1, 2, 3, 4],

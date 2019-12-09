@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
+# @Author: razor87
+# @Date:   2017-09-09 14:03:30
+# @Last Modified by:   razor87
+# @Last Modified time: 2019-12-08 11:32:46
 import dis
 import sys
 import array
 import numpy as np
-
 
 help(5)
 dir(5)
@@ -16,7 +19,6 @@ abs.__doc__  # 'abs(number) -> number
 
 dis.dis(func)
 func.__code__.co_code
-
 func.__closure__.cell_contents
 hasattr(a, 'attr')
 getattr(d, cmd)(*args)

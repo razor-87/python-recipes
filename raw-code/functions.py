@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# @Author: razor87
+# @Date:   2019-09-29 19:22:37
+# @Last Modified by:   razor87
+# @Last Modified time: 2019-12-05 19:21:20
 import random
 from typing import Generator
 
@@ -76,20 +80,6 @@ def chunks(s: str, k: int) -> Generator:
 
 def get_magic_number(cond):
     return 666 if cond else 999
-
-
-def make_closure(x):
-    """
-    >>> make_closure(2)()
-    2
-    4
-    """
-    def closure():
-        nonlocal x
-        print(x)
-        x *= 2
-        print(x)
-    return closure
 
 
 def f(x):

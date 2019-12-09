@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-26 17:40:27
+# @Last Modified time: 2019-11-27 17:20:27
 
 """
 all()
@@ -288,6 +288,31 @@ if any((x, y, z)):
 #     print('passed')
 if all((x, y, z)):
     print('passed')
+
+
+def make_closure(x):
+    """
+    >>> make_closure(2)()
+    2
+    4
+    """
+    def closure():
+        nonlocal x
+        print(x)
+        x *= 2
+        print(x)
+    return closure
+
+
+def get_multiplier(a):
+    """
+    >>> multiply_by_3 = get_multiplier(3)
+    >>> multiply_by_3(10)
+    30
+    """
+    def out(b):
+        return a * b
+    return out
 
 
 def dot_product_(vec1, vec2, sum=sum, map=map, mul=operator.mul):

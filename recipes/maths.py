@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:52:29
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-26 16:46:51
+# @Last Modified time: 2019-12-08 15:48:17
 import math
 
 1.5e2  # 1.5 * 10**2
@@ -68,7 +68,7 @@ x.bit_length() - 1  # faster
 # 1
 
 
-def last_digit(n):
+def last_digit(n: int) -> int:
     # Get the last digit of a number
     return n % 10
 
@@ -80,21 +80,21 @@ def digits(n):
         n /= 10
 
 
-def sum_digits(n):
+def sum_digits(n: int) -> int:
     # Sum of all digits of a number
     s = 0
     while n:
         s += n % 10
-        n /= 10
+        n //= 10
     return s
 
 
-def length_digits(n):
+def length_digits(n: int) -> int:
     # Number of digits in a number
     s = 0
     while n:
         s += 1
-        n /= 10
+        n //= 10
     return s
 
 

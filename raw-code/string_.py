@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+# @Author: razor87
+# @Date:   2019-09-29 19:54:13
+# @Last Modified by:   razor87
+# @Last Modified time: 2019-12-09 20:28:21
 import binascii
 import re
-from string import ascii_lowercase, digits, punctuation
+import string
 from typing import List
 
 
@@ -14,10 +18,16 @@ bytes("hello", "ascii")
 
 bytes.hex()
 
-ascii_lowercase
+
+string.ascii_lowercase
 # 'abcdefghijklmnopqrstuvwxyz'
-punctuation
+string.ascii_letters
+# 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+string.punctuation
 # '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+string.whitespace
+# ' \t\n\r\x0b\x0c'
+
 
 ord('f')
 # 102
@@ -227,9 +237,6 @@ def remove_spaces(x: str) -> str:
 
 
 
-
-
-
 # "[^"\s,):]
 # [^"\s,):]"
 # leap([\s\w+])year
@@ -272,7 +279,7 @@ r"^[\w-]{1,}@[a-zA-Z0-9]{1,}\.\w{1,3}$"
 
 print(re.escape('http://www.python.org'))
 # http://www\.python\.org
-legal_chars = ascii_lowercase + digits + "!#$%&'*+-.^_`|~:"
+legal_chars = string.ascii_lowercase + string.digits + "!#$%&'*+-.^_`|~:"
 print('[%s]+' % re.escape(legal_chars))
 # [abcdefghijklmnopqrstuvwxyz0123456789!\#\$%\&'\*\+\-\.\^_`\|\~:]+
 operators = ['+', '-', '*', '/', '**']
