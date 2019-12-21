@@ -2,20 +2,15 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-27 17:20:27
+# @Last Modified time: 2019-12-21 15:55:46
 
 """
 all()
 any()
 bool()
 callable()
-delattr()
 enumerate()
 filter()
-getattr()
-hasattr()
-isinstance()
-issubclass()
 iter()
 len()
 map()
@@ -25,11 +20,8 @@ next()
 pow()
 range()
 reversed()
-setattr()
 sorted()
 sum()
-type()
-vars()
 zip()
 """
 import collections
@@ -140,12 +132,12 @@ map(list, zip(*matrix.lists))
 #  Counter({'B': 1, 'C': 1}),
 #  Counter({'C': 2}))
 
-A = [1, 2, 3, 4]
-B = [2, 3, 5, 7]
-[A[i] + B[i] for i in range(len(A))]
+A, B = [1, 2, 3, 4], [2, 3, 5, 7]
+[*map(operator.add, A, B)]  # == [A[i] + B[i] for i in range(len(A))]
 # [3, 5, 8, 11]
-[*map(operator.add, A, B)]
-# [3, 5, 8, 11]
+
+[*map(''.join, itertools.permutations('abc'))]
+# ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
 
 max(min(map(int, tuple(s.split()))) for s in input_)
 min(i for i in nums if i % 2 != 0)

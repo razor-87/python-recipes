@@ -2,11 +2,58 @@
 # @Author: razor87
 # @Date:   2017-09-09 14:03:30
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-08 11:32:46
+# @Last Modified time: 2019-12-21 15:52:51
 import dis
 import sys
 import array
 import numpy as np
+from pympler import asizeof
+
+sys.argv
+sys.executable
+sys.exit
+sys.exit(0)
+sys.path
+sys.platform
+sys.modules
+sys.getrefcount
+sys.maxsize
+# 9223372036854775807
+
+sys.getsizeof(range(10))  # == asizeof.flatsize
+# 48
+sys.getsizeof(_ for _ in range(10))
+# 88
+sys.getsizeof(array.array('i', range(10)))
+# 128
+sys.getsizeof(tuple(range(10)))
+# 128
+sys.getsizeof(np.array(range(10), dtype='i'))
+# 136
+sys.getsizeof(list(range(10)))
+# 200
+sys.getsizeof({i: None for i in range(10)})
+# 368
+sys.getsizeof(set(range(10)))
+# 736
+
+asizeof.asizeof(_ for _ in range(10))
+# 0
+asizeof.asizeof(range(10))
+# 48
+asizeof.asizeof(array.array('i', range(10)))
+# 128
+asizeof.asizeof(np.array(range(10), dtype='i'))
+# 136
+asizeof.asizeof(tuple(range(10)))
+# 440
+asizeof.asizeof(list(range(10)))
+# 512
+asizeof.asizeof({i: None for i in range(10)})
+# 696
+asizeof.asizeof(set(range(10)))
+# 1048
+
 
 help(5)
 dir(5)
@@ -22,8 +69,6 @@ func.__code__.co_code
 func.__closure__.cell_contents
 hasattr(a, 'attr')
 getattr(d, cmd)(*args)
-
-(int)(num) == int(num)
 
 dis.dis(compile("(10, 'abc')", '', 'eval'))
 
@@ -62,60 +107,6 @@ id(b)
 # 4465566792
 
 
-sys.argv
-sys.executable
-sys.exit
-sys.exit(0)
-sys.path
-sys.platform
-sys.modules
-
-sys.maxsize
-# 9223372036854775807
-
-sys.getrefcount
-
-sys.getsizeof(range(10))
-# 48
-sys.getsizeof(_ for _ in range(10))
-# 88
-sys.getsizeof(array.array('i', range(10)))
-# 128
-sys.getsizeof(tuple(range(10)))
-# 128
-sys.getsizeof(np.array(range(10), dtype='i'))
-# 136
-sys.getsizeof(list(range(10)))
-# 200
-sys.getsizeof({i: None for i in range(10)})
-# 368
-sys.getsizeof(set(range(10)))
-# 736
-
-
-from pympler import asizeof
-asizeof.flatsize  # == sys.getsizeof
-
-asizeof.asizeof(_ for _ in range(10))
-# 0
-asizeof.asizeof(range(10))
-# 48
-asizeof.asizeof(array.array('i', range(10)))
-# 128
-asizeof.asizeof(np.array(range(10), dtype='i'))
-# 136
-asizeof.asizeof(tuple(range(10)))
-# 440
-asizeof.asizeof(list(range(10)))
-# 512
-asizeof.asizeof({i: None for i in range(10)})
-# 696
-asizeof.asizeof(set(range(10)))
-# 1048
-
-
-
-
 
 class SameHash():
     def __hash__(self):
@@ -149,19 +140,26 @@ a, *rest, b = range(5)
 *rest, a, b = range(5)
 
 
+[*"string"]  # iterable -> list
+# ['s', 't', 'r', 'i', 'n', 'g']
+
+*[1, 2, 3, 4],
+(*[1, 2, 3, 4],)  # iterable -> tuple
+# (1, 2, 3, 4)
+
+[1, 2, *[3, 4]]  # Since Python 3.5
+# [1, 2, 3, 4]
+
 animals = [
-   'bird',
-   'fish',
-   'elephant',
+    'bird',
+    'fish',
+    'elephant',
 ]
 for (first_char, *_, last_char) in animals:
     print(first_char, last_char)
 # b d
 # f h
 # e t
-
-
-
 
 
 
@@ -210,46 +208,6 @@ name = user.name() if user is not None else 'Guest'
 xP == hP and text[:m] == P and print(0, end=' ')
 
 (func1 if expression else func2)(args)
-
-
-
-
-
-
-import timeit
-print(timeit.timeit("a and b", globals=globals()))
-
-print(timeit.timeit('[n**2 for n in range(10) if n%2==0]', number=10000))
-
-print(timeit.timeit("gcd(*rand())", number=100000, globals=globals()))
-
-# The "timeit" module lets you measure the execution
-# time of small bits of Python code
-timeit.timeit('"-".join(str(n) for n in range(100))', number=10000)
-# 0.3412662749997253
-
-timeit.timeit('"-".join([str(n) for n in range(100)])', number=10000)
-# 0.2996307989997149
-
-timeit.timeit('"-".join(map(str, range(100)))', number=10000)
-# 0.24581470699922647
-
-
-# fastest reversing string in Python
-timeit.timeit('"asdfg"[::-1]', number=1000000)
-
-arr = [str(d) for d in range(101)]
-timeit.timeit('sorted(map(int, set(arr)))', number=10000, globals=globals())
-# 0.33720446200004517
-timeit.timeit('sorted(int(s) for s in set(arr))', number=10000, globals=globals())
-# 0.45892249400003493
-
-arr = (str(d) for d in range(101))
-timeit.timeit('sorted(map(int, set(arr)))', number=1000000, globals=globals())
-# 0.8356489219995638
-timeit.timeit('sorted(int(s) for s in set(arr))', number=1000000, globals=globals())
-# 0.9175120390000302
-
 
 
 

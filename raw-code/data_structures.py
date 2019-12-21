@@ -5,24 +5,13 @@ https://docs.python.org/3/tutorial/datastructures.html
 https://docs.python.org/3/library/collections.html
 https://pymotw.com/3/data_structures.html
 
+https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences
 https://docs.python.org/3/library/stdtypes.html#memoryview
 https://docs.python.org/3/library/stdtypes.html#dictionary-view-objects
 """
 
 
 # https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
-[*iterable]
-# iterable -> list
-[*"string"]
-# ['s', 't', 'r', 'i', 'n', 'g']
-
-li = ['spam', 'egg', 'spam']
-li.clear()
-
-[1, 2, *[3, 4]]  # Since Python 3.5
-# [1, 2, 3, 4]
-
-
 # Append[1]        O(1)
 # Pop last         O(1)
 # Pop intermediate O(k)
@@ -45,14 +34,6 @@ myStack.pop()
 # Traceback (most recent call last):
 #   File "<console>", line 1, in <module>
 # IndexError: pop from empty list
-
-
-
-# https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences
-(*iterable,)
-# iterable -> tuple
-*[1, 2, 3, 4],
-# (1, 2, 3, 4)
 
 
 

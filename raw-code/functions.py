@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:22:37
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-05 19:21:20
+# @Last Modified time: 2019-12-21 15:53:48
 import random
 from typing import Generator
 
@@ -270,3 +270,20 @@ def fact(x, cache={0: 1}):
     if x not in cache:
         cache[x] = x * fact(x - 1)
     return cache[x]
+
+
+def string_validators(string: str) -> list:
+    """
+    >>> string_validators('qA2')
+    [True, True, True, True, True]
+    >>> string_validators('123')
+    [True, False, True, False, False]
+    """
+    dict_methods = {
+        'isalnum': (char.isalnum() for char in string),
+        'isalpha': (char.isalpha() for char in string),
+        'isdigit': (char.isdigit() for char in string),
+        'islower': (char.islower() for char in string),
+        'isupper': (char.isupper() for char in string),
+    }
+    return [*map(any, dict_methods.values())]
