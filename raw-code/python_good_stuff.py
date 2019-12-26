@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2017-09-09 14:03:30
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-21 15:52:51
+# @Last Modified time: 2019-12-26 19:18:44
 import dis
 import sys
 import array
@@ -325,9 +325,6 @@ res = (a > 0) + (b > 0) + (c > 0)
 
 
 
-
-
-
 # When To Use __repr__ vs __str__?
 # Emulate what the std lib does:
 import datetime
@@ -382,15 +379,6 @@ common = [dict(entry) for entry in common]
 
 
 
-
-# Membership testing with sets and dictionaries is much faster, O(1), than
-# searching sequences, O(n). When testing "a in b", b should be a set or
-# dictionary instead of a list or tuple.
-
-
-
-
-
 # "is" vs "=="
 # • "==" evaluates to True if the objects
 #   referred to by the variables are equal
@@ -414,9 +402,6 @@ False
 
 
 
-
-
-
 # Functions are first-class citizens in Python.
 # They can be passed as arguments to other functions,
 # returned as values from other functions, and
@@ -429,7 +414,6 @@ funcs[0]
 # <function myfunc at 0x107012230>
 funcs[0](2, 3)
 # 5
-
 
 
 
@@ -466,7 +450,6 @@ list(range(*args))
 
 
 
-
 # Python 3.3+ has a std
 # lib module for displaying
 # tracebacks even when Python
@@ -491,12 +474,11 @@ atexit.register(goodbye, 'Donny', 'nice')
 
 
 
-
 # In Python 3.4+ you can use
 # contextlib.suppress() to selectively
 # ignore specific exceptions:
-import contextlib
-with contextlib.suppress(FileNotFoundError):
+from contextlib import suppress
+with suppress(FileNotFoundError):
     os.remove('somefile.tmp')
 
 # This is equivalent to:
@@ -518,6 +500,31 @@ def tag(name):
     print("[%s]" % name)
     yield
     print("[/%s]" % name)
+
+@contextmanager
+def managed_resource(*args, **kwds):
+    # Code to acquire resource, e.g.:
+    resource = acquire_resource(*args, **kwds)
+    try:
+        yield resource
+    finally:
+        # Code to release resource, e.g.:
+        release_resource(resource)
+
+with managed_resource(timeout=3600) as resource:
+    # Resource is released at the end of this block,
+    # even if code in the block raises an exception
+
+
+@contextmanager
+def make_context():
+    print('  entering')
+    try:
+        yield {}
+    except RuntimeError as err:
+        print('  ERROR:', err)
+    finally:
+        print('  exiting')
 
 
 

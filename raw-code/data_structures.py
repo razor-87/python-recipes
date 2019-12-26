@@ -67,6 +67,9 @@ set(a) < set(b)
 
 
 # https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+# Membership testing with sets and dictionaries is much faster, O(1), than
+# searching sequences, O(n). When testing "a in b", b should be a set or
+# dictionary instead of a list or tuple.
 d = {'flux': 1}
 d.clear()
 
@@ -178,8 +181,8 @@ sorted(c.elements())
 # Knuth's example for prime factors of 1836:  2**2 * 3**3 * 17**1
 prime_factors = Counter({2: 2, 3: 3, 17: 1})
 product = 1
-for factor in prime_factors.elements():     # loop over factors
-    product *= factor                       # and multiply them
+for factor in prime_factors.elements():  # loop over factors and multiply them
+    product *= factor
 product
 # 1836
 # Note, if an element's count has been set to zero or is a negative
@@ -192,6 +195,11 @@ product
 collections.defaultdict(int)
 collections.defaultdict(list)
 collections.defaultdict(set)
+
+from collections import defaultdict
+dict_of_lists = defaultdict(list)
+dict_of_lists['a'].append('something for a')
+print(dict_of_lists['a'])
 
 
 

@@ -2,27 +2,84 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-21 15:55:46
-
+# @Last Modified time: 2019-12-26 19:17:09
 """
-all()
-any()
-bool()
-callable()
-enumerate()
-filter()
-iter()
-len()
-map()
-max()
-min()
-next()
-pow()
-range()
-reversed()
-sorted()
-sum()
-zip()
+built-in:
+    all()
+    any()
+    bool()
+    callable()
+    dir()
+    enumerate()
+    filter()
+    iter()
+    len()
+    map()
+    max()
+    min()
+    next()
+    pow()
+    range()
+    reversed()
+    sorted()
+    sum()
+    zip()
+
+operator:
+    abs()
+    add()
+    and_()
+    attrgetter()
+    concat()
+    contains()
+    countOf()
+    delitem()
+    eq()
+    floordiv()
+    ge()
+    getitem()
+    gt()
+    iadd()
+    iand()
+    iconcat()
+    ifloordiv()
+    ilshift()
+    imatmul()
+    imod()
+    imul()
+    index()
+    indexOf()
+    inv()
+    invert()
+    ior()
+    ipow()
+    irshift()
+    is_()
+    is_not()
+    isub()
+    itemgetter()
+    itruediv()
+    ixor()
+    le()
+    length_hint()
+    lshift()
+    lt()
+    matmul()
+    methodcaller()
+    mod()
+    mul()
+    ne()
+    neg()
+    not_()
+    or_()
+    pos()
+    pow()
+    rshift()
+    setitem()
+    sub()
+    truediv()
+    truth()
+    xor()
 """
 import collections
 import functools
@@ -31,34 +88,20 @@ import math
 import operator
 from typing import List
 
-# Math operations: add(), sub(), mul(), floordiv(), abs(), …
-# Logical operations: not_(), truth().
-# Bitwise operations: and_(), or_(), invert().
-# Comparisons: eq(), ne(), lt(), le(), gt(), and ge().
-# Object identity: is_(), is_not().
-operator.itemgetter(-1)
-operator.attrgetter('sort')
-operator.xor
+(lambda x: x**2)(2)
+# 4
+(lambda x, y: x + y)(5, 3)
+# 8
 
-somelist = [(1, 5, 8), (6, 2, 4), (9, 7, 5)]
-somelist.sort(key=operator.itemgetter(0))
-# [(1, 5, 8), (6, 2, 4), (9, 7, 5)]
-somelist.sort(key=operator.itemgetter(1))
-# [(6, 2, 4), (1, 5, 8), (9, 7, 5)]
+[*reversed([3, 2, 1, 0])] == [0, 1, 2, 3]
+# True
 
-# How to sort a Python dict by value
-# (== get a representation sorted by value)
+[f"{op}()" for op in dir(operator) if not op.startswith('_')][:3]
+# ['abs()', 'add()', 'and_()']
+
 xs = {'a': 4, 'b': 3, 'c': 2, 'd': 1}
-sorted(xs.items(), key=lambda x: x[1])
-# Or:
-sorted(xs.items(), key=operator.itemgetter(1))
+sorted(xs.items(), key=operator.itemgetter(1))  # == key=lambda x: x[1]
 # [('d', 1), ('c', 2), ('b', 3), ('a', 4)]
-
-pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
-pairs.sort(key=lambda pair: pair[1])
-pairs
-# [(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
-
 sorted([(0, 1), (0, 1), (0, 1)], key=operator.itemgetter(1), reverse=True)
 # [(0, 1), (0, 1), (0, 1)]
 sorted([[1], [1, 1, 1], [1, 1]], reverse=True, key=len)  # sort by len
@@ -67,15 +110,13 @@ sorted(["ba", "ab", "aa", "aaa"], key=lambda x: (len(x), x))
 # ['aa', 'ab', 'ba', 'aaa']
 sorted(collections.Counter("abbccc").most_common(), key=lambda x: (-x[1], x))
 # [('c', 3), ('b', 2), ('a', 1)]
-
 list_b = [28, 14, '28', 5, '9', '1']
 sorted(list_b, key=int)
 # ['1', 5, '9', 14, 28, '28']
 sorted(list_b, key=str)
 # ['1', 14, 28, '28', 5, '9']
-sorted(range(-5, 6), key=lambda x: x ** 2)
+sorted(range(-5, 6), key=lambda x: x**2)
 # [0, -1, 1, -2, 2, -3, 3, -4, 4, -5, 5]
-
 arr = [*"Sorting1234"]
 sorted(arr, key=lambda c: (c.isdigit(), c in '02468', c.isupper(), c))
 # ['g', 'i', 'n', 'o', 'r', 't', 'S', '1', '3', '2', '4']
@@ -92,14 +133,6 @@ sorted((int(c.isdigit()), int(c in '02468'), int(c.isupper()), c) for c in arr)
 #  (1, 1, 0, '2'),
 #  (1, 1, 0, '4')]
 
-(lambda x: x**2)(2)
-# 4
-(lambda x, y: x + y)(5, 3)
-# 8
-
-(0, 1, 2, 3) == (*reversed([3, 2, 1, 0]),)
-# True
-
 [*enumerate('abc')]
 # [(0, 'a'), (1, 'b'), (2, 'c')]
 [*enumerate('abc', 1)]
@@ -111,39 +144,36 @@ sorted((int(c.isdigit()), int(c in '02468'), int(c.isupper()), c) for c in arr)
 
 # create a concatenated string from 0 to 19 (e.g. "012..1819")
 "".join(map(str, range(20)))
-
+# '012345678910111213141516171819'
 [*map(lambda a, b: (a, b), range(11), [2, 4, 8])]
 # [(0, 2), (1, 4), (2, 8)]
 [*map(lambda x: x**2, range(10))]
 # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
-
-map(lambda i: map(lambda x, y: x + y, matr_a[i], matr_b[i]), range(len(matr_a)))
-(map(operator.add, c[i], d[i]) for i in range(len(c)))
-(map(sum, zip(*t)) for t in zip(X, Y))
-map(list, zip(*matrix.lists))
+l1, l2 = [(1, 1), (2, 2), (3, 3)], [(4, 4), (5, 5), (6, 6)]
+[[*map(sum, zip(*t))] for t in zip(l1, l2)]
+# [[5, 5], [7, 7], [9, 9]]
 {*map(str.upper, {'a', 'b'})}
 # {'A', 'B'}
-
-(*map(collections.Counter, itertools.combinations_with_replacement('ABC', 2)),)
-# (Counter({'A': 2}),
+[*map(collections.Counter, itertools.combinations_with_replacement('ABC', 2))]
+# [Counter({'A': 2}),
 #  Counter({'A': 1, 'B': 1}),
 #  Counter({'A': 1, 'C': 1}),
 #  Counter({'B': 2}),
 #  Counter({'B': 1, 'C': 1}),
-#  Counter({'C': 2}))
-
+#  Counter({'C': 2})]
 A, B = [1, 2, 3, 4], [2, 3, 5, 7]
 [*map(operator.add, A, B)]  # == [A[i] + B[i] for i in range(len(A))]
 # [3, 5, 8, 11]
-
 [*map(''.join, itertools.permutations('abc'))]
 # ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
 
-max(min(map(int, tuple(s.split()))) for s in input_)
-min(i for i in nums if i % 2 != 0)
-min(i for i in map(int, input().split()) if i % 2 != 0)
-min(filter(lambda x: x % 2 != 0, map(int, input().split())))
-min(map(int, input().split()), key=lambda x: (not x % 2, x))
+arr = [(1, 'a'), (3, 'c'), (4, 'e'), (-1, 'z')]
+max(arr)
+# (4, 'e')
+max(arr, key=lambda x: x[1])
+# (-1, 'z')
+min(arr, key=lambda x: x[1])
+# (1, 'a')
 
 [*filter(lambda x: x % 2 == 0, range(16))]
 # [0, 2, 4, 6, 8, 10, 12, 14]
@@ -153,9 +183,9 @@ min(map(int, input().split()), key=lambda x: (not x % 2, x))
 # [1, 2]
 [*filter(lambda k: math.gcd(k, 20) == 1, range(1, 21))]
 # [1, 3, 7, 9, 11, 13, 17, 19]
-(*filter(lambda x: x.isdigit(), ['d', '1', 'f', '5']),)
-# ('1', '5')
-len((*filter(lambda x: x & 1 == 0, range(1001)),))
+[*filter(lambda x: x.isdigit(), ['d', '1', 'f', '5'])]
+# ['1', '5']
+len([*filter(lambda x: x & 1 == 0, range(1001))])
 # 501
 
 my_list = [[1, 2, 3], [40, 50, 60], [9, 8, 7]]
@@ -163,49 +193,32 @@ sum(sub[1] for sub in my_list)
 # 60
 sum(1 for i in [3, 3, 4, 4, 3] if i == 4)
 # 2
-
-sum(nums[i]**nums[i+1] for i in range(len(nums))[::2])
-
-sum(text.encode('utf-8'))
-
-sum((i in a) - (i in b) for i in n)
-sum(bool({i} & a) - bool({i} & b) for i in n)
-
+sum("text".encode('utf-8'))
+# 453
+a, b = {1, 2, 3}, {4, 5, 6}
+sum((i in a) - (i in b) for i in [2, 6, 3, 2, 5, 1])
+# 2
 sum(x & 1 == 0 for x in range(1001))
 # 501
-
-L = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-functools.reduce(operator.add, L)
-# 55
-sum(L)
-# 55
-
-U = [1, 2, 3]
-V = [2, 3, 5]
-functools.reduce(operator.add, map(operator.mul, U, V))
-# 23
-sum(map(operator.mul, U, V))
-# 23
-
 sum([[1], [2], [3]], [])
-functools.reduce(operator.iconcat, [[1], [2], [3]], [])
 # [1, 2, 3]
 
-functools.reduce(operator.mul, range(1, 11))  # math.factorial(10)
+L = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+functools.reduce(operator.add, L)  # == sum(L)
+# 55
+U, V = [1, 2, 3], [2, 3, 5]
+functools.reduce(operator.add, map(operator.mul, U, V))  # == sum(map(operator.mul, U, V))
+# 23
+functools.reduce(operator.iconcat, [[1], [2], [3]], [])
+# [1, 2, 3]
+functools.reduce(operator.mul, range(1, 11))  # == math.factorial(10)
 # 3628800
-
 functools.reduce(lambda x, y: x + y, [1, 2, 3])
 # 6
-
 functools.reduce(lambda x, y: y**x, reversed(arr))
 # (3, 2, 2) -> 3**(2**2) -> 81
-
-functools.reduce(operator.mul, ((3 << 1) + 3 for _ in range(1, 101)))  # 3**200
+functools.reduce(operator.mul, ((3 << 1) + 3 for _ in range(1, 101)))  # == 3**200
 # 265613988875874769338781322035779626829233452653394495974574961739092490901302182994384699044001
-
-functools.reduce(lambda x, y: x*(y**5), map(int, input().split()), 1)
-print(*map(lambda x, y: x ^ y,
-           map(int, input().split()), map(int, input().split())))
 
 [*zip('ABC', range(5))]
 # [('A', 0), ('B', 1), ('C', 2)]
@@ -213,13 +226,6 @@ print(*map(lambda x, y: x ^ y,
 # [('A', 0, 10), ('B', 1, 20), ('C', 2, 30)]
 [*zip(range(7), [x**2 for x in range(7)])]
 # [(0, 0), (1, 1), (2, 4), (3, 9), (4, 16), (5, 25), (6, 36)]
-nums = range(10)
-[*zip(nums[::2], nums[1::2])]
-# [(0, 1), (2, 3), (4, 5), (6, 7), (8, 9)]
-d = {}
-d.update(zip(nums[::2], nums[1::2]))  # dict(zip(nums[::2], nums[1::2]))
-d
-# {0: 1, 2: 3, 4: 5, 6: 7, 8: 9}
 eng, ger = ['one', 'two', 'three'], ['eins', 'zwei', 'drei']
 [*zip(eng, ger)]
 # [('one', 'eins'), ('two', 'zwei'), ('three', 'drei')]
@@ -240,13 +246,18 @@ s = 'abcdefghi'
 i = iter(s)
 [*zip(i, i, i)]
 # [('a', 'b', 'c'), ('d', 'e', 'f'), ('g', 'h', 'i')]
-(*zip(*(iter(s),)*3),)
-# (('a', 'b', 'c'), ('d', 'e', 'f'), ('g', 'h', 'i'))
-for part in zip(*(iter(s),)*3):
+[*zip(*(iter(s), ) * 3)]
+# [('a', 'b', 'c'), ('d', 'e', 'f'), ('g', 'h', 'i')]
+for part in zip(*(iter(s),) * 3):
     print(part)
 # ('a', 'b', 'c')
 # ('d', 'e', 'f')
 # ('g', 'h', 'i')
+nums = range(10)
+[*zip(nums[::2], nums[1::2])]
+# [(0, 1), (2, 3), (4, 5), (6, 7), (8, 9)]
+dict(zip(nums[::2], nums[1::2]))  # == dict.update(zip(nums[::2], nums[1::2]))
+# {0: 1, 2: 3, 4: 5, 6: 7, 8: 9}
 
 any((False, False, True))
 # True
@@ -260,9 +271,9 @@ any(i in [3, 4] for i in [1, 2, 3])  # Matching partial list
 
 all((True, True, False))
 # False
-all(x == round((x**3)**(1/3)) for x in range(5))
+all(x == round((x**3)**(1 / 3)) for x in range(5))
 # True
-all({x**3: x == round((x**3)**(1/3)) for x in range(5)}.values())
+all({x**3: x == round((x**3)**(1 / 3)) for x in range(5)}.values())
 # True
 
 # Different ways to test multiple
@@ -293,6 +304,7 @@ def make_closure(x):
         print(x)
         x *= 2
         print(x)
+
     return closure
 
 
@@ -304,6 +316,7 @@ def get_multiplier(a):
     """
     def out(b):
         return a * b
+
     return out
 
 
@@ -322,10 +335,6 @@ def vowel(char):
     ['A', 'a', 'a']
     """
     return char.lower() in "aeiou"
-
-
-def make_adder(n):
-    return lambda x: x + n
 
 
 def stringify_list(num_list):
@@ -374,7 +383,8 @@ def pattern_in_string(pattern, string):
     n = len(string) - len(pattern) + 1
     # return sum(string[i:].startswith(pattern) for i in range(n))
     return sum(sub_string == pattern
-               for sub_string in (string[i:i + len(pattern)] for i in range(n)))
+               for sub_string in (string[i:i + len(pattern)]
+                                  for i in range(n)))
 
 
 def greeter(person, greeting):

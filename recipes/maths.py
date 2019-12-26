@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:52:29
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-08 15:48:17
+# @Last Modified time: 2019-12-26 19:19:30
 import math
 
 1.5e2  # 1.5 * 10**2
@@ -117,8 +117,7 @@ def rotate_vec(vector, angle):
     """
     from numpy import array, cos, sin
     θ = angle
-    mat = [[cos(θ), -sin(θ)],
-           [sin(θ), cos(θ)]]
+    mat = [[cos(θ), -sin(θ)], [sin(θ), cos(θ)]]
     mat = array(mat)
     return mat @ vector
 
@@ -134,11 +133,11 @@ def struct_inverse_sqrt(number):
     x2 = number * 0.5
     y = number
     packed_y = pack('f', y)
-    i = unpack('i', packed_y)[0]         # treat float's bytes as int
-    i = 0x5f3759df - (i >> 1)            # arithmetic with magic number
+    i = unpack('i', packed_y)[0]  # treat float's bytes as int
+    i = 0x5f3759df - (i >> 1)  # arithmetic with magic number
     packed_i = pack('i', i)
-    y = unpack('f', packed_i)[0]         # treat int's bytes as float
-    y = y * (threehalfs - (x2 * y * y))  # Newton's method
+    y = unpack('f', packed_i)[0]  # treat int's bytes as float
+    y *= (threehalfs - (x2 * y * y))  # Newton's method
     return y
 
 
@@ -158,7 +157,7 @@ def approx_pi2(n=10000000):
     return (6 * val)**0.5
 
 
-def a078633(n):
+def a078633(n: int) -> int:
     """
     https://oeis.org/A078633
     Smallest number of sticks of length 1 needed to construct n squares
@@ -166,6 +165,29 @@ def a078633(n):
     """
     from math import ceil, sqrt
     return (2 * n) + ceil(2 * sqrt(n))
+
+
+def a007913(n: int) -> int:
+    """
+    https://oeis.org/A007913
+
+    >>> a007913(1)
+    1
+    >>> a007913(8)
+    2
+    >>> a007913(24)
+    6
+    """
+    from sympy.ntheory.factor_ import core
+    return core(n)
+
+
+def is_square_free(n: int) -> bool:
+    from math import sqrt
+    for i in range(2, round(sqrt(n)) + 1):
+        if n % (i**2) == 0:
+            return False
+    return True
 
 
 def lcm(a, b):
@@ -184,3 +206,20 @@ def lcms(*numbers):
     """
     from functools import reduce
     return reduce(lcm, numbers)
+
+
+def primes():
+    """
+    https://en.wikipedia.org/wiki/Wilson%27s_theorem
+
+    >>> from itertools import takewhile
+    >>> [*takewhile(lambda x: x <= 31, primes())]
+    [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    """
+    from math import factorial
+    p = 2
+    while True:
+        com = (factorial(p - 1) + 1) % p
+        if com == 0:
+            yield p
+        p += 1
