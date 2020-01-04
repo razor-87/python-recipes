@@ -2,28 +2,28 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-26 19:17:09
+# @Last Modified time: 2020-01-04 20:13:32
 """
 built-in:
-    all()
-    any()
-    bool()
-    callable()
-    dir()
-    enumerate()
-    filter()
-    iter()
-    len()
-    map()
-    max()
-    min()
-    next()
-    pow()
-    range()
-    reversed()
-    sorted()
-    sum()
-    zip()
+    all(iterable) -> bool
+    any(iterable) -> bool
+    callable(object) -> bool
+    enumerate(iterable, start=0) -> enumerate object
+    filter(function or None, iterable) -> filter object
+    hash(object) -> int
+    id(object) -> int
+    len(sequence) -> int
+    map(func, *iterables) -> map object
+    max(iterable, *[, key, default]) -> value
+    max(arg1, arg2, *args[, key]) -> value
+    min(iterable, *[, key, default]) -> value
+    min(arg1, arg2, *args[, key]) -> value
+    range(stop) -> range object
+    range(start, stop[, step]) -> range object
+    reversed(sequence) -> reversed object
+    sorted(iterable, *, key=None, reverse=False) -> list
+    sum(iterable, /, start=0) -> value
+    zip(*iterables) -> zip object
 
 operator:
     abs()
@@ -92,6 +92,9 @@ from typing import List
 # 4
 (lambda x, y: x + y)(5, 3)
 # 8
+gen = (lambda s: (yield from s))('abs')
+next(gen), next(gen), next(gen)
+# ('a', 'b', 's')
 
 [*reversed([3, 2, 1, 0])] == [0, 1, 2, 3]
 # True

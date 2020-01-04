@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2017-09-09 14:03:30
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-26 19:18:44
+# @Last Modified time: 2019-12-27 15:10:37
 import dis
 import sys
 import array
@@ -212,16 +212,9 @@ xP == hP and text[:m] == P and print(0, end=' ')
 
 
 
-
+# list of public objects when from module import *
 __all__ = []
 
-
-
-for i in foo:
-    if i == 0:
-        break
-else:
-    print("i was never 0")
 
 
 
@@ -267,6 +260,21 @@ f1() and f2() and f3()
 
 
 
+# Else Clauses on Loop Statements
+for i in foo:
+    if i == 0:
+        break
+else:
+    print("i was never 0")
+
+
+lst = []
+while x:
+    print("Then")
+    lst.pop()
+else:
+    print("Else")
+# Else
 
 
 # amount different mutable/immutable elements
@@ -572,7 +580,7 @@ for x in data:
     if f(z):
         g(x)
     else:
-        g(x)
+        h(x)
 # into
 if f(z):
     for x in data:
