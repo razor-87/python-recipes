@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-04 20:22:54
+# @Last Modified time: 2020-01-09 20:00:38
 
 bin(0x7F)
 # '0b1111111'
@@ -138,10 +138,6 @@ def add_by_bits_r(x, y):
     return add_by_bits_r(x ^ y, (x & y) << 1)
 
 
-def is_power_of_two(n):
-    return n & (n - 1) == 0
-
-
 def is_div_by_17(n):
     # true for any n of the form 2**k + 1 like 5, 9, 17, 33...
     if n == 0 or n == 17:
@@ -149,25 +145,6 @@ def is_div_by_17(n):
     elif n < 17:
         return False
     return is_div_by_17((n >> 4) - (n & 15))
-
-
-def divide_by_bits(x, y):
-    power_y = y
-    power = 1
-    loop_count = 0
-    while power_y < x:
-        power_y <<= 1
-        power <<= 1
-        loop_count += 1
-    quotient = 0
-    while power_y > 0:
-        power_y >>= 1
-        power >>= 1
-        if x >= power_y:
-            x -= power_y
-            quotient += power
-    print(f"loop_count = {2*loop_count}")
-    return quotient
 
 
 def divide(n, m):
@@ -239,50 +216,6 @@ def find_position_of_msb(n):
     print(f"{n} : MSB at {low}. Between {pow(2, low)} and {pow(2, low + 1)}")
 
 
-def invert_bits(a):
-    """
-    >>> bin(1 << invert_bits(0b1100101100101).bit_length())
-    '0b100000000000'
-    """
-    return a ^ ((1 << a.bit_length()) - 1)
-
-
-def low_nibble(b):
-    return b & 0x0F
-
-
-def high_nibble(b):
-    return (b >> 4) & 0x0F
-
-
-def bitstr(n, width=None):
-    """
-    Return the binary representation of n as a string and
-    optionally zero-fill (pad) it to a given length
-
-    """
-    result = []
-    while n:
-        result.append(str(n % 2))
-        n = int(n / 2)
-    if (width is not None) and len(result) < width:
-        result.extend(['0'] * (width - len(result)))
-    result.reverse()
-    return ''.join(result)
-
-
-def mask(n):
-    """
-    Return a bitmask of length n (suitable for masking against an
-    int to coerce the size to a given length)
-
-    """
-    if n >= 0:
-        return 2**n - 1
-    else:
-        return 0
-
-
 def rol(n, rotations=1, width=8):
     """
     Return a given number of bitwise left rotations of an integer n,
@@ -309,100 +242,155 @@ def ror(n, rotations=1, width=8):
     return (n >> rotations) | ((n << (width - rotations)) & mask(width))
 
 
-def int_to_bin(num, bits=8):
-    """https://catonmat.net/low-level-bit-hacks"""
-    r = ''
-    while bits:
-        r += ('1' if num & 1 else '0')
-        bits -= 1
-        num >>= 1
-    print(r)
-
-
-def check_even_or_odd(i: int) -> bool:
+def sum_powers_of_two(n: int) -> int:
     """
-    Bit Hack #1. Check if the integer is even or odd.
+    >>> sum_powers_of_two(5)
+    63
+    >>> sum_powers_of_two(10) == 2**11 - 1
+    True
+    """
+    return (2 << n) - 1
 
-    >>> check_even_or_odd(0)
+
+def is_power_of_two(n: int) -> bool:
+    """
+    >>> is_power_of_two(1024)
     True
-    >>> check_even_or_odd(1)
+    >>> is_power_of_two(5)
     False
-    >>> check_even_or_odd(2)
+    """
+    return n & (n - 1) == 0
+
+
+def invert_bits(b: int) -> int:
+    """
+    >>> bin(1 << invert_bits(0b1100101100101).bit_length())
+    '0b100000000000'
+    """
+    return b ^ ((1 << b.bit_length()) - 1)
+
+
+def low_nibble(b: int) -> int:
+    """
+    >>> bin(low_nibble(0b101010))
+    '0b1010'
+    """
+    return b & 0x0F
+
+
+def high_nibble(b: int) -> int:
+    """
+    >>> bin(high_nibble(0b10010000))
+    '0b1001'
+    """
+    return (b >> 4) & 0x0F
+
+
+def mask(n: int) -> int:
+    """
+    Return a bitmask of length n.
+
+    >>> bin(mask(5))
+    '0b11111'
+    """
+    return (2 << (n - 1)) - 1 if n >= 0 else 0
+
+
+def is_even_or_odd(i: int) -> bool:
+    """
+    Check if the integer is even or odd.
+
+    >>> is_even_or_odd(0)
     True
-    >>> check_even_or_odd(101)
+    >>> is_even_or_odd(1)
+    False
+    >>> is_even_or_odd(2)
+    True
+    >>> is_even_or_odd(101)
     False
     """
     return i & 1 == 0
 
 
-def test_nth_bit_is_set(i: int, n: int) -> bool:
+def is_nth_bit_is_set(i: int, n: int) -> bool:
     """
-    Bit Hack #2. Test if the n-th bit is set
+    Test if the n-th bit is set.
 
-    10 -> 0b1010
-    >>> test_nth_bit_is_set(10, 0)
+    >>> is_nth_bit_is_set(0b1010, 0)
     False
-    >>> test_nth_bit_is_set(10, 1)
+    >>> is_nth_bit_is_set(0b1010, 1)
     True
-    >>> test_nth_bit_is_set(10, 3)
+    >>> is_nth_bit_is_set(0b1010, 3)
     True
-    >>> test_nth_bit_is_set(10, 5)
+    >>> is_nth_bit_is_set(0b1010, 5)
     False
     """
     return bool(i & (1 << n))
 
 
-def set_nth_bit(i, n):
+def set_nth_bit(i: int, n: int) -> int:
     """
-    Bit Hack #3. Set the n-th bit.
+    Set the n-th bit.
+
+    >>> bin(set_nth_bit(0b100000, 0))
+    '0b100001'
     """
     return i | (1 << n)
 
 
-def unset_nth_bit(i, n):
+def unset_nth_bit(i: int, n: int) -> int:
     """
-    Bit Hack #4. Unset the n-th bit
+    Unset the n-th bit.
+
+    >>> bin(unset_nth_bit(0b111111, 0))
+    '0b111110'
     """
     return i & ~(1 << n)
 
 
-def toggle_nth_bit(i, n):
+def toggle_nth_bit(i: int, n: int) -> int:
     """
-    Bit Hack #5. Toggle the n-th bit
+    Toggle the n-th bit.
+
     """
     return i ^ (1 << n)
 
 
-def turn_off_rightmost_bit(i):
+def turn_off_rightmost_bit(i: int) -> int:
     """
-    Bit Hack #6. Turn off the rightmost 1-bit
+    Turn off the rightmost 1-bit.
+
     """
     return i & (i - 1)
 
 
-def isolate_rightmost_bit(i):
+def isolate_rightmost_bit(i: int) -> int:
     """
-    Bit Hack #7. Isolate the rightmost 1-bit
+    Isolate the rightmost 1-bit.
+
     """
     return i & (-i)
 
 
-def right_propagate_rightmost_bit(i):
+def right_propagate_rightmost_bit(i: int) -> int:
     """
-    Bit Hack #8. Right propagate the rightmost 1-bit
+    Right propagate the rightmost 1-bit.
+
     """
     return i | (i - 1)
 
 
-def isolate_rightmost_0_bit(i):
+def isolate_rightmost_0_bit(i: int) -> int:
     """
-    Bit Hack #9. Isolate the rightmost 0-bit
+    Isolate the rightmost 0-bit.
+
     """
     return ~i & (i + 1)
 
 
-def turn_rightmost_0_bit(i):
+def turn_rightmost_0_bit(i: int) -> int:
     """
-    Bit Hack #10. Turn on the rightmost 0-bit
+    Turn on the rightmost 0-bit.
+
     """
     return i | (i + 1)

@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:52:29
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-04 19:39:57
+# @Last Modified time: 2020-01-08 13:44:19
 import math
 
 1.5e2  # 1.5 * 10**2
@@ -13,22 +13,19 @@ import math
 
 round(1000**(1 / 3))  # cubic root
 # 10
-
-# n(n+1)/2
-(100 * 101) // 2  # sum 1..100 == sum(range(101))
-# 5050
-
 abs(-1)
 # 1
-
 divmod(177, 10)  # (x // y, x % y)
 # (17, 7)
-
 pow(3, 4, 5)  # x**y mod m - Modular exponentiation
 # 1
-
 complex(1, 2)
 # (1+2j)
+
+(100 * 101) // 2  # n(n+1)/2 == sum 1..100 == sum(range(101))
+# 5050
+2**11 - 1  # 2^n+1-1 == sum 2^0..2^n == sum(2**p for p in range(n+1))
+# 2047
 
 (33 + 7 - 1) // 7  # ((m + n - 1) // n) - division with rounding up
 # 5
@@ -40,7 +37,7 @@ complex(1, 2)
 3**200 % 50
 # 1
 
-3 / 9  # 0.nnnnnnnnnnn
+3 / 9  # n/9 == 0.nnnnnnnnnnn
 # 0.3333333333333333
 
 n, k = 52, 2

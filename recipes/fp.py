@@ -2,12 +2,13 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-04 20:13:32
+# @Last Modified time: 2020-01-09 18:38:13
 """
 built-in:
     all(iterable) -> bool
     any(iterable) -> bool
     callable(object) -> bool
+    dir([object]) -> list of strings
     enumerate(iterable, start=0) -> enumerate object
     filter(function or None, iterable) -> filter object
     hash(object) -> int
@@ -261,6 +262,9 @@ nums = range(10)
 # [(0, 1), (2, 3), (4, 5), (6, 7), (8, 9)]
 dict(zip(nums[::2], nums[1::2]))  # == dict.update(zip(nums[::2], nums[1::2]))
 # {0: 1, 2: 3, 4: 5, 6: 7, 8: 9}
+pairs = [(1, 'a'), (2, 'b'), (3, 'c'), (4, 'd')]
+[*zip(*pairs)]  # Unzipping a Sequence
+# (1, 2, 3, 4), ('a', 'b', 'c', 'd')
 
 any((False, False, True))
 # True
