@@ -2,31 +2,67 @@
 # @Author: razor87
 # @Date:   2019-11-16 15:27:00
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-26 15:16:25
+# @Last Modified time: 2020-01-15 21:46:39
+from typing import Generator, Iterable
 
 
-def gen_eq(a, b):
+def chain(*iterables: Iterable) -> Generator:
     """
-    >>> sum(gen_eq(a, b))
-    """
-    if a == b:
-        yield True
-
-
-def chain(*iterables):
-    """
-    >>> [*chain(s, t)]
+    >>> [*chain(['A', 'B', 'C'], [0, 1, 2])]
     ['A', 'B', 'C', 0, 1, 2]
     """
     for i in iterables:
         yield from i
 
 
-def fibonacci(number):
+def updown(n: int) -> Generator:
+    """
+    >>> [*updown(3)]
+    [1, 2, 3, 2, 1]
+    """
+    yield from range(1, n)
+    yield from range(n, 0, -1)
+
+
+def fibonacci(number: int) -> Generator:
     a = b = 1
     for _ in range(number):
         yield a
         a, b = b, a + b
+
+
+def my_range(n: int) -> Generator:
+    """
+    >>> for i in my_range(5):
+    ...     print(i)
+    0
+    1
+    4
+    9
+    16
+    """
+    i = 0
+    while i < n:
+        yield i**2
+        i += 1
+
+
+def numbers(x: int) -> Generator:
+    """
+    >>> [*numbers(11)]
+    [0, 2, 4, 6, 8, 10]
+    """
+    for i in range(x):
+        if i % 2 == 0:
+            yield i
+
+
+def unique_stable(arr) -> Generator:
+    dupes = {}
+    for val in arr:
+        if val not in dupes:
+            dupes.add(val)
+            yield val
 
 
 def accumulator():
@@ -48,40 +84,6 @@ def accumulator():
         if not value:
             break
         total += value
-
-
-def my_range(n):
-    """
-    >>> for i in my_range(5):
-    ...     print(i)
-    0
-    1
-    4
-    9
-    16
-    """
-    i = 0
-    while i < n:
-        yield i**2
-        i += 1
-
-
-def numbers(x):
-    """
-    >>> [*numbers(11)]
-    [0, 2, 4, 6, 8, 10]
-    """
-    for i in range(x):
-        if i % 2 == 0:
-            yield i
-
-
-def unique_stable(arr):
-    dupes = {}
-    for val in arr:
-        if val not in dupes:
-            dupes.add(val)
-            yield val
 
 
 def chunks(g, n=2):

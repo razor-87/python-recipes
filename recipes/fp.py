@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-04 20:17:35
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-09 18:38:13
+# @Last Modified time: 2020-01-15 21:04:19
 """
 built-in:
     all(iterable) -> bool
@@ -217,10 +217,10 @@ functools.reduce(operator.iconcat, [[1], [2], [3]], [])
 # [1, 2, 3]
 functools.reduce(operator.mul, range(1, 11))  # == math.factorial(10)
 # 3628800
-functools.reduce(lambda x, y: x + y, [1, 2, 3])
+functools.reduce(operator.add, [1, 2, 3])
 # 6
-functools.reduce(lambda x, y: y**x, reversed(arr))
-# (3, 2, 2) -> 3**(2**2) -> 81
+functools.reduce(pow, [3, 2, 2])  # == 3**(2**2)
+# 81
 functools.reduce(operator.mul, ((3 << 1) + 3 for _ in range(1, 101)))  # == 3**200
 # 265613988875874769338781322035779626829233452653394495974574961739092490901302182994384699044001
 

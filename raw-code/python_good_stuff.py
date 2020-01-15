@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2017-09-09 14:03:30
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-27 15:10:37
+# @Last Modified time: 2020-01-15 12:57:38
 import dis
 import sys
 import array
@@ -131,15 +131,6 @@ half_size = len(numbers) // 2
 median = sum(numbers[half_size - 1:half_size + 1]) / 2
 
 
-
-a, b, c = range(3)
-values = range(5)
-a, b, _, _, _ = values
-a, b, *rest = values
-a, *rest, b = range(5)
-*rest, a, b = range(5)
-
-
 [*"string"]  # iterable -> list
 # ['s', 't', 'r', 'i', 'n', 'g']
 
@@ -161,6 +152,30 @@ for (first_char, *_, last_char) in animals:
 # f h
 # e t
 
+a, b, c = range(3)
+a, b, c
+# (0, 1, 2)
+values = range(5)
+a, b, _, _, _ = values
+a, b
+# (0, 1)
+a, b, *rest = values
+a, b, rest
+# (0, 1, [2, 3, 4])
+a, b, c, d, e, *rest = values
+a, b, c, d, e, rest
+# (0, 1, 2, 3, 4, [])
+
+*lst, = range(5)  # == [*lst]
+lst
+# [0, 1, 2, 3, 4]
+*lst2, = (1, 2, 3)
+lst2
+# [1, 2, 3]
+for *b, in [(1, 2, 3), (4, 5, 6, 7)]:
+    print(b)
+# [1, 2, 3]
+# [4, 5, 6, 7]
 
 
 
@@ -212,12 +227,6 @@ xP == hP and text[:m] == P and print(0, end=' ')
 
 
 
-# list of public objects when from module import *
-__all__ = []
-
-
-
-
 class Bunch:
     def __init__(self, **kwds):
         self.__dict__.update(kwds)
@@ -235,7 +244,6 @@ def f1(): print("True"); return True
 def f2(): print("False"); return False
 def f3(): print("True"); return True
 
-
 any((f1(), f2(), f3()))
 # True
 # False
@@ -248,15 +256,14 @@ all((f1(), f2(), f3()))
 # True
 # False
 
-f1() or f2() or f3()
+any(f() for f in (f1, f2, f3))  # == f1() or f2() or f3()
 # True
 # True
 
-f1() and f2() and f3()
+all(f() for f in (f1, f2, f3))  # == f1() and f2() and f3()
 # True
 # False
 # False
-
 
 
 
@@ -631,3 +638,4 @@ dispatch_dict('mul', 2, 8)
 
 dispatch_dict('unknown', 2, 8)
 # None
+

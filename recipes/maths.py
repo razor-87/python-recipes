@@ -2,8 +2,9 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:52:29
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-08 13:44:19
+# @Last Modified time: 2020-01-15 21:21:42
 import math
+from typing import Iterable
 
 1.5e2  # 1.5 * 10**2
 # 150.0
@@ -138,7 +139,7 @@ def struct_inverse_sqrt(number):
     return y
 
 
-def tower_of_powers(n, powers):
+def tower_of_powers(n: int, powers: Iterable[int]) -> int:
     """
     https://en.wikipedia.org/wiki/Knuth%27s_up-arrow_notation
     https://en.wikipedia.org/wiki/Conway_chained_arrow_notation
@@ -152,7 +153,10 @@ def tower_of_powers(n, powers):
     7625597484987
     """
     from functools import reduce
-    return n**reduce(lambda x, y: y**x, reversed(powers))
+    return n**reduce(pow, powers)
+
+
+tower_of_powers(3, [3, 3])
 
 
 def approx_pi2(n=10000000):

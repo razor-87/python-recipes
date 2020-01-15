@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-08-01 11:08:22
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-11-18 10:11:13
+# @Last Modified time: 2020-01-15 21:46:30
 import collections
 import itertools
 import operator
@@ -298,7 +298,7 @@ def dot_product(vec1, vec2):
 def flatten(nested_lists):
     """Flatten one level of nesting.
 
-    >>> [*flatten([[0, 1], [2, 3]]))
+    >>> [*flatten([[0, 1], [2, 3]])]
     [0, 1, 2, 3]
     """
     return itertools.chain.from_iterable(nested_lists)
@@ -362,7 +362,7 @@ def grouper(iterable, n, fillvalue=None):
 
 def smth_loops(width, height, depth):
     """
-    >>> smth_loops(2, 2, 2)
+    >>> smth_loops(2, 2, 2) #doctest: +NORMALIZE_WHITESPACE
     [(0, 0, 0),
      (0, 0, 1),
      (0, 1, 0),
