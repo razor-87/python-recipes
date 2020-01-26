@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2017-09-09 14:03:30
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-15 12:57:38
+# @Last Modified time: 2020-01-26 18:04:19
 import dis
 import sys
 import array
@@ -11,14 +11,12 @@ from pympler import asizeof
 
 sys.argv
 sys.executable
-sys.exit
 sys.exit(0)
 sys.path
 sys.platform
 sys.modules
 sys.getrefcount
-sys.maxsize
-# 9223372036854775807
+sys.maxsize  # 9223372036854775807
 
 sys.getsizeof(range(10))  # == asizeof.flatsize
 # 48
@@ -55,12 +53,10 @@ asizeof.asizeof(set(range(10)))
 # 1048
 
 
-help(5)
 dir(5)
 # ['__abs__', '__add__', ...]
 dir(sys)
 # ['__breakpointhook__', '__displayhook__', '__doc__', ...]
-
 abs.__doc__  # 'abs(number) -> number
 # Return the absolute value of the argument.
 
@@ -488,6 +484,16 @@ def goodbye(name, adjective):
 atexit.register(goodbye, 'Donny', 'nice')
 
 
+import gc
+def cleanup():
+    # do any cleanup work here...
+
+    # call the garbage collector?
+    gc.collect()
+    pass
+atexit.register(cleanup)
+
+
 
 # In Python 3.4+ you can use
 # contextlib.suppress() to selectively
@@ -622,7 +628,6 @@ def f(*, a=1, b=2, c=4, **kwargs):
 
 
 
-
 # Because Python has first-class functions they can
 # be used to emulate switch/case statements
 def dispatch_dict(operator, x, y):
@@ -638,4 +643,3 @@ dispatch_dict('mul', 2, 8)
 
 dispatch_dict('unknown', 2, 8)
 # None
-

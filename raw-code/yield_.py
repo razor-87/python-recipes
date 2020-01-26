@@ -2,8 +2,13 @@
 # @Author: razor87
 # @Date:   2019-11-16 15:27:00
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-15 21:46:39
+# @Last Modified time: 2020-01-26 17:37:09
 from typing import Generator, Iterable
+
+
+def ifile(name: str) -> Generator:
+    with open(name, encoding='utf-8') as f:
+        yield from f
 
 
 def chain(*iterables: Iterable) -> Generator:
