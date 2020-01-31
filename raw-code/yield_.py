@@ -2,13 +2,20 @@
 # @Author: razor87
 # @Date:   2019-11-16 15:27:00
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-26 17:37:09
+# @Last Modified time: 2020-01-27 16:58:26
 from typing import Generator, Iterable
 
 
 def ifile(name: str) -> Generator:
     with open(name, encoding='utf-8') as f:
         yield from f
+
+
+def elapsed_time():
+    from time import monotonic
+    start = monotonic()
+    while True:
+        yield monotonic() - start
 
 
 def chain(*iterables: Iterable) -> Generator:

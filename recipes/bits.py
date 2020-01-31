@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-09 20:00:38
+# @Last Modified time: 2020-01-31 20:20:50
 
 bin(0x7F)
 # '0b1111111'
@@ -195,12 +195,30 @@ def bits_rotate_right(byte):
     return byte
 
 
-def number_of_set_bits(i):
+def counting_bits_set(i):
     # https://en.wikipedia.org/wiki/Hamming_weight
     assert 0 <= i < 0x100000000
     i -= ((i >> 1) & 0x55555555)
     i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
     return (((i + (i >> 4) & 0xF0F0F0F) * 0x1010101) & 0xffffffff) >> 24
+
+
+def counting_bits_set_k(i):
+    """
+    https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetKernighan
+
+    >>> counting_bits_set_k(0b101010101)
+    5
+    >>> counting_bits_set_k(2 << 63)
+    1
+    >>> counting_bits_set_k((2 << 63) - 1)
+    64
+    """
+    c = 0
+    while i:
+        i &= (i - 1)
+        c += 1
+    return c
 
 
 def find_position_of_msb(n):

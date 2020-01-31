@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-06-24 12:18:25
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-05 19:21:34
+# @Last Modified time: 2020-01-31 20:25:58
 import io
 import sys
 
@@ -30,88 +30,13 @@ sys.stdin.getvalue()
 # '1\n2\n3\n4\n5\n6\n7\n8\n9'
 
 
-print(data, file=out, flush=True)
+print(data, file=file, flush=True)
 
 
 f = open('data.txt')
 first, second, *rest, last = f.readlines()
 f.close()
 
-
-
-
-
-a = []
-a = list(map(int, input().split()))
-print(' '.join(map(str, a)))
-print(*a)
-
-a, b = map(int, input().split())
-a, b = sys.stdin.read().split()
-
-reader = (int(line.strip()) for line in sys.stdin.readlines())
-N = next(reader)
-
-input_list = next(sys.stdin).split()
-
-
-
-ls = [[*map(int, i.split())] for i in sys.stdin]
-(n, e, d), ps, res = ls[0], [*range(ls[0][0] + 1)], 1
-
-
-_, arr = (tuple(map(int, lst))
-          for lst in map(str.split, map(str.strip, sys.stdin.readlines())))
-_, arr = sys.stdin.readline(), tuple(sys.stdin.readline().split())
-lines = list(map(str.strip, sys.stdin.readlines()))
-
-
-
-inp = input().split()
-name, price = ' '.join(inp[:-1]), int(inp[-1])
-
-
-
-tuple(tuple(map(float, lst)) for lst in map(str.split,
-                                            map(str.strip, sys.stdin.readlines()[1:])))
-
-(tuple(map(int, row.strip().split())) for row in sys.stdin.readlines())
-
-[tuple(map(int, el.split())) for el in map(str.strip, sys.stdin.readlines()[1:])]
-
-
-
-
-_, *arr = map(int, sys.stdin.read().split())
-# -> List[int]
-
-
-arr = tuple(input() for _ in range(int(input())))
-# 3
-# 1 0
-# 2 $ -> ('1 0', '2 $', '3 1')
-# 3 1
-
-
-x, y = (int(input()) for _ in range(2))
-
-(x, y), ex = map(int, input().split()), input()
-
-
-a, b = (tuple(map(int, input().split())) for _ in range(2))
-
-p, x = [*map(float, input().split())], int(input())
-
-n, _ = map(int, input().split())
-
-lst = [input().split() for _ in range(n)]
-
-lst = [input().split() for _ in range((*map(int, input().split()),)[0])]
-
-(*map(int, input().split()),)
-# 45 66 34 -> (45, 66, 34)
-
-({*map(int, input().split())} for _ in range(2))
 
 
 with open('input00.txt') as f:

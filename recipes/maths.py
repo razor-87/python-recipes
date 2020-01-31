@@ -2,8 +2,9 @@
 # @Author: razor87
 # @Date:   2019-10-04 19:52:29
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-15 21:21:42
+# @Last Modified time: 2020-01-31 20:10:59
 import math
+from functools import lru_cache
 from typing import Iterable
 
 1.5e2  # 1.5 * 10**2
@@ -156,9 +157,6 @@ def tower_of_powers(n: int, powers: Iterable[int]) -> int:
     return n**reduce(pow, powers)
 
 
-tower_of_powers(3, [3, 3])
-
-
 def approx_pi2(n=10000000):
     """
     https://en.wikipedia.org/wiki/Approximations_of_%CF%80
@@ -219,6 +217,22 @@ def is_square_free(n: int) -> bool:
         if n % (i**2) == 0:
             return False
     return True
+
+
+@lru_cache(maxsize=None)
+def factorials_lru(n: int) -> int:
+    """
+    >>> factorials_lru(1)
+    1
+    >>> factorials_lru(5)
+    120
+    >>> factorials_lru(10)
+    3628800
+    >>> factorials_lru(10)
+    3628800
+    """
+    from math import factorial
+    return factorial(n)
 
 
 def lcm(a, b):

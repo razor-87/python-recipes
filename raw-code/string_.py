@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:54:13
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-09 20:28:21
+# @Last Modified time: 2020-01-31 20:27:25
 import binascii
 import re
 import string
@@ -27,6 +27,8 @@ string.punctuation
 # '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
 string.whitespace
 # ' \t\n\r\x0b\x0c'
+string.digits
+# '0123456789'
 
 
 ord('f')
@@ -168,9 +170,6 @@ raw.translate(table)
 
 
 
-"0123456789"[6:3:-1]
-# "654"
-
 foo = "yasoob"
 foo[::-1]
 # 'boosay'
@@ -204,35 +203,6 @@ print(f'{correct:<10}|{phonetic_correct:<20}|{typo:<10}|{phonetic_typo:<20}|{pho
 print(f'Centre Aligned:')
 print(f'{correct:^10}|{phonetic_correct:^20}|{typo:^10}|{phonetic_typo:^20}|{phonetic_distance:^20}|')
 # Centre Aligned:
-
-
-def wrap(string: str, k: int) -> List[str]:
-    # textwrap.wrap('AABCAAADA', 3) -> ['AAB', 'CAA', 'ADA']
-    import textwrap
-    return textwrap.wrap(string, k)
-
-
-def fill(string: str, max_width: int) -> str:
-    # textwrap.fill('AABCAAADA', 3) -> 'AAB\nCAA\nADA'
-    import textwrap
-    return textwrap.fill(string, width=max_width)
-
-
-def most_amount_sub(string, sub):
-    n = 1
-    while b*n in string:
-        n += 1
-    return n - 1
-
-
-def rev_s(s: str) -> str:
-    # fastest reversing string in Python
-    return s[::-1]
-
-
-def remove_spaces(x: str) -> str:
-    return x.replace(' ', '')
-
 
 
 
@@ -285,3 +255,37 @@ print('[%s]+' % re.escape(legal_chars))
 operators = ['+', '-', '*', '/', '**']
 print('|'.join(map(re.escape, sorted(operators, reverse=True))))
 # /|\-|\+|\*\*|\*
+
+
+
+def wrap(string: str, k: int) -> List[str]:
+    # textwrap.wrap('AABCAAADA', 3) -> ['AAB', 'CAA', 'ADA']
+    import textwrap
+    return textwrap.wrap(string, k)
+
+
+def fill(string: str, max_width: int) -> str:
+    # textwrap.fill('AABCAAADA', 3) -> 'AAB\nCAA\nADA'
+    import textwrap
+    return textwrap.fill(string, width=max_width)
+
+
+def most_amount_sub(string, sub):
+    n = 1
+    while b*n in string:
+        n += 1
+    return n - 1
+
+
+def rev_s(s: str) -> str:
+    # fastest reversing string in Python
+    return s[::-1]
+
+
+def remove_spaces(x: str) -> str:
+    return x.replace(' ', '')
+
+
+
+
+
