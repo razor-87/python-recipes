@@ -2,64 +2,40 @@
 # @Author: razor87
 # @Date:   2019-10-01 18:10:45
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-31 20:20:50
-
-bin(0x7F)
-# '0b1111111'
-
-bin(int('010101', 2))
-# '0b10101'
-
-bin(~0b11111111)  # ~255 -> -256
-# '-0b100000000'
-
-bin(0xCA)
-# '0b11001010'
-
-bin(0xFF)
-# '0b11111111' -> 255
+# @Last Modified time: 2020-02-06 20:27:19
 
 bin(0xF)
 # '0b1111' -> 15
 
-bin(0x100)
-# '0b100000000' -> 256
+bin(0x10)
+# '0b10000' -> 16
 
-bin(0x80)
-# '0b10000000' -> 128
+bin(0x3f)
+# '0b111111' -> 63
 
 bin(0x40)
 # '0b1000000' -> 64
 
-bin(10)[2:], len(bin(10)[2:])
-# ('1010', 4)
+bin(0x7F)
+# '0b1111111' -> 127
 
-bin(255)[2:], len(bin(255)[2:])
-# ('11111111', 8)
+bin(0x80)
+# '0b10000000' -> 128
 
-bin(100).count('1')
-# 3
+bin(0xFF)
+# '0b11111111' -> 255
+
+bin(0x100)
+# '0b100000000' -> 256
+
+bin(~0xFF)  # ~255
+# '-0b100000000' -> -256
 
 (100).bit_length()
 # 7
 
 (0xFF00FF << 8) == (0xFF00FF * 2**8)  # (16711935 << 8) == (16711935 * 2**8)
 # True
-
-0b10101  # int('0b10101', 0)
-# 21
-
-0x100  # int('0x100', 16)
-# 256
-
-~0
-# -1
-
-0b100000000 - 0b100000001
-# -1
-
-0b_111_0101_0011
-# 1875
 
 hex(1_234_987)
 # 0x12d82b
@@ -69,28 +45,11 @@ hex(9223372036854775807)  # sys.maxsize
 
 hex(0b0010), hex(0b0100), hex(0b1010)
 # ('0x2', '0x4', '0xa')
-bin(0x24A)
-# '0b1001001010'
 
-''.join(
-    map(str, (
-        0xCA >> 7,
-        (0xCA >> 6) % 2,
-        (0xCA >> 5) % 2,
-        (0xCA >> 4) % 2,
-        (0xCA >> 3) % 2,
-        (0xCA >> 2) % 2,
-        (0xCA >> 1) % 2,
-        0xCA % 2,
-    )))
-# '11001010'
-
-# n << b -> n * (2**b)
-1 << 1  # 1 * (2**1)
+1 << 1  # n << i -> n * (2**i)
 # 2
 
-# n >> b -> n // (2**b)
-64 >> 2  # 64 // (2**2) -> 64 // 4
+64 >> 2  # n >> i -> n // (2**i)
 # 16
 
 2 << 1  # 2**2 == 1 << 2
@@ -162,12 +121,6 @@ def power_by_bits(a, b):
     return result
 
 
-def reverse_bits(x):
-    inp_bits = bin(x)[2:]
-    # return int(f"0b{inp_bits[::-1]}", 2)
-    return f"0b{inp_bits} -> 0b{inp_bits[::-1]}"
-
-
 def swap_bits(x, i, j):
     x_old = bin(x)
     low = (x >> i) & 1
@@ -193,32 +146,6 @@ def bits_rotate_right(byte):
     if bit:
         byte |= 0x80
     return byte
-
-
-def counting_bits_set(i):
-    # https://en.wikipedia.org/wiki/Hamming_weight
-    assert 0 <= i < 0x100000000
-    i -= ((i >> 1) & 0x55555555)
-    i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
-    return (((i + (i >> 4) & 0xF0F0F0F) * 0x1010101) & 0xffffffff) >> 24
-
-
-def counting_bits_set_k(i):
-    """
-    https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetKernighan
-
-    >>> counting_bits_set_k(0b101010101)
-    5
-    >>> counting_bits_set_k(2 << 63)
-    1
-    >>> counting_bits_set_k((2 << 63) - 1)
-    64
-    """
-    c = 0
-    while i:
-        i &= (i - 1)
-        c += 1
-    return c
 
 
 def find_position_of_msb(n):
@@ -260,6 +187,78 @@ def ror(n, rotations=1, width=8):
     return (n >> rotations) | ((n << (width - rotations)) & mask(width))
 
 
+def format_to_8_bit(n: int) -> str:
+    """
+    >>> format_to_8_bit(10)
+    '00001010'
+    """
+    bits = (n % 2,
+            (n >> 1) % 2,
+            (n >> 2) % 2,
+            (n >> 3) % 2,
+            (n >> 4) % 2,
+            (n >> 5) % 2,
+            (n >> 6) % 2,
+            n >> 7)
+    return "{7}{6}{5}{4}{3}{2}{1}{0}".format(*bits)
+
+
+def reverse_bits(n: int) -> int:
+    """
+    >>> bin(reverse_bits(0b10001111))
+    '0b11110001'
+    """
+    return int(format(n, 'b')[::-1], 2)
+
+
+def count_bits_set(n: int) -> int:
+    """
+    >>> count_bits_set_fast(0b101010101)
+    5
+    >>> count_bits_set_fast(2 << 63)
+    1
+    >>> count_bits_set_fast((2 << 63) - 1)
+    64
+    """
+    return format(n, 'b').count('1')
+
+
+def count_bits_set_fast(n: int) -> int:
+    """
+    https://en.wikipedia.org/wiki/Hamming_weight
+
+    >>> count_bits_set_fast(0b101010101)
+    5
+    >>> count_bits_set_fast(2 << 63)
+    1
+    >>> count_bits_set_fast((2 << 63) - 1)
+    64
+    """
+    if 0 <= n < 0x100000000:
+        n -= ((n >> 1) & 0x55555555)
+        n = (n & 0x33333333) + ((n >> 2) & 0x33333333)
+        return (((n + (n >> 4) & 0xF0F0F0F) * 0x1010101) & 0xffffffff) >> 24
+    return count_bits_set(n)
+
+
+def count_bits_set_kernighan(n: int) -> int:
+    """
+    https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetKernighan
+
+    >>> count_bits_set_kernighan(0b101010101)
+    5
+    >>> count_bits_set_kernighan(2 << 63)
+    1
+    >>> count_bits_set_kernighan((2 << 63) - 1)
+    64
+    """
+    c = 0
+    while n:
+        n &= n - 1
+        c += 1
+    return c
+
+
 def sum_powers_of_two(n: int) -> int:
     """
     >>> sum_powers_of_two(5)
@@ -280,41 +279,7 @@ def is_power_of_two(n: int) -> bool:
     return n & (n - 1) == 0
 
 
-def invert_bits(b: int) -> int:
-    """
-    >>> bin(1 << invert_bits(0b1100101100101).bit_length())
-    '0b100000000000'
-    """
-    return b ^ ((1 << b.bit_length()) - 1)
-
-
-def low_nibble(b: int) -> int:
-    """
-    >>> bin(low_nibble(0b101010))
-    '0b1010'
-    """
-    return b & 0x0F
-
-
-def high_nibble(b: int) -> int:
-    """
-    >>> bin(high_nibble(0b10010000))
-    '0b1001'
-    """
-    return (b >> 4) & 0x0F
-
-
-def mask(n: int) -> int:
-    """
-    Return a bitmask of length n.
-
-    >>> bin(mask(5))
-    '0b11111'
-    """
-    return (2 << (n - 1)) - 1 if n >= 0 else 0
-
-
-def is_even_or_odd(i: int) -> bool:
+def is_even_or_odd(n: int) -> bool:
     """
     Check if the integer is even or odd.
 
@@ -327,10 +292,10 @@ def is_even_or_odd(i: int) -> bool:
     >>> is_even_or_odd(101)
     False
     """
-    return i & 1 == 0
+    return n & 1 == 0
 
 
-def is_nth_bit_is_set(i: int, n: int) -> bool:
+def is_nth_bit_is_set(n: int, i: int) -> bool:
     """
     Test if the n-th bit is set.
 
@@ -343,72 +308,136 @@ def is_nth_bit_is_set(i: int, n: int) -> bool:
     >>> is_nth_bit_is_set(0b1010, 5)
     False
     """
-    return bool(i & (1 << n))
+    return bool(n & (1 << i))
 
 
-def set_nth_bit(i: int, n: int) -> int:
+def twos_complement(n: int) -> int:
+    """
+    https://en.wikipedia.org/wiki/Two%27s_complement
+
+    >>> bin(twos_complement(111))
+    '0b10000'
+    >>> bin(twos_complement(256))
+    '0b11111111'
+    """
+    return ~n + (1 << n.bit_length())
+
+
+def invert_bits(n: int) -> int:
+    """
+    >>> bin(0b1100101100101 ^ invert_bits(0b1100101100101))
+    '0b1111111111111'
+    """
+    return n ^ ((1 << n.bit_length()) - 1)
+
+
+def low_nibble(n: int) -> int:
+    """
+    >>> bin(low_nibble(0b101010))
+    '0b1010'
+    """
+    return n & 0x0F
+
+
+def high_nibble(n: int) -> int:
+    """
+    >>> bin(high_nibble(0b10010000))
+    '0b1001'
+    """
+    return (n >> 4) & 0x0F
+
+
+def mask(n: int) -> int:
+    """
+    Return a bitmask of length n.
+
+    >>> bin(mask(5))
+    '0b11111'
+    """
+    return (2 << (n - 1)) - 1 if n >= 0 else 0
+
+
+def set_nth_bit(n: int, i: int) -> int:
     """
     Set the n-th bit.
 
     >>> bin(set_nth_bit(0b100000, 0))
     '0b100001'
+    >>> bin(set_nth_bit(0b100001, 0))
+    '0b100001'
     """
-    return i | (1 << n)
+    return n | (1 << i)
 
 
-def unset_nth_bit(i: int, n: int) -> int:
+def unset_nth_bit(n: int, i: int) -> int:
     """
     Unset the n-th bit.
 
-    >>> bin(unset_nth_bit(0b111111, 0))
-    '0b111110'
+    >>> bin(unset_nth_bit(0b11111111, 0))
+    '0b11111110'
+    >>> bin(unset_nth_bit(0b11111110, 0))
+    '0b11111110'
     """
-    return i & ~(1 << n)
+    return n & ~(1 << i)
 
 
-def toggle_nth_bit(i: int, n: int) -> int:
+def toggle_nth_bit(n: int, i: int) -> int:
     """
     Toggle the n-th bit.
 
+    >>> bin(toggle_nth_bit(0b10000001, 0))
+    '0b10000000'
+    >>> bin(toggle_nth_bit(0b10000001, 3))
+    '0b10001001'
     """
-    return i ^ (1 << n)
+    return n ^ (1 << i)
 
 
-def turn_off_rightmost_bit(i: int) -> int:
+def turn_off_rightmost_bit(n: int) -> int:
     """
     Turn off the rightmost 1-bit.
 
+    >>> bin(turn_off_rightmost_bit(0b11111100))
+    '0b11111000'
     """
-    return i & (i - 1)
+    return n & (n - 1)
 
 
-def isolate_rightmost_bit(i: int) -> int:
+def isolate_rightmost_bit(n: int) -> int:
     """
     Isolate the rightmost 1-bit.
 
+    >>> bin(isolate_rightmost_bit(0b11111000))
+    '0b1000'
     """
-    return i & (-i)
+    return n & (-n)
 
 
-def right_propagate_rightmost_bit(i: int) -> int:
-    """
-    Right propagate the rightmost 1-bit.
-
-    """
-    return i | (i - 1)
-
-
-def isolate_rightmost_0_bit(i: int) -> int:
-    """
-    Isolate the rightmost 0-bit.
-
-    """
-    return ~i & (i + 1)
-
-
-def turn_rightmost_0_bit(i: int) -> int:
+def turn_rightmost_0_bit(n: int) -> int:
     """
     Turn on the rightmost 0-bit.
 
+    >>> bin(turn_rightmost_0_bit(0b11110001))
+    '0b11110011'
     """
-    return i | (i + 1)
+    return n | (n + 1)
+
+
+def isolate_rightmost_0_bit(n: int) -> int:
+    """
+    Isolate the rightmost 0-bit.
+
+    >>> bin(isolate_rightmost_0_bit(0b10000111))
+    '0b1000'
+    """
+    return ~n & (n + 1)
+
+
+def right_propagate_rightmost_bit(n: int) -> int:
+    """
+    Right propagate the rightmost 1-bit.
+
+    >>> bin(right_propagate_rightmost_bit(0b10010000))
+    '0b10011111'
+    """
+    return n | (n - 1)
