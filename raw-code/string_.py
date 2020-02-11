@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:54:13
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-31 20:27:25
+# @Last Modified time: 2020-02-11 19:44:37
 import binascii
 import re
 import string
@@ -169,12 +169,6 @@ raw.translate(table)
                               "cdefghijklmnopqrstuvwxyzab"))
 
 
-
-foo = "yasoob"
-foo[::-1]
-# 'boosay'
-
-
 ["%-3d%12d" % (exponent, 10**exponent) for exponent in range(7, 11)]
 # ['7      10000000', '8     100000000', '9    1000000000', '10  10000000000']
 
@@ -185,62 +179,29 @@ typo = 'typo'
 phonetic_typo = 'phonetic_typo'
 phonetic_distance = 'phonetic_distance'
 
-print(f'No Spacing:')
-print(f'{correct}|{phonetic_correct}|{typo}|{phonetic_typo}|{phonetic_distance}|\n')
-# No Spacing:
-# correct|phonetic_correct|typo|phonetic_typo|phonetic_distance|
-
 print(f'Right Aligned:')
 print(f'{correct:>10}|{phonetic_correct:>20}|{typo:>10}|{phonetic_typo:>20}|{phonetic_distance:>20}|\n')
 # Right Aligned:
 #    correct|    phonetic_correct|      typo|       phonetic_typo|   phonetic_distance|
-
 print(f'Left Aligned:')
 print(f'{correct:<10}|{phonetic_correct:<20}|{typo:<10}|{phonetic_typo:<20}|{phonetic_distance:<20}|\n')
 # Left Aligned:
 # correct   |phonetic_correct    |typo      |phonetic_typo       |phonetic_distance   |
-
 print(f'Centre Aligned:')
 print(f'{correct:^10}|{phonetic_correct:^20}|{typo:^10}|{phonetic_typo:^20}|{phonetic_distance:^20}|')
 # Centre Aligned:
 
 
-
-
-# "[^"\s,):]
-# [^"\s,):]"
-# leap([\s\w+])year
-
-re.I  # re.IGNORECASE
-re.DEBUG
-
-
 len(max(re.findall(r'(1+)', '3441153111154354113111111')))
 # 6
-
 bool(re.findall(r'c{1}(\w*)w{1}(\w*)h{1}(\w*)', 'dcsdgfwgdh'))
 # True
-
-# +-float
-pattern = re.compile(r'^[-+]?[0-9]*\.[0-9]+$')
-pattern.match('text')
-print(bool(pattern.match('text')))
+bool(re.match(r'^[-+]?[0-9]*\.[0-9]+$', '-0.4543'))  # +-float
+# True
 
 # split
-regex_pattern = r"[,.]"
-re.split(regex_pattern, '100,000,000.000')
+re.split(r"[,.]", '100,000,000.000')
 # ['100', '000', '000', '000']
-
-
-sentence = "this is a test, not testing."
-it = re.finditer('\\btest\\b', sentence)
-for match in it:
-    print("match position: " + str(match.start()) + "-" + str(match.end()))
-
-# search 123-123 like strings
-m = re.search(r'\d+-\d+', line)
-if m:
-    current = m.group(0)
 
 # email
 r"[a-z][\w._-]*@[a-z]+\.[a-z]{1,3}$"
@@ -255,7 +216,6 @@ print('[%s]+' % re.escape(legal_chars))
 operators = ['+', '-', '*', '/', '**']
 print('|'.join(map(re.escape, sorted(operators, reverse=True))))
 # /|\-|\+|\*\*|\*
-
 
 
 def wrap(string: str, k: int) -> List[str]:
@@ -286,6 +246,17 @@ def remove_spaces(x: str) -> str:
     return x.replace(' ', '')
 
 
+def encode(text):
+    """
+    >>> encode('WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW')
+    '12W1B12W3B24W1B14W'
+    """
+    return re.sub(r'(.)\1+', lambda m: str(len(m.group(0))) + m.group(1), text)
 
 
-
+def decode(text):
+    """
+    >>> decode('12W1B12W3B24W1B14W')
+    'WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW'
+    """
+    return re.sub(r'(\d+)(\D)', lambda m: m.group(2) * int(m.group(1)), text)

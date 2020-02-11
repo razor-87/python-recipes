@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2019-11-16 15:27:00
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-27 16:58:26
+# @Last Modified time: 2020-02-11 19:22:39
 from typing import Generator, Iterable
 
 
@@ -11,7 +11,7 @@ def ifile(name: str) -> Generator:
         yield from f
 
 
-def elapsed_time():
+def elapsed_time() -> Generator:
     from time import monotonic
     start = monotonic()
     while True:
@@ -36,66 +36,23 @@ def updown(n: int) -> Generator:
     yield from range(n, 0, -1)
 
 
-def fibonacci(number: int) -> Generator:
+def fibonacci_gen(num: int) -> Generator:
+    """
+    >>> [*fibonacci_gen(10)]
+    [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+    """
     a = b = 1
-    for _ in range(number):
+    for _ in range(num):
         yield a
         a, b = b, a + b
 
 
-def my_range(n: int) -> Generator:
-    """
-    >>> for i in my_range(5):
-    ...     print(i)
-    0
-    1
-    4
-    9
-    16
-    """
-    i = 0
-    while i < n:
-        yield i**2
-        i += 1
-
-
-def numbers(x: int) -> Generator:
-    """
-    >>> [*numbers(11)]
-    [0, 2, 4, 6, 8, 10]
-    """
-    for i in range(x):
-        if i % 2 == 0:
-            yield i
-
-
-def unique_stable(arr) -> Generator:
-    dupes = {}
+def unique_stable(arr: Iterable) -> Generator:
+    dupes = set()
     for val in arr:
         if val not in dupes:
             dupes.add(val)
             yield val
-
-
-def accumulator():
-    """
-    >>> generator = accumulator()
-    >>> next(generator)
-    0
-    >>> generator.send(1)
-    Got: 1
-    1
-    >>> generator.send(1)
-    Got: 2
-    3
-    """
-    total = 0
-    while True:
-        value = yield total
-        print(f"Got: {value}")
-        if not value:
-            break
-        total += value
 
 
 def chunks(g, n=2):
@@ -108,7 +65,7 @@ def chunks(g, n=2):
 
 
 def chunks_(string, k):
-    yield from zip(*(iter(string),) * k)
+    yield from zip(*(iter(string), ) * k)
 
 
 def grouper(iterable, n, fillvalue=''):
@@ -121,7 +78,7 @@ def grouper(iterable, n, fillvalue=''):
     'gfdgfgdgdb\nvcgjkjhddf\ngr hfghfgf\n kjhkhjtgg\n ghfvbvcbc\nvfhjkh____'
     """
     from itertools import zip_longest
-    args = (iter(iterable),) * n
+    args = (iter(iterable), ) * n
     yield from zip_longest(fillvalue=fillvalue, *args)
 
 
@@ -133,7 +90,7 @@ def moving_average(iterable, n=3):
     from collections import deque
     from itertools import islice
     it = iter(iterable)
-    d = deque(islice(it, n-1))
+    d = deque(islice(it, n - 1))
     d.appendleft(0)
     s = sum(d)
     for elem in it:
@@ -202,3 +159,17 @@ def unique_everseen(iterable, key=None):
             if k not in seen:
                 seen_add(k)
                 yield element
+
+
+def yield_from_merging(*iterables, sorting=True, reverse=False, key=None):
+    """
+    >>> [*yield_from_merging([5, 3, 1, 0], [7, 8, 0, 9, 8])]
+    [0, 0, 1, 3, 5, 7, 8, 8, 9]
+    >>> [*yield_from_merging([5, 3, 1, 0], [7, 8, 0, 9, 8], reverse=True)]
+    [9, 8, 8, 7, 5, 3, 1, 0, 0]
+    """
+    from heapq import merge
+    if sorting:
+        iterables = (sorted(iterable, reverse=reverse, key=None)
+                     for iterable in iterables)
+    yield from merge(*iterables, reverse=reverse, key=None)

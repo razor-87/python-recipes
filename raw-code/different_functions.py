@@ -2,9 +2,7 @@
 # @Author: razor87
 # @Date:   2019-09-29 19:22:37
 # @Last Modified by:   razor87
-# @Last Modified time: 2019-12-21 15:53:48
-import random
-from typing import Generator
+# @Last Modified time: 2020-02-11 20:07:06
 
 
 def array_shift(data, shift):
@@ -15,143 +13,20 @@ def array_shift(data, shift):
     return items
 
 
-def check(seq, elem):
-    # if elem in seq:
-    #     return True
-    # return False
-    return elem in seq
-
-
-def find(required_el, lst):
-    try:
+def find_idx(required_el, lst):
+    if required_el in {*lst}:
         return lst.index(required_el)
-    except ValueError:
-        return -1
-
-
-def find_(required_el, lst):
-    if required_el in lst:
-        return lst.index(required_el)
-    return -1
-
-
-def f_(a, lst=None):
-    if lst is None:
-        lst = []
-    lst.append(a)
-    return lst
-
-
-def unique(seq, idfun=repr):
-    seen = {}
-    return [seen.setdefault(idfun(e), e) for e in seq if idfun(e) not in seen]
-
-
-def valid_sign(sign: str):
-    # Single-character match
-    return sign in {'+', '-'}
 
 
 def majority_element(arr: list):
-    # from collections import Counter
-    # return Counter(arr).most_common()[0][0]
     arr.sort()
     return arr[len(arr)//2]
-
-
-def rev(lst: list):
-    """
-    >>> rev([1, 2, 3])
-    [3, 2, 1]
-    """
-    return lst[::-1]
 
 
 def pop_append(data: list, shift: int):
     for _ in range(shift):
         data.append(data.pop(0))
     return data
-
-
-def chunks(s: str, k: int) -> Generator:
-    n = len(s) // k
-    return (sub_s for sub_s in (s[i:i + k:] for i in range(len(s))[::n]))
-
-
-def get_magic_number(cond):
-    return 666 if cond else 999
-
-
-def f(x):
-    """
-    >>> f(3)
-    'abc'
-    """
-    def h():
-        nonlocal x
-        x = 'abc'
-    x += 1
-    h()
-    return x
-
-
-def type_stats(type_obj):
-    """
-    >>> type_stats(tuple)
-    3136
-    >>> type_stats(list)
-    659
-    >>> type_stats(tuple)
-    6953
-    >>> type_stats(list)
-    2455
-    """
-    import gc
-    count = 0
-    for obj in gc.get_objects():
-        if type(obj) == type_obj:
-            count += 1
-    return count
-
-
-def parrot(voltage, state='a stiff', action='voom'):
-    """
-    >>> d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
-    >>> parrot(**d)
-    "-- This parrot wouldn't VOOM if you put four million volts through it. E's bleedin' demised !"
-    """
-    print("-- This parrot wouldn't", action, end=' ')
-    print("if you put", voltage, "volts through it.", end=' ')
-    print("E's", state, "!")
-
-
-def better_contains(haystack, needle):
-    # Personally, I'm not a fan of the `else`
-    # "completion clause" in loops because
-    # I find it confusing. I'd rather do
-    # something like this:
-    for item in haystack:
-        if item == needle:
-            return
-    raise ValueError('Needle not found')
-    # Note: Typically you'd write something
-    # like this to do a membership test,
-    # which is much more Pythonic:
-    if needle not in haystack:
-        raise ValueError('Needle not found')
-
-
-def info(object, spacing=10, collapse=1):  # 1 2
-    """
-    Print methods and doc strings.
-    Takes module, class, list, dictionary, or string.
-    """
-    methodList = [method for method in dir(object) if callable(getattr(object, method))]
-    processFunc = collapse and (lambda s: " ".join(s.split())) or (lambda s: s)
-    print("\n".join(["%s %s" %
-                     (method.ljust(spacing),
-                      processFunc(str(getattr(object, method).__doc__)))
-                     for method in methodList]))
 
 
 def bytes2human(n):
@@ -169,6 +44,23 @@ def bytes2human(n):
             value = float(n) / prefix[s]
             return '%.1f%s' % (value, s)
     return "%sB" % n
+
+
+def int_to_bytes(x: int) -> bytes:
+    return x.to_bytes((x.bit_length() + 7) // 8, 'big')
+
+
+def int_from_bytes(xbytes: bytes) -> int:
+    return int.from_bytes(xbytes, 'big')
+
+
+def int_to_bytes_sign(i: int, *, signed: bool = False) -> bytes:
+    length = ((i + ((i * signed) < 0)).bit_length() + 7 + signed) // 8
+    return i.to_bytes(length, byteorder='big', signed=signed)
+
+
+def bytes_to_int_sign(b: bytes, *, signed: bool = False) -> int:
+    return int.from_bytes(b, byteorder='big', signed=signed)
 
 
 def timeit_(param: str, n: int = 10000) -> float:
@@ -198,43 +90,51 @@ def rand():
 def random_product(*args, repeat=1):
     """
     Random selection from itertools.product(*args, **kwds)
+
     """
+    from random import choice
     pools = [tuple(pool) for pool in args] * repeat
-    return tuple(random.choice(pool) for pool in pools)
+    return tuple(choice(pool) for pool in pools)
 
 
 def random_permutation(iterable, r=None):
     """
     Random selection from itertools.permutations(iterable, r)
+
     """
+    from random import sample
     pool = tuple(iterable)
     r = len(pool) if r is None else r
-    return tuple(random.sample(pool, r))
+    return tuple(sample(pool, r))
 
 
 def random_combination(iterable, r):
     """
     Random selection from itertools.combinations(iterable, r)
+
     """
+    from random import sample
     pool = tuple(iterable)
     n = len(pool)
-    indices = sorted(random.sample(range(n), r))
+    indices = sorted(sample(range(n), r))
     return tuple(pool[i] for i in indices)
 
 
 def random_combination_with_replacement(iterable, r):
     """
     Random selection from itertools.combinations_with_replacement(iterable, r)
+
     """
+    from random import randrange
     pool = tuple(iterable)
     n = len(pool)
-    indices = sorted(random.randrange(n) for i in range(r))
+    indices = sorted(randrange(n) for i in range(r))
     return tuple(pool[i] for i in indices)
 
 
 def countdown(num_sec=3):
     from time import sleep
-    for countdown in reversed(range(num_sec + 1)):
+    for countdown in range(num_sec, 0, -1):
         if countdown > 0:
             print(countdown, end='...')
             sleep(1)
@@ -264,12 +164,6 @@ def shorthand_dict(names):
     from inspect import currentframe
     lcls = currentframe().f_back.f_locals
     return {k: lcls[k] for k in names}
-
-
-def fact(x, cache={0: 1}):
-    if x not in cache:
-        cache[x] = x * fact(x - 1)
-    return cache[x]
 
 
 def string_validators(string: str) -> list:

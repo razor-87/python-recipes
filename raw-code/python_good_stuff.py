@@ -2,7 +2,7 @@
 # @Author: razor87
 # @Date:   2017-09-09 14:03:30
 # @Last Modified by:   razor87
-# @Last Modified time: 2020-01-26 18:04:19
+# @Last Modified time: 2020-02-11 19:48:59
 import dis
 import sys
 import array
@@ -382,84 +382,6 @@ l = l[:j]
 l = l[i:]
 
 
-# Data type choice
-set1 = set([tuple(entry.items()) for entry in list1])
-set2 = set([tuple(entry.items()) for entry in list2])
-common = set1.intersection(set2)
-common = [dict(entry) for entry in common]
-
-
-
-# "is" vs "=="
-# • "==" evaluates to True if the objects
-#   referred to by the variables are equal
-# • "is" expressions evaluate to True if two
-#   variables point to the same object
-a = [1, 2, 3]
-b = a
-
-a is b
-True
-a == b
-True
-
-c = list(a)
-
-a == c
-True
-
-a is c
-False
-
-
-
-# Functions are first-class citizens in Python.
-# They can be passed as arguments to other functions,
-# returned as values from other functions, and
-# assigned to variables and stored in data structures.
-def myfunc(a, b):
-    return a + b
-
-funcs = [myfunc]
-funcs[0]
-# <function myfunc at 0x107012230>
-funcs[0](2, 3)
-# 5
-
-
-
-# Python's list slice syntax can be used without indices
-# for a few fun and useful things:
-# You can clear all elements from a list:
-lst = [1, 2, 3, 4, 5]
-del lst[:]
-lst
-# []
-
-# You can replace all elements of a list
-# without creating a new list object:
-a = lst
-lst[:] = [7, 8, 9]
-lst
-# [7, 8, 9]
-a
-# [7, 8, 9]
-a is lst
-# True
-
-# You can also create a (shallow) copy of a list:
-b = lst[:]
-b
-# [7, 8, 9]
-b is lst
-# False
-
-args = [3, 6]
-list(range(*args))
-# [3, 4, 5]
-
-
-
 
 # Python 3.3+ has a std
 # lib module for displaying
@@ -515,12 +437,8 @@ except FileNotFoundError:
 #  the first statement following the end of
 #  the with statement."
 
+
 from contextlib import contextmanager
-@contextmanager
-def tag(name):
-    print("[%s]" % name)
-    yield
-    print("[/%s]" % name)
 
 @contextmanager
 def managed_resource(*args, **kwds):
@@ -532,55 +450,11 @@ def managed_resource(*args, **kwds):
         # Code to release resource, e.g.:
         release_resource(resource)
 
+
 with managed_resource(timeout=3600) as resource:
     # Resource is released at the end of this block,
     # even if code in the block raises an exception
-
-
-@contextmanager
-def make_context():
-    print('  entering')
-    try:
-        yield {}
-    except RuntimeError as err:
-        print('  ERROR:', err)
-    finally:
-        print('  exiting')
-
-
-
-# In Python 3 you can use a bare "*" asterisk
-# in function parameter lists to force the
-# caller to use keyword arguments for certain
-# parameters:
-def f(a, b, *, c='x', d='y', e='z'):
-    return 'Hello'
-
-# To pass the value for c, d, and e you
-# will need to explicitly pass it as
-# "key=value" named arguments:
-f(1, 2, 'p', 'q', 'v')
-# TypeError: "f() takes 2 positional arguments but 5 were given"
-
-f(1, 2, c='p', d='q',e='v')
-# 'Hello'
-
-
-
-# Python 3.5+ allows passing multiple sets
-# of keyword arguments ("kwargs") to a
-# function within a single call, using
-# the "**" syntax:
-def process_data(a, b, c, d):
-    print(a, b, c, d)
-
-x = {'a': 1, 'b': 2}
-y = {'c': 3, 'd': 4}
-
-process_data(**x, **y)
-# 1 2 3 4
-process_data(**x, c=23, d=42)
-# 1 2 23 42
+    pass
 
 
 
@@ -611,14 +485,12 @@ def loop_with(data, func):
 loop_with(data, g if f(z) else h)
 
 
-
-
-# A simple way to choose one of two possible values
-L1 = [1, 2, 0, 3, 0, 5]
-L2 = [(p, 0xFF)[p == 0] for p in L1]  # [0xFF if p == 0 else p for p in L1]
-L2
-# [1, 2, 255, 3, 255, 5]
-
+# In Python 3 you can use a bare "*" asterisk
+# in function parameter lists to force the
+# caller to use keyword arguments for certain
+# parameters:
+def f(a, b, *, c='x', d='y', e='z'):
+    return 'Hello'
 
 
 
@@ -626,6 +498,26 @@ def f(*, a=1, b=2, c=4, **kwargs):
     # Future-proof APIs with keyword-only arguments
     return sum([a, b, c]) + sum(kwargs.values())
 
+
+# Functions are first-class citizens in Python.
+# They can be passed as arguments to other functions,
+# returned as values from other functions, and
+# assigned to variables and stored in data structures.
+def myfunc(a, b):
+    return a + b
+
+funcs = [myfunc]
+funcs[0]
+# <function myfunc at 0x107012230>
+funcs[0](2, 3)
+# 5
+
+
+# A simple way to choose one of two possible values
+L1 = [1, 2, 0, 3, 0, 5]
+L2 = [(p, 0xFF)[p == 0] for p in L1]  # [0xFF if p == 0 else p for p in L1]
+L2
+# [1, 2, 255, 3, 255, 5]
 
 
 # Because Python has first-class functions they can
