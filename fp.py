@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-10-04 20:17:35
-# @Last Modified by:   razor87
-# @Last Modified time: 2020-01-15 21:04:19
 """
 built-in:
     all(iterable) -> bool
@@ -25,62 +21,6 @@ built-in:
     sorted(iterable, *, key=None, reverse=False) -> list
     sum(iterable, /, start=0) -> value
     zip(*iterables) -> zip object
-
-operator:
-    abs()
-    add()
-    and_()
-    attrgetter()
-    concat()
-    contains()
-    countOf()
-    delitem()
-    eq()
-    floordiv()
-    ge()
-    getitem()
-    gt()
-    iadd()
-    iand()
-    iconcat()
-    ifloordiv()
-    ilshift()
-    imatmul()
-    imod()
-    imul()
-    index()
-    indexOf()
-    inv()
-    invert()
-    ior()
-    ipow()
-    irshift()
-    is_()
-    is_not()
-    isub()
-    itemgetter()
-    itruediv()
-    ixor()
-    le()
-    length_hint()
-    lshift()
-    lt()
-    matmul()
-    methodcaller()
-    mod()
-    mul()
-    ne()
-    neg()
-    not_()
-    or_()
-    pos()
-    pow()
-    rshift()
-    setitem()
-    sub()
-    truediv()
-    truth()
-    xor()
 """
 import collections
 import functools

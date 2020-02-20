@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-10-01 18:10:45
-# @Last Modified by:   razor87
-# @Last Modified time: 2020-02-06 20:27:19
 
 bin(0xF)
 # '0b1111' -> 15

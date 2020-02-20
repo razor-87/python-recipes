@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-11-16 15:27:00
-# @Last Modified by:   razor87
-# @Last Modified time: 2020-02-11 19:22:39
 from typing import Generator, Iterable
 
 

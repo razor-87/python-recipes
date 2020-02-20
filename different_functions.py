@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-09-29 19:22:37
-# @Last Modified by:   razor87
-# @Last Modified time: 2020-02-11 20:07:06
 
 
 def array_shift(data, shift):

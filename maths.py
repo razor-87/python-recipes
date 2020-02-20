@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-10-04 19:52:29
-# @Last Modified by:   razor87
-# @Last Modified time: 2020-01-31 20:10:59
 import math
 from functools import lru_cache
 from typing import Iterable

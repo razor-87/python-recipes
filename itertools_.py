@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Author: razor87
-# @Date:   2019-08-01 11:08:22
-# @Last Modified by:   razor87
-# @Last Modified time: 2020-01-15 21:46:30
 import collections
 import itertools
 import operator
-
 
 [*itertools.chain.from_iterable([[1, 2, 3], [4, 5, 6], [7, 8, 9]])]
 [*itertools.chain.from_iterable((range(1, 4), range(4, 7), range(7, 10)))]
