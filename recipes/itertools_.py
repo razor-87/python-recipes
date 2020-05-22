@@ -327,10 +327,15 @@ def partition(pred, iterable):
 
 
 def powerset(iterable):
-    """powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"""
-    s = [*iterable]
-    return itertools.chain.from_iterable(
-        itertools.combinations(s, r) for r in range(len(s) + 1))
+    """
+    >>> [*powerset([1,2,3])]
+    [(), (1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]
+    """
+    from typing import Container
+    from itertools import chain, combinations
+    s = iterable if isinstance(iterable, Container) else [*iterable]
+    return chain.from_iterable(
+        combinations(s, r) for r in range(len(s) + 1))
 
 
 def unique_justseen(iterable, key=None):

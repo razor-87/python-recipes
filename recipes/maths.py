@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import math
 from functools import lru_cache
-from typing import Iterable
+from typing import Iterable, Generator, List, Union
+import numpy as np
 
 1.5e2  # 1.5 * 10**2
 # 150.0
@@ -19,6 +20,9 @@ pow(3, 4, 5)  # x**y mod m - Modular exponentiation
 # 1
 complex(1, 2)
 # (1+2j)
+
+float('inf')  # math.inf
+float('-inf')  # -math.inf
 
 (100 * 101) // 2  # n(n+1)/2 == sum 1..100 == sum(range(101))
 # 5050
@@ -70,11 +74,11 @@ def last_digit(n: int) -> int:
     return n % 10
 
 
-def digits(n):
+def digits(n: int) -> Generator[int, None, None]:
     # How to get the digits of an integer
     while n:
         yield n % 10
-        n /= 10
+        n //= 10
 
 
 def sum_digits(n: int) -> int:
@@ -95,38 +99,29 @@ def length_digits(n: int) -> int:
     return s
 
 
-def reverse_digits(n):
-    # Reverse digits in a number
-    s = 0
-    k = 10**(length_digits(n) - 1)
-    while n:
-        s += k * (n % 10)
-        n /= 10
-        k /= 10
-    return s
-
-
-def rotate_vec(vector, angle):
+def rotate_vec(vector: List[List[int]], angle: int) -> np.ndarray:
     """
     >>> rotate_vec([[1, 2], [3, 5]], 45)
     array([[-2.02738858, -3.20387365],
            [ 2.42686949,  4.32841699]])
     """
-    from numpy import array, cos, sin
-    mat = array([[cos(angle), -sin(angle)], [sin(angle), cos(angle)]])
+    mat = np.array([[np.cos(angle), -np.sin(angle)],
+                    [np.sin(angle), np.cos(angle)]])
     return mat @ vector
 
 
-def struct_inverse_sqrt(number):
+def struct_inverse_sqrt(n: Union[int, float]) -> float:
     """
     https://en.wikipedia.org/wiki/Fast_inverse_square_root
     http://ajcr.net/fast-inverse-square-root-python/
 
+    >>> struct_inverse_sqrt(0.15625)
+    2.5254863388218056
     """
     from struct import pack, unpack
     threehalfs = 1.5
-    x2 = number * 0.5
-    y = number
+    x2 = n * 0.5
+    y = n
     packed_y = pack('f', y)
     i = unpack('i', packed_y)[0]  # treat float's bytes as int
     i = 0x5f3759df - (i >> 1)  # arithmetic with magic number
@@ -153,7 +148,7 @@ def tower_of_powers(n: int, powers: Iterable[int]) -> int:
     return n**reduce(pow, powers)
 
 
-def approx_pi2(n=10000000):
+def approx_pi2(n: int = 10000000) -> float:
     """
     https://en.wikipedia.org/wiki/Approximations_of_%CF%80
 
@@ -215,23 +210,35 @@ def is_square_free(n: int) -> bool:
     return True
 
 
-@lru_cache(maxsize=None)
-def factorials_lru(n: int) -> int:
+@lru_cache(maxsize=256)
+def factorial_lru(n: int) -> int:
     """
-    >>> factorials_lru(1)
+    >>> factorial_lru(0)
     1
-    >>> factorials_lru(5)
+    >>> factorial_lru(5)
     120
-    >>> factorials_lru(10)
-    3628800
-    >>> factorials_lru(10)
+    >>> factorial_lru(10)
     3628800
     """
     from math import factorial
     return factorial(n)
 
 
-def lcm(a, b):
+def factorials_gen(n: int) -> Generator[int, None, None]:
+    """
+    https://oeis.org/A000142
+
+    >>> [*factorials_gen(1)]
+    [1, 1]
+    >>> [*factorials_gen(5)]
+    [1, 1, 2, 6, 24, 120]
+    >>> [*factorials_gen(10)]
+    [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
+    """
+    return (factorial_lru(i) for i in range(n + 1))
+
+
+def lcm(a: int, b: int) -> int:
     """
     https://en.wikipedia.org/wiki/Least_common_multiple
 
@@ -244,7 +251,7 @@ def lcm(a, b):
     return (a // gcd(a, b)) * b
 
 
-def lcms(*numbers):
+def lcms(*numbers: int) -> int:
     """
     >>> lcms(8, 9, 21)
     504
@@ -253,18 +260,39 @@ def lcms(*numbers):
     return reduce(lcm, numbers)
 
 
-def primes():
+def wilson_primality_test(n: int) -> bool:
     """
     https://en.wikipedia.org/wiki/Wilson%27s_theorem
 
+    >>> assert all(wilson_primality_test(i) for i in [2, 3, 5, 7, 11])
+    >>> assert not all(wilson_primality_test(i) for i in [4, 6, 8, 9, 10])
+    """
+    return ((factorial_lru(n - 1) + 1) % n) == 0
+
+
+def primes_gen() -> Generator[int, None, None]:
+    """
+    https://oeis.org/A000040
+
     >>> from itertools import takewhile
-    >>> [*takewhile(lambda x: x <= 31, primes())]
+    >>> [*takewhile(lambda x: x <= 31, primes_gen())]
     [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
     """
-    from math import factorial
     p = 2
     while True:
-        com = (factorial(p - 1) + 1) % p
-        if com == 0:
+        if wilson_primality_test(p):
             yield p
         p += 1
+
+
+def fermat_number(n: int) -> int:
+    """
+    https://en.wikipedia.org/wiki/Fermat_number
+    https://oeis.org/A000215
+
+    >>> [fermat_number(i) for i in range(5)]
+    [3, 5, 17, 257, 65537]
+    """
+    if n == 0:
+        return 3
+    return (2 << ((2 << (n - 1)) - 1)) + 1  # 2**(2**n) + 1
