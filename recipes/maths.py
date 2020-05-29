@@ -210,9 +210,45 @@ def is_square_free(n: int) -> bool:
     return True
 
 
-@lru_cache(maxsize=256)
+def lcm(a: int, b: int) -> int:
+    """
+    https://en.wikipedia.org/wiki/Least_common_multiple
+
+    >>> lcm(4, 6)
+    12
+    >>> lcm(21, 6)
+    42
+    """
+    from math import gcd
+    return (a // gcd(a, b)) * b
+
+
+def lcms(*numbers: int) -> int:
+    """
+    >>> lcms(8, 9, 21)
+    504
+    """
+    from functools import reduce
+    return reduce(lcm, numbers)
+
+
+def fermat_number(n: int) -> int:
+    """
+    https://en.wikipedia.org/wiki/Fermat_number
+    https://oeis.org/A000215
+
+    >>> [fermat_number(i) for i in range(5)]
+    [3, 5, 17, 257, 65537]
+    """
+    return 3 if n == 0 else (2 << ((2 << (n - 1)) - 1)) + 1  # 2**(2**n) + 1
+
+
+@lru_cache(maxsize=None)
 def factorial_lru(n: int) -> int:
     """
+    https://en.wikipedia.org/wiki/Factorial
+    sympy.factorial
+
     >>> factorial_lru(0)
     1
     >>> factorial_lru(5)
@@ -238,28 +274,6 @@ def factorials_gen(n: int) -> Generator[int, None, None]:
     return (factorial_lru(i) for i in range(n + 1))
 
 
-def lcm(a: int, b: int) -> int:
-    """
-    https://en.wikipedia.org/wiki/Least_common_multiple
-
-    >>> lcm(4, 6)
-    12
-    >>> lcm(21, 6)
-    42
-    """
-    from math import gcd
-    return (a // gcd(a, b)) * b
-
-
-def lcms(*numbers: int) -> int:
-    """
-    >>> lcms(8, 9, 21)
-    504
-    """
-    from functools import reduce
-    return reduce(lcm, numbers)
-
-
 def wilson_primality_test(n: int) -> bool:
     """
     https://en.wikipedia.org/wiki/Wilson%27s_theorem
@@ -270,29 +284,35 @@ def wilson_primality_test(n: int) -> bool:
     return ((factorial_lru(n - 1) + 1) % n) == 0
 
 
-def primes_gen() -> Generator[int, None, None]:
+def fermat_primality_test(n: int, k: int = 3) -> bool:
+    """
+    https://en.wikipedia.org/wiki/Fermat_primality_test
+
+    >>> assert all(fermat_primality_test(i) for i in [2, 3, 5, 7, 11])
+    >>> assert not all(fermat_primality_test(i) for i in [4, 6, 8, 9, 10])
+    """
+    from math import gcd
+    from random import randrange
+    for _ in range(k):
+        random_num = randrange(1, n)
+        if gcd(n, random_num) != 1 or pow(random_num, n - 1, n) != 1:
+            return False
+    return True
+
+
+def primes_gen(n: int) -> Generator[int, None, None]:
     """
     https://oeis.org/A000040
+    sympy.ntheory.isprime
+    sympy.ntheory.primerange
 
-    >>> from itertools import takewhile
-    >>> [*takewhile(lambda x: x <= 31, primes_gen())]
+    >>> [*primes_gen(31)]
     [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    >>> assert len([*primes_gen(2000)]) == 303
     """
-    p = 2
-    while True:
-        if wilson_primality_test(p):
-            yield p
-        p += 1
-
-
-def fermat_number(n: int) -> int:
-    """
-    https://en.wikipedia.org/wiki/Fermat_number
-    https://oeis.org/A000215
-
-    >>> [fermat_number(i) for i in range(5)]
-    [3, 5, 17, 257, 65537]
-    """
-    if n == 0:
-        return 3
-    return (2 << ((2 << (n - 1)) - 1)) + 1  # 2**(2**n) + 1
+    yield 2
+    if n <= 1000:
+        k = (n.bit_length() - 1) << 1
+        yield from (p for p in range(3, n+1, 2) if fermat_primality_test(p, k))
+    else:
+        yield from (p for p in range(3, n+1, 2) if wilson_primality_test(p))
