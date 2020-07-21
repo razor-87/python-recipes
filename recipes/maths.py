@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import math
 from functools import lru_cache
-from typing import Iterable, Generator, List, Union
+from typing import Iterable, Generator, List, Sequence, Union
 import numpy as np
 
 1.5e2  # 1.5 * 10**2
@@ -69,11 +69,6 @@ x.bit_length() - 1  # faster
 # 1
 
 
-def last_digit(n: int) -> int:
-    # Get the last digit of a number
-    return n % 10
-
-
 def digits(n: int) -> Generator[int, None, None]:
     # How to get the digits of an integer
     while n:
@@ -83,20 +78,42 @@ def digits(n: int) -> Generator[int, None, None]:
 
 def sum_digits(n: int) -> int:
     # Sum of all digits of a number
-    s = 0
-    while n:
-        s += n % 10
-        n //= 10
-    return s
+    return sum(digits(n))
 
 
 def length_digits(n: int) -> int:
     # Number of digits in a number
-    s = 0
-    while n:
-        s += 1
-        n //= 10
-    return s
+    return sum(1 for _ in digits(n))
+
+
+def median(numbers: Sequence[Union[int, float]]) -> float:
+    half_size = len(numbers) // 2
+    return sum(numbers[half_size-1:half_size+1]) / 2
+
+
+def moving_average(iterable, n=3):
+    """
+    http://en.wikipedia.org/wiki/Moving_average
+    moving_average([40, 30, 50, 46, 39, 44]) --> 40.0 42.0 45.0 43.0
+    """
+    from collections import deque
+    from itertools import islice
+    it = iter(iterable)
+    d = deque(islice(it, n - 1))
+    d.appendleft(0)
+    s = sum(d)
+    for elem in it:
+        s += elem - d.popleft()
+        d.append(elem)
+        yield s / n
+
+
+def rand():
+    import random
+    c = random.randint(1, 100000)
+    a = c * random.randint(1, 100000)
+    b = c * random.randint(1, 100000)
+    return a, b
 
 
 def rotate_vec(vector: List[List[int]], angle: int) -> np.ndarray:
@@ -316,3 +333,14 @@ def primes_gen(n: int) -> Generator[int, None, None]:
         yield from (p for p in range(3, n+1, 2) if fermat_primality_test(p, k))
     else:
         yield from (p for p in range(3, n+1, 2) if wilson_primality_test(p))
+
+
+def fibonacci_gen(num: int) -> Generator:
+    """
+    >>> [*fibonacci_gen(10)]
+    [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+    """
+    a = b = 1
+    for _ in range(num):
+        yield a
+        a, b = b, a + b

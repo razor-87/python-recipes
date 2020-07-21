@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Generator, Iterable, Optional, TextIO
+from typing import Any, Generator, Iterable, List, Optional, TextIO
 
 
 def array_shift(data, shift):
@@ -10,28 +10,33 @@ def array_shift(data, shift):
     return items
 
 
-def find_idx(required_el, lst):
-    if required_el in {*lst}:
-        return lst.index(required_el)
-
-
-def majority_element(arr: list):
+def majority_element(arr: list) -> int:
     arr.sort()
     return arr[len(arr) // 2]
 
 
-def pop_append(data: list, shift: int):
+def pop_append(data: list, shift: int) -> list:
     for _ in range(shift):
         data.append(data.pop(0))
     return data
 
 
+def find_idx(required_el: Any, lst: List[Any]) -> Optional[int]:
+    # list.index() without raise an exception
+    if required_el in {*lst}:
+        return lst.index(required_el)
+    return None
+
+
 def bytes2human(n):
-    # http://code.activestate.com/recipes/578019
-    # >>> bytes2human(10000)
-    # '9.8K'
-    # >>> bytes2human(100001221)
-    # '95.4M'
+    """
+    http://code.activestate.com/recipes/578019
+
+    >>> bytes2human(10000)
+    '9.8K'
+    >>> bytes2human(100001221)
+    '95.4M'
+    """
     symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
     prefix = {}
     for i, s in enumerate(symbols):
@@ -60,6 +65,18 @@ def bytes_to_int_sign(b: bytes, *, signed: bool = False) -> int:
     return int.from_bytes(b, byteorder='big', signed=signed)
 
 
+def datetime_now(fmt="%Y-%m-%d %H:%M:%S"):
+    from datetime import datetime
+    return datetime.now().strftime(fmt)
+
+
+def elapsed_time() -> Generator:
+    from time import monotonic
+    start = monotonic()
+    while True:
+        yield monotonic() - start
+
+
 def timeit_(param: str, n: int = 10000) -> float:
     from timeit import timeit
     return timeit(param, number=n, globals=globals())
@@ -75,85 +92,6 @@ def compare(fs, args):
     plt.legend()
     plt.grid(True)
     plt.show()
-
-
-def rand():
-    import random
-    c = random.randint(1, 100000)
-    a = c * random.randint(1, 100000)
-    b = c * random.randint(1, 100000)
-    return a, b
-
-
-def random_product(*args, repeat=1):
-    """
-    Random selection from itertools.product(*args, **kwds)
-
-    """
-    from random import choice
-    pools = [tuple(pool) for pool in args] * repeat
-    return tuple(choice(pool) for pool in pools)
-
-
-def random_permutation(iterable, r=None):
-    """
-    Random selection from itertools.permutations(iterable, r)
-
-    """
-    from random import sample
-    pool = tuple(iterable)
-    r = len(pool) if r is None else r
-    return tuple(sample(pool, r))
-
-
-def random_combination(iterable, r):
-    """
-    Random selection from itertools.combinations(iterable, r)
-
-    """
-    from random import sample
-    pool = tuple(iterable)
-    n = len(pool)
-    indices = sorted(sample(range(n), r))
-    return tuple(pool[i] for i in indices)
-
-
-def random_combination_with_replacement(iterable, r):
-    """
-    Random selection from itertools.combinations_with_replacement(iterable, r)
-
-    """
-    from random import randrange
-    pool = tuple(iterable)
-    n = len(pool)
-    indices = sorted(randrange(n) for i in range(r))
-    return tuple(pool[i] for i in indices)
-
-
-def countdown(num_sec=3):
-    from time import sleep
-    for countdown in range(num_sec, 0, -1):
-        if countdown > 0:
-            print(countdown, end='...')
-            sleep(1)
-        else:
-            print('Go!')
-
-
-def progress(width=30):
-    from time import sleep
-    for percent in range(101):
-        left = width * percent // 100
-        right = width - left
-        print('\r[',
-              '#' * left,
-              ' ' * right,
-              ']',
-              f' {percent:.0f}%',
-              sep='',
-              end='',
-              flush=True)
-        sleep(0.1)
 
 
 def shorthand_dict(names):
@@ -197,57 +135,6 @@ def unique(iterable, seen=None):
     return acc
 
 
-def download_file_in_chunks(url, filename, chunk_size=512):
-    from requests import get
-    response = get(url, stream=True, allow_redirects=True)
-    with open(filename, "wb") as handle:
-        # handle.write(response.content)
-        for chunk in response.iter_content(chunk_size=chunk_size):
-            if chunk:  # filter out keep-alive new chunks
-                handle.write(chunk)
-
-
-def ifile(name: str) -> Generator:
-    with open(name, encoding='utf-8') as f:
-        yield from f
-
-
-def elapsed_time() -> Generator:
-    from time import monotonic
-    start = monotonic()
-    while True:
-        yield monotonic() - start
-
-
-def chain(*iterables: Iterable) -> Generator:
-    """
-    >>> [*chain(['A', 'B', 'C'], [0, 1, 2])]
-    ['A', 'B', 'C', 0, 1, 2]
-    """
-    for i in iterables:
-        yield from i
-
-
-def updown(n: int) -> Generator:
-    """
-    >>> [*updown(3)]
-    [1, 2, 3, 2, 1]
-    """
-    yield from range(1, n)
-    yield from range(n, 0, -1)
-
-
-def fibonacci_gen(num: int) -> Generator:
-    """
-    >>> [*fibonacci_gen(10)]
-    [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
-    """
-    a = b = 1
-    for _ in range(num):
-        yield a
-        a, b = b, a + b
-
-
 def unique_stable(arr: Iterable) -> Generator:
     dupes = set()
     for val in arr:
@@ -256,114 +143,29 @@ def unique_stable(arr: Iterable) -> Generator:
             yield val
 
 
-def chunks(g, n=2):
+def unique_mutable_elements(seq):
     """
-    Collect data into chunks of a maximum size
-    chunks('ABCDEFG', 3) --> ABC DEF G
+    Amount different mutable/immutable elements
+
+    >>> len_mutable_elements([1, [2], 1, [2], 3])
+    4
     """
-    from itertools import islice, repeat
-    yield from map(lambda it: islice(it, n), repeat(iter(g)))
+    return len({id(el) for el in seq})
 
 
-def chunks_(string, k):
-    yield from zip(*(iter(string), ) * k)
+def ifile(name: str) -> Generator:
+    with open(name, encoding='utf-8') as f:
+        yield from f
 
 
-def grouper(iterable: Iterable,
-            n: int,
-            fillvalue: Optional[str] = '') -> Generator[str, None, None]:
-    """
-    Collect data into fixed-length chunks or blocks
-    grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
-
-    >>> big_string = "gfdgfgdgdbvcgjkjhddfgr hfghfgf kjhkhjtgg ghfvbvcbcvfhjkh"
-    >>> [''.join(chunk) for chunk #doctest: +NORMALIZE_WHITESPACE
-    ... in grouper(big_string, 10, '_')]
-    ['gfdgfgdgdb', 'vcgjkjhddf', 'gr hfghfgf',
-    ' kjhkhjtgg', ' ghfvbvcbc', 'vfhjkh____']
-    """
-    from itertools import zip_longest
-    args = (iter(iterable), ) * n
-    yield from zip_longest(fillvalue=fillvalue, *args)
-
-
-def moving_average(iterable, n=3):
-    """
-    http://en.wikipedia.org/wiki/Moving_average
-    moving_average([40, 30, 50, 46, 39, 44]) --> 40.0 42.0 45.0 43.0
-    """
-    from collections import deque
-    from itertools import islice
-    it = iter(iterable)
-    d = deque(islice(it, n - 1))
-    d.appendleft(0)
-    s = sum(d)
-    for elem in it:
-        s += elem - d.popleft()
-        d.append(elem)
-        yield s / n
-
-
-def iter_except(func, exception, first=None):
-    """
-    Call a function repeatedly until an exception is raised.
-    Converts a call-until-exception interface to an iterator interface.
-    Like builtins.iter(func, sentinel) but uses an exception instead
-    of a sentinel to end the loop.
-
-    priority queue - iter_except(functools.partial(heappop, h), IndexError)
-    non-blocking dict - iter_except(d.popitem, KeyError)
-    non-blocking set -  iter_except(s.pop, KeyError)
-    non-blocking deque - iter_except(d.popleft, IndexError)
-    loop over a producer Queue - iter_except(q.get_nowait, Queue.Empty)
-    """
-    try:
-        if first is not None:
-            # For database APIs needing an initial cast to db.first()
-            yield first()
-        while True:
-            yield func()
-    except exception:
-        pass
-
-
-def roundrobin(*iterables):
-    """
-    Recipe credited to George Sakkis
-    roundrobin('ABC', 'D', 'EF') --> A D E B F C
-    """
-    import itertools
-    num_active = len(iterables)
-    nexts = itertools.cycle(iter(it).__next__ for it in iterables)
-    while num_active:
-        try:
-            for next in nexts:
-                yield next()
-        except StopIteration:
-            # Remove the iterator we just exhausted from the cycle.
-            num_active -= 1
-            nexts = itertools.cycle(itertools.islice(nexts, num_active))
-
-
-def unique_everseen(iterable, key=None):
-    """
-    List unique elements, preserving order. Remember all elements ever seen.
-    unique_everseen('AAAABBBCCDAABBB') --> A B C D
-    unique_everseen('ABBCcAD', str.lower) --> A B C D
-    """
-    from itertools import filterfalse
-    seen = set()
-    seen_add = seen.add
-    if key is None:
-        for element in filterfalse(seen.__contains__, iterable):
-            seen_add(element)
-            yield element
-    else:
-        for element in iterable:
-            k = key(element)
-            if k not in seen:
-                seen_add(k)
-                yield element
+def download_file_in_chunks(url, filename, chunk_size=512):
+    from requests import get
+    response = get(url, stream=True, allow_redirects=True)
+    with open(filename, "wb") as handle:
+        # handle.write(response.content)
+        for chunk in response.iter_content(chunk_size=chunk_size):
+            if chunk:  # filter out keep-alive new chunks
+                handle.write(chunk)
 
 
 def yield_from_merging(*iterables, sorting=True, reverse=False, key=None):
@@ -399,3 +201,91 @@ def search_lines(lines: TextIO, pattern: str, history: int = 5) -> Generator:
         if pattern in line:
             yield line, previous_lines
         previous_lines.append(line)
+
+
+def chain(*iterables: Iterable) -> Generator:
+    """
+    >>> [*chain(['A', 'B', 'C'], [0, 1, 2])]
+    ['A', 'B', 'C', 0, 1, 2]
+    """
+    for i in iterables:
+        yield from i
+
+
+def updown(n: int) -> Generator:
+    """
+    >>> [*updown(3)]
+    [1, 2, 3, 2, 1]
+    """
+    yield from range(1, n)
+    yield from range(n, 0, -1)
+
+
+def chunks(g, n=2):
+    """
+    Collect data into chunks of a maximum size
+    chunks('ABCDEFG', 3) --> ABC DEF G
+    """
+    from itertools import islice, repeat
+    yield from map(lambda it: islice(it, n), repeat(iter(g)))
+
+
+def chunks_(string, k):
+    yield from zip(*(iter(string), ) * k)
+
+
+def grouper(iterable: Iterable,
+            n: int,
+            fillvalue: Optional[str] = '') -> Generator[str, None, None]:
+    """
+    Collect data into fixed-length chunks or blocks
+    grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+
+    >>> big_string = "gfdgfgdgdbvcgjkjhddfgr hfghfgf kjhkhjtgg ghfvbvcbcvfhjkh"
+    >>> [''.join(chunk) for chunk #doctest: +NORMALIZE_WHITESPACE
+    ... in grouper(big_string, 10, '_')]
+    ['gfdgfgdgdb', 'vcgjkjhddf', 'gr hfghfgf',
+    ' kjhkhjtgg', ' ghfvbvcbc', 'vfhjkh____']
+    """
+    from itertools import zip_longest
+    args = (iter(iterable), ) * n
+    yield from zip_longest(fillvalue=fillvalue, *args)
+
+
+def roundrobin(*iterables):
+    """
+    Recipe credited to George Sakkis
+    roundrobin('ABC', 'D', 'EF') --> A D E B F C
+    """
+    import itertools
+    num_active = len(iterables)
+    nexts = itertools.cycle(iter(it).__next__ for it in iterables)
+    while num_active:
+        try:
+            for nxt in nexts:
+                yield nxt()
+        except StopIteration:
+            # Remove the iterator we just exhausted from the cycle.
+            num_active -= 1
+            nexts = itertools.cycle(itertools.islice(nexts, num_active))
+
+
+def unique_everseen(iterable, key=None):
+    """
+    List unique elements, preserving order. Remember all elements ever seen.
+    unique_everseen('AAAABBBCCDAABBB') --> A B C D
+    unique_everseen('ABBCcAD', str.lower) --> A B C D
+    """
+    from itertools import filterfalse
+    seen = set()
+    seen_add = seen.add
+    if key is None:
+        for element in filterfalse(seen.__contains__, iterable):
+            seen_add(element)
+            yield element
+    else:
+        for element in iterable:
+            k = key(element)
+            if k not in seen:
+                seen_add(k)
+                yield element
