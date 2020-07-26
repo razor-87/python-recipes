@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Generator, Iterable, List, Optional, TextIO
+from typing import Any, Generator, Iterable, List, Optional, Sequence, TextIO
 
 
 def array_shift(data, shift):
@@ -108,51 +108,6 @@ def shorthand_dict(names):
     return {k: lcls[k] for k in names}
 
 
-def string_validators(string: str) -> list:
-    """
-    >>> string_validators('qA2')
-    [True, True, True, True, True]
-    >>> string_validators('123')
-    [True, False, True, False, False]
-    """
-    dict_methods = {
-        'isalnum': (char.isalnum() for char in string),
-        'isalpha': (char.isalpha() for char in string),
-        'isdigit': (char.isdigit() for char in string),
-        'islower': (char.islower() for char in string),
-        'isupper': (char.isupper() for char in string),
-    }
-    return [*map(any, dict_methods.values())]
-
-
-def unique(iterable, seen=None):
-    seen = set(seen or [])
-    acc = []
-    for item in iterable:
-        if item not in seen:
-            seen.add(item)
-            acc.append(item)
-    return acc
-
-
-def unique_stable(arr: Iterable) -> Generator:
-    dupes = set()
-    for val in arr:
-        if val not in dupes:
-            dupes.add(val)
-            yield val
-
-
-def unique_mutable_elements(seq):
-    """
-    Amount different mutable/immutable elements
-
-    >>> len_mutable_elements([1, [2], 1, [2], 3])
-    4
-    """
-    return len({id(el) for el in seq})
-
-
 def ifile(name: str) -> Generator:
     with open(name, encoding='utf-8') as f:
         yield from f
@@ -168,26 +123,44 @@ def download_file_in_chunks(url, filename, chunk_size=512):
                 handle.write(chunk)
 
 
-def yield_from_merging(*iterables, sorting=True, reverse=False, key=None):
+def follow_file(filename):
     """
-    >>> [*yield_from_merging([5, 3, 1, 0], [7, 8, 0, 9, 8])]
-    [0, 0, 1, 3, 5, 7, 8, 8, 9]
-    >>> [*yield_from_merging([5, 3, 1, 0], [7, 8, 0, 9, 8], reverse=True)]
-    [9, 8, 8, 7, 5, 3, 1, 0, 0]
+    Generator that produces a sequenceof lines being written at the end
     """
-    from heapq import merge
-    if sorting:
-        iterables = (sorted(iterable, reverse=reverse, key=None)
-                     for iterable in iterables)
-    yield from merge(*iterables, reverse=reverse, key=None)
+    from os import SEEK_END
+    from time import sleep
+
+    with open(filename, 'r') as f:
+        f.seek(0, SEEK_END)
+        while True:
+            line = f.readline()
+            if line:  # line != ''
+                yield line  # Emit a line
+            else:
+                sleep(0.1)  # Sleep briefly to avoid busy wait
+
+
+def parse_data(filename):
+    """
+    Example of iterating over lines of a file with an extra lineno attribute
+    """
+    with open(filename, 'r') as f:
+        for lineno, line in enumerate(f, 1):
+            fields = line.split()
+            try:
+                _ = int(fields[1])
+            except ValueError as e:
+                print(f'Line {lineno}: Parse error: {e}')
 
 
 def string_to_dict(s: str,
+                   *,
                    key_first: bool = True,
-                   types: Optional[tuple] = None) -> dict:
+                   types: Optional[Sequence] = None) -> dict:
     lst = s.split()
-    zipped = zip(lst[::2], lst[1::2]) if key_first else zip(
-        lst[1::2], lst[::2])
+    even_pos, odd_pos = lst[::2], lst[1::2]
+    keys, values = (even_pos, odd_pos) if key_first else (odd_pos, even_pos)
+    zipped = zip(keys, values)
     if types is None:
         return dict(zipped)
     key_type, value_type = types if key_first else reversed(types)
@@ -201,6 +174,20 @@ def search_lines(lines: TextIO, pattern: str, history: int = 5) -> Generator:
         if pattern in line:
             yield line, previous_lines
         previous_lines.append(line)
+
+
+def yield_from_merging(*iterables, sorting=True, reverse=False, key=None):
+    """
+    >>> [*yield_from_merging([5, 3, 1, 0], [7, 8, 0, 9, 8])]
+    [0, 0, 1, 3, 5, 7, 8, 8, 9]
+    >>> [*yield_from_merging([5, 3, 1, 0], [7, 8, 0, 9, 8], reverse=True)]
+    [9, 8, 8, 7, 5, 3, 1, 0, 0]
+    """
+    from heapq import merge
+    if sorting:
+        iterables = (sorted(iterable, reverse=reverse, key=key)
+                     for iterable in iterables)
+    yield from merge(*iterables, reverse=reverse, key=key)
 
 
 def chain(*iterables: Iterable) -> Generator:
@@ -252,40 +239,27 @@ def grouper(iterable: Iterable,
     yield from zip_longest(fillvalue=fillvalue, *args)
 
 
-def roundrobin(*iterables):
-    """
-    Recipe credited to George Sakkis
-    roundrobin('ABC', 'D', 'EF') --> A D E B F C
-    """
-    import itertools
-    num_active = len(iterables)
-    nexts = itertools.cycle(iter(it).__next__ for it in iterables)
-    while num_active:
-        try:
-            for nxt in nexts:
-                yield nxt()
-        except StopIteration:
-            # Remove the iterator we just exhausted from the cycle.
-            num_active -= 1
-            nexts = itertools.cycle(itertools.islice(nexts, num_active))
-
-
-def unique_everseen(iterable, key=None):
+def unique_stable(it: Iterable, seen: Optional[Iterable] = None) -> Generator:
     """
     List unique elements, preserving order. Remember all elements ever seen.
-    unique_everseen('AAAABBBCCDAABBB') --> A B C D
-    unique_everseen('ABBCcAD', str.lower) --> A B C D
+
+    >>> ''.join(unique_stable('AAAABBBCCDAABBB'))
+    'ABCD'
+    >>> ''.join(unique_stable('AAAABBBCCDAABBB', 'B'))
+    'ACD'
     """
     from itertools import filterfalse
-    seen = set()
-    seen_add = seen.add
-    if key is None:
-        for element in filterfalse(seen.__contains__, iterable):
-            seen_add(element)
-            yield element
-    else:
-        for element in iterable:
-            k = key(element)
-            if k not in seen:
-                seen_add(k)
-                yield element
+    seen = set(seen or [])
+    for el in filterfalse(seen.__contains__, it):  # if el not in seen
+        seen.add(el)
+        yield el
+
+
+def unique_mutable_elements(seq: Sequence) -> int:
+    """
+    Amount different mutable/immutable elements
+
+    >>> unique_mutable_elements([1, [2], 1, [2], 3])
+    4
+    """
+    return len({id(el) for el in seq})
