@@ -42,12 +42,6 @@ float('-inf')  # -math.inf
 3 / 9  # n/9 == 0.nnnnnnnnnnn
 # 0.3333333333333333
 
-n, k = 52, 2
-permutations = math.factorial(n) // math.factorial(n - k)  # nPk
-# 2652
-combinations = permutations // math.factorial(k)  # nCk
-# 1326
-
 math.gcd(100, 75)  # gcd
 # 25
 
@@ -91,6 +85,10 @@ def median(numbers: Sequence[Union[int, float]]) -> float:
     return sum(numbers[half_size-1:half_size+1]) / 2
 
 
+def majority_element(arr: Sequence) -> int:
+    return sorted(arr)[len(arr) // 2]
+
+
 def moving_average(iterable, n=3):
     """
     http://en.wikipedia.org/wiki/Moving_average
@@ -114,6 +112,28 @@ def rand():
     a = c * random.randint(1, 100000)
     b = c * random.randint(1, 100000)
     return a, b
+
+
+def permutations(n, k):
+    """
+    nPk
+
+    >>> permutations(52, 2)
+    2652
+    """
+    from math import factorial
+    return factorial(n) // factorial(n - k)
+
+
+def combinations(n, k):
+    """
+    nCk
+
+    >>> combinations(52, 2)
+    1326
+    """
+    from math import factorial
+    return permutations(n, k) // factorial(k)
 
 
 def rotate_vec(vector: List[List[int]], angle: int) -> np.ndarray:

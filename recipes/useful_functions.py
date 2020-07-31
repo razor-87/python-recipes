@@ -1,24 +1,22 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Generator, Iterable, List, Optional, Sequence, TextIO
+from typing import (Any, Callable, Deque, Generator, Iterable, List, Optional,
+                    Sequence, TextIO)
 
 
-def array_shift(data, shift):
-    # left rotation
+def array_shift(data: Iterable, shift: int) -> Deque:
+    """
+    left(-) or right(+) shift of array
+
+    >>> arr = range(10)
+    >>> array_shift(arr, -3)
+    deque([3, 4, 5, 6, 7, 8, 9, 0, 1, 2])
+    >>> array_shift(arr, 3)
+    deque([7, 8, 9, 0, 1, 2, 3, 4, 5, 6])
+    """
     from collections import deque
-    items = deque(data)
-    items.rotate(-shift)
-    return items
-
-
-def majority_element(arr: list) -> int:
-    arr.sort()
-    return arr[len(arr) // 2]
-
-
-def pop_append(data: list, shift: int) -> list:
-    for _ in range(shift):
-        data.append(data.pop(0))
-    return data
+    deq = deque(data)
+    deq.rotate(shift)
+    return deq
 
 
 def find_idx(required_el: Any, lst: List[Any]) -> Optional[int]:
@@ -28,7 +26,7 @@ def find_idx(required_el: Any, lst: List[Any]) -> Optional[int]:
     return None
 
 
-def bytes2human(n):
+def bytes2human(bts: int) -> str:
     """
     http://code.activestate.com/recipes/578019
 
@@ -37,35 +35,13 @@ def bytes2human(n):
     >>> bytes2human(100001221)
     '95.4M'
     """
-    symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
-    prefix = {}
-    for i, s in enumerate(symbols):
-        prefix[s] = 1 << (i + 1) * 10
-    for s in reversed(symbols):
-        if n >= prefix[s]:
-            value = float(n) / prefix[s]
-            return '%.1f%s' % (value, s)
-    return "%sB" % n
+    symbols = "YZEPTGMK"
+    nums = (1 << i for i in range(80, 9, -10))
+    return next((f"{bts / n:.1f}{s}"
+                 for s, n in zip(symbols, nums) if bts >= n), f"{bts}B")
 
 
-def int_to_bytes(x: int) -> bytes:
-    return x.to_bytes((x.bit_length() + 7) // 8, 'big')
-
-
-def int_from_bytes(xbytes: bytes) -> int:
-    return int.from_bytes(xbytes, 'big')
-
-
-def int_to_bytes_sign(i: int, *, signed: bool = False) -> bytes:
-    length = ((i + ((i * signed) < 0)).bit_length() + 7 + signed) // 8
-    return i.to_bytes(length, byteorder='big', signed=signed)
-
-
-def bytes_to_int_sign(b: bytes, *, signed: bool = False) -> int:
-    return int.from_bytes(b, byteorder='big', signed=signed)
-
-
-def datetime_now(fmt="%Y-%m-%d %H:%M:%S"):
+def datetime_now(fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
     from datetime import datetime
     return datetime.now().strftime(fmt)
 
@@ -75,23 +51,6 @@ def elapsed_time() -> Generator:
     start = monotonic()
     while True:
         yield monotonic() - start
-
-
-def timeit_(param: str, n: int = 10000) -> float:
-    from timeit import timeit
-    return timeit(param, number=n, globals=globals())
-
-
-def compare(fs, args):
-    import timeit
-    from matplotlib import pyplot as plt
-    for f in fs:
-        plt.plot(args,
-                 [timeit.timeit(str(f(arg)), number=10000000) for arg in args],
-                 label=f.__name__)
-    plt.legend()
-    plt.grid(True)
-    plt.show()
 
 
 def shorthand_dict(names):
@@ -151,6 +110,16 @@ def parse_data(filename):
                 _ = int(fields[1])
             except ValueError as e:
                 print(f'Line {lineno}: Parse error: {e}')
+
+
+def string_filter(s: str, method: Callable) -> str:
+    """
+    >>> string_filter('1s6 1g7 599h 29h89 0d53', method=str.isdigit)
+    '16175992989053'
+    >>> string_filter('16 17 599 2989 053', method=str.isalpha)
+    ''
+    """
+    return ''.join(filter(method, s))
 
 
 def string_to_dict(s: str,
@@ -255,11 +224,11 @@ def unique_stable(it: Iterable, seen: Optional[Iterable] = None) -> Generator:
         yield el
 
 
-def unique_mutable_elements(seq: Sequence) -> int:
+def amount_unique_elements(seq: Sequence) -> int:
     """
     Amount different mutable/immutable elements
 
-    >>> unique_mutable_elements([1, [2], 1, [2], 3])
+    >>> amount_unique_elements([1, [2], 1, [2], 3])
     4
     """
-    return len({id(el) for el in seq})
+    return len({id(el) for el in seq})  # len(set(map(id, seq)))
