@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import (Any, Callable, Deque, Generator, Iterable, List, Optional,
-                    Sequence, TextIO)
+                    Sequence, TextIO, Tuple)
 
 
 def array_shift(data: Iterable, shift: int) -> Deque:
@@ -41,6 +41,25 @@ def bytes2human(bts: int) -> str:
                  for s, n in zip(symbols, nums) if bts >= n), f"{bts}B")
 
 
+def int_to_bytes(integer: int,
+                 *,
+                 byteorder: str = 'big') -> Tuple[bytes, bool]:
+    if integer < 0:
+        return (integer.to_bytes((((integer + 1).bit_length() + 8) // 8),
+                                 byteorder=byteorder,
+                                 signed=True), True)
+    return (integer.to_bytes(((integer.bit_length() + 7) // 8),
+                             byteorder=byteorder), False)
+
+
+def int_from_bytes(bytes_sign: Tuple[bytes, bool],
+                   *,
+                   byteorder: str = 'big',
+                   signed: bool = False) -> int:
+    bytes_, signed = bytes_sign
+    return int.from_bytes(bytes_, byteorder='big', signed=signed)
+
+
 def datetime_now(fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
     from datetime import datetime
     return datetime.now().strftime(fmt)
@@ -53,23 +72,20 @@ def elapsed_time() -> Generator:
         yield monotonic() - start
 
 
-def shorthand_dict(names):
-    """
-    >>> context = {"user_id": 42, "user_ip": "1.2.3.4"}
-    >>> mode, action_type = "force", 7
-    >>> shorthand_dict(["context", #doctest: +NORMALIZE_WHITESPACE
-    ... "mode", "action_type"])
-    {'context': {'user_id': 42, 'user_ip': '1.2.3.4'},
-    'mode': 'force', 'action_type': 7}
-    """
-    from inspect import currentframe
-    lcls = currentframe().f_back.f_locals
-    return {k: lcls[k] for k in names}
-
-
 def ifile(name: str) -> Generator:
     with open(name, encoding='utf-8') as f:
         yield from f
+
+
+def file_processing(file_name, processing):
+    with open(f"{file_name}") as f:
+        for line in iter(f.readline, ''):
+            processing(line)
+
+
+def seek_next_line(f):
+    for _ in iter(lambda: f.read(1), '\n'):
+        ...
 
 
 def download_file_in_chunks(url, filename, chunk_size=512):
@@ -110,6 +126,17 @@ def parse_data(filename):
                 _ = int(fields[1])
             except ValueError as e:
                 print(f'Line {lineno}: Parse error: {e}')
+
+
+def parse_csv_data(lines, types, headers=None, indices=None):
+    from csv import reader
+    rows = reader(lines)
+    if indices:
+        rows = ([row[index] for index in indices] for row in rows)
+    converted = ([func(val) for func, val in zip(types, row)] for row in rows)
+    if headers:
+        return (dict(zip(headers, row)) for row in converted)
+    return converted
 
 
 def string_filter(s: str, method: Callable) -> str:
@@ -168,6 +195,16 @@ def chain(*iterables: Iterable) -> Generator:
         yield from i
 
 
+def flatten(nested_lists):
+    """Flatten one level of nesting.
+
+    >>> [*flatten([[0, 1], [2, 3]])]
+    [0, 1, 2, 3]
+    """
+    from itertools import chain
+    return chain.from_iterable(nested_lists)
+
+
 def updown(n: int) -> Generator:
     """
     >>> [*updown(3)]
@@ -181,6 +218,7 @@ def chunks(g, n=2):
     """
     Collect data into chunks of a maximum size
     chunks('ABCDEFG', 3) --> ABC DEF G
+
     """
     from itertools import islice, repeat
     yield from map(lambda it: islice(it, n), repeat(iter(g)))
@@ -192,7 +230,7 @@ def chunks_(string, k):
 
 def grouper(iterable: Iterable,
             n: int,
-            fillvalue: Optional[str] = '') -> Generator[str, None, None]:
+            fillvalue: Optional[str] = None) -> Generator[str, None, None]:
     """
     Collect data into fixed-length chunks or blocks
     grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
@@ -224,6 +262,18 @@ def unique_stable(it: Iterable, seen: Optional[Iterable] = None) -> Generator:
         yield el
 
 
+def unique_justseen(iterable, key=None):
+    """
+    List unique elements, preserving order. Remember only the element just seen.
+    unique_justseen('AAAABBBCCDAABBB') --> A B C D A B
+    unique_justseen('ABBCcAD', str.lower) --> A B C A D
+
+    """
+    from itertools import groupby
+    from operator import itemgetter
+    return map(next, map(itemgetter(1), groupby(iterable, key)))
+
+
 def amount_unique_elements(seq: Sequence) -> int:
     """
     Amount different mutable/immutable elements
@@ -232,3 +282,115 @@ def amount_unique_elements(seq: Sequence) -> int:
     4
     """
     return len({id(el) for el in seq})  # len(set(map(id, seq)))
+
+
+def invert_dict(dct: dict) -> dict:
+    """
+    >>> invert_dict({'a': 4, 'b': 3, 'c': 2, 'd': 1})
+    {4: 'a', 3: 'b', 2: 'c', 1: 'd'}
+    """
+    from operator import itemgetter
+    invert = itemgetter(1, 0)
+    items = dct.items()
+    return dict(map(invert, items))  # type: ignore
+
+
+def is_vowel(char):
+    """
+    >>> [*filter(is_vowel, 'Aardvark')]
+    ['A', 'a', 'a']
+    """
+    return char.lower() in "aeiou"
+
+
+def maximum_sum(list_of_lists):
+    """
+    >>> list_of_lists = [[1, 2, 3], [4, 5, 6], [10, 11, 12], [7, 8, 9]]
+    >>> maximum_sum(list_of_lists)
+    33
+    """
+    return sum(max(list_of_lists, key=sum))
+
+
+def sum_nest_elem(lst: List[List[int]], i: int) -> int:
+    """
+    >>> lst, i = [[1, 2, 3], [40, 50, 60], [9, 8, 7]], 1
+    >>> sum_nest_elem(lst, i)
+    60
+    """
+    return sum(sub[i] for sub in lst)
+
+
+def first_true(iterable, default=False, pred=None):
+    """Returns the first true value in the iterable.
+    If no true value is found, returns *default*
+    If *pred* is not None, returns the first item
+    for which pred(item) is true.
+    first_true([a,b,c], x) --> a or b or c or x
+    first_true([a,b], x, f) --> a if f(a) else b if f(b) else x
+
+    """
+    return next(filter(pred, iterable), default)
+
+
+def quantify(iterable, pred=bool):
+    """Count how many times the predicate is true"""
+    return sum(map(pred, iterable))
+
+
+def pattern_in_string(pattern, string):
+    n = len(string) - len(pattern) + 1
+    # return sum(string[i:].startswith(pattern) for i in range(n))
+    return sum(sub_string == pattern
+               for sub_string in (string[i:i + len(pattern)]
+                                  for i in range(n)))
+
+
+def tail(n, iterable):
+    """Return an iterator over the last n items"""
+    # tail(3, 'ABCDEFG') --> E F G
+    from collections import deque
+    return iter(deque(iterable, maxlen=n))
+
+
+def take(n, iterable):
+    """Return first n items of the iterable as a list"""
+    from itertools import islice
+    return [*islice(iterable, n)]
+
+
+def nth(iterable, n, default=None):
+    """Returns the nth item or a default value"""
+    from itertools import islice
+    return next(islice(iterable, n, None), default)
+
+
+def tabulate(function, start=0):
+    """Return function(0), function(1), ..."""
+    from itertools import count
+    return map(function, count(start))
+
+
+def ncycles(iterable, n):
+    """Returns the sequence elements n times"""
+    from itertools import chain, repeat
+    return chain.from_iterable(repeat(iterable, n))
+
+
+def pairwise(iterable):
+    """s -> (s0, s1), (s1, s2), (s2, s3), ..."""
+    from itertools import tee
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
+
+
+def partition(pred, iterable):
+    """
+    Use a predicate to partition entries into false entries and true entries
+    partition(is_odd, range(10)) --> 0 2 4 6 8   and  1 3 5 7 9
+
+    """
+    from itertools import filterfalse, tee
+    t1, t2 = tee(iterable)
+    return filterfalse(pred, t1), filter(pred, t2)

@@ -7,9 +7,6 @@ import numpy as np
 1.5e2  # 1.5 * 10**2
 # 150.0
 
-(13).__add__(2)
-# 15
-
 round(1000**(1 / 3))  # cubic root
 # 10
 abs(-1)
@@ -134,6 +131,22 @@ def combinations(n, k):
     """
     from math import factorial
     return permutations(n, k) // factorial(k)
+
+
+def powerset(iterable):
+    """
+    >>> [*powerset([1,2,3])]
+    [(), (1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]
+    """
+    from typing import Container
+    from itertools import chain, combinations
+    s = iterable if isinstance(iterable, Container) else [*iterable]
+    return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
+
+
+def dot_product(vec1, vec2):
+    from operator import mul
+    return sum(map(mul, vec1, vec2))
 
 
 def rotate_vec(vector: List[List[int]], angle: int) -> np.ndarray:
