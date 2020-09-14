@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from typing import (Any, Callable, Deque, Generator, Iterable, List, Optional,
-                    Sequence, TextIO, Tuple)
+from typing import (Any, Callable, Deque, Generator, Iterable, Iterator, List,
+                    Optional, Sequence, TextIO, Tuple)
 
 
 def array_shift(data: Iterable, shift: int) -> Deque:
@@ -41,6 +41,40 @@ def bytes2human(bts: int) -> str:
                  for s, n in zip(symbols, nums) if bts >= n), f"{bts}B")
 
 
+def hexdump(data: bytes) -> None:
+    """
+    https://code.activestate.com/recipes/579064-hex-dump/
+
+    >>> hexdump(b'\x7f\x7f\x7f\x7f\x7f')  #doctest: +NORMALIZE_WHITESPACE
+    0000000000: 7F 7F 7F 7F 7F                                    .....
+    """
+    def _pack(a):
+        """
+        ['7F', '7F', '7F', '7F', '7F', '7F', '7F', '7F', '7F']
+        ->
+        [[['7F', '7F', '7F', '7F', '7F', '7F', '7F', '7F'], ['7F']]]
+        """
+        for n in (8, 2):
+            a = [a[i:i + n] for i in range(0, len(a), n)]
+        return a
+
+    def _join(a, *cs):
+        """
+        [[['7F', '7F', '7F', '7F', '7F']]], '  ', ' '
+        ->
+        '7F 7F 7F 7F 7F'
+        """
+        return (cs[0].join(_join(t, *cs[1:])) for t in a) if cs else a
+
+    _to_hex = lambda c: f'{c:02X}'
+    _to_chr = lambda c: chr(c) if 32 <= c < 127 else '.'
+    _make = lambda f, *cs: _join(_pack([*map(f, data)]), *cs)
+    hs = _make(_to_hex, '  ', ' ')
+    cs = _make(_to_chr, ' ', '')
+    for i, (h, c) in enumerate(zip(hs, cs)):
+        print(f"{i * 16:010X}: {h:48}  {c:16}")
+
+
 def int_to_bytes(integer: int,
                  *,
                  byteorder: str = 'big') -> Tuple[bytes, bool]:
@@ -60,9 +94,26 @@ def int_from_bytes(bytes_sign: Tuple[bytes, bool],
     return int.from_bytes(bytes_, byteorder='big', signed=signed)
 
 
-def datetime_now(fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
+def get_epoch_time(time_as_str: Optional[str] = None,
+                   fmt: str = '%d-%m-%Y %H:%M:%S.%f') -> int:
+    """
+    >>> get_epoch_time('04-09-2020 17:13:40.162')
+    1599239620162
+    """
     from datetime import datetime
-    return datetime.now().strftime(fmt)
+    fmt_time = datetime.now() if time_as_str is None else datetime.strptime(
+        time_as_str, fmt)
+    epoch = datetime.utcfromtimestamp(0)
+    return int((fmt_time - epoch).total_seconds() * 1000)
+
+
+def timestamp2isotime(timestamp: int) -> str:
+    """
+    >>> timestamp2isotime(1599239620162)
+    '2020-09-04T17:13:40.162'
+    """
+    from datetime import datetime
+    return datetime.utcfromtimestamp(timestamp / 1000).isoformat()[:-3]
 
 
 def elapsed_time() -> Generator:
@@ -96,6 +147,21 @@ def download_file_in_chunks(url, filename, chunk_size=512):
         for chunk in response.iter_content(chunk_size=chunk_size):
             if chunk:  # filter out keep-alive new chunks
                 handle.write(chunk)
+
+
+def download_extract_zip(url):
+    """
+    Download a ZIP file and extract its contents in memory
+    yields (filename, file-like object) pairs
+    """
+    from io import BytesIO
+    from zipfile import ZipFile
+    from requests import get
+    response = get(url)
+    with ZipFile(BytesIO(response.content)) as thezip:
+        for zipinfo in thezip.infolist():
+            with thezip.open(zipinfo) as thefile:
+                yield zipinfo.filename, thefile
 
 
 def follow_file(filename):
@@ -295,7 +361,7 @@ def invert_dict(dct: dict) -> dict:
     return dict(map(invert, items))  # type: ignore
 
 
-def is_vowel(char):
+def is_vowel(char: str) -> bool:
     """
     >>> [*filter(is_vowel, 'Aardvark')]
     ['A', 'a', 'a']
@@ -303,7 +369,7 @@ def is_vowel(char):
     return char.lower() in "aeiou"
 
 
-def maximum_sum(list_of_lists):
+def maximum_sum(list_of_lists: Iterable[Iterable[int]]) -> int:
     """
     >>> list_of_lists = [[1, 2, 3], [4, 5, 6], [10, 11, 12], [7, 8, 9]]
     >>> maximum_sum(list_of_lists)
@@ -312,85 +378,31 @@ def maximum_sum(list_of_lists):
     return sum(max(list_of_lists, key=sum))
 
 
-def sum_nest_elem(lst: List[List[int]], i: int) -> int:
+def pattern_in_string(pattern: str, string: str) -> int:
     """
-    >>> lst, i = [[1, 2, 3], [40, 50, 60], [9, 8, 7]], 1
-    >>> sum_nest_elem(lst, i)
-    60
+    >>> pattern_in_string('aba', 'abababa')
+    3
     """
-    return sum(sub[i] for sub in lst)
+    n = len(string) - len(pattern) + 1
+    return sum(string[i:].startswith(pattern) for i in range(n))
 
 
-def first_true(iterable, default=False, pred=None):
-    """Returns the first true value in the iterable.
-    If no true value is found, returns *default*
-    If *pred* is not None, returns the first item
-    for which pred(item) is true.
-    first_true([a,b,c], x) --> a or b or c or x
-    first_true([a,b], x, f) --> a if f(a) else b if f(b) else x
-
+def quantify(iterable: Iterable, pred: Callable = bool) -> int:
     """
-    return next(filter(pred, iterable), default)
+    Count how many times the predicate is true
 
-
-def quantify(iterable, pred=bool):
-    """Count how many times the predicate is true"""
+    >>> quantify([[], (), None, 0, 1, -1, 'fsdfds', ''])
+    3
+    """
     return sum(map(pred, iterable))
 
 
-def pattern_in_string(pattern, string):
-    n = len(string) - len(pattern) + 1
-    # return sum(string[i:].startswith(pattern) for i in range(n))
-    return sum(sub_string == pattern
-               for sub_string in (string[i:i + len(pattern)]
-                                  for i in range(n)))
+def tail(n: int, iterable: Iterable) -> Iterator:
+    """
+    Return an iterator over the last n items
 
-
-def tail(n, iterable):
-    """Return an iterator over the last n items"""
-    # tail(3, 'ABCDEFG') --> E F G
+    >>> [*tail(3, 'ABCDEFG')]
+    ['E', 'F', 'G']
+    """
     from collections import deque
     return iter(deque(iterable, maxlen=n))
-
-
-def take(n, iterable):
-    """Return first n items of the iterable as a list"""
-    from itertools import islice
-    return [*islice(iterable, n)]
-
-
-def nth(iterable, n, default=None):
-    """Returns the nth item or a default value"""
-    from itertools import islice
-    return next(islice(iterable, n, None), default)
-
-
-def tabulate(function, start=0):
-    """Return function(0), function(1), ..."""
-    from itertools import count
-    return map(function, count(start))
-
-
-def ncycles(iterable, n):
-    """Returns the sequence elements n times"""
-    from itertools import chain, repeat
-    return chain.from_iterable(repeat(iterable, n))
-
-
-def pairwise(iterable):
-    """s -> (s0, s1), (s1, s2), (s2, s3), ..."""
-    from itertools import tee
-    a, b = tee(iterable)
-    next(b, None)
-    return zip(a, b)
-
-
-def partition(pred, iterable):
-    """
-    Use a predicate to partition entries into false entries and true entries
-    partition(is_odd, range(10)) --> 0 2 4 6 8   and  1 3 5 7 9
-
-    """
-    from itertools import filterfalse, tee
-    t1, t2 = tee(iterable)
-    return filterfalse(pred, t1), filter(pred, t2)

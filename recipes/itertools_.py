@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import collections
 import itertools
 import operator
 
@@ -7,8 +6,7 @@ import operator
 [*itertools.chain.from_iterable((range(1, 4), range(4, 7), range(7, 10)))]
 # [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-s = "Aardvark"
-vowel = lambda char: char.lower() in "aeiou"
+vowel, s = lambda char: char.lower() in "aeiou", "Aardvark"
 [*itertools.filterfalse(vowel, s)]
 # ['r', 'd', 'v', 'r', 'k']
 [*itertools.compress(s, (1, 0, 1, 1, 0, 1))]
@@ -57,8 +55,10 @@ sample = [5, 4, 2, 8, 7, 6, 3, 0, 9, 1]
 # [32, 9, 1000]
 [*itertools.starmap(operator.mul, enumerate('albatroz', 1))]
 # ['a', 'll', 'bbb', 'aaaa', 'ttttt', 'rrrrrr', 'ooooooo', 'zzzzzzzz']
-[*itertools.starmap(lambda a, b: b / a,
-                    enumerate(itertools.accumulate(sample), 1))]
+[
+    *itertools.starmap(lambda a, b: b / a,
+                       enumerate(itertools.accumulate(sample), 1))
+]
 # [5.0, 4.5, 3.6666666666666665, 4.75, 5.2, 5.333333333333333,
 # 5.0, 4.375, 4.888888888888889, 4.5]
 
@@ -98,25 +98,23 @@ suits = 'spades hearts diamonds clubs'.split()
 [*itertools.product(range(2), repeat=3)]
 # [(0, 0, 0), (0, 0, 1), (0, 1, 0), (0, 1, 1), (1, 0, 0),
 # (1, 0, 1), (1, 1, 0), (1, 1, 1)]
-rows = itertools.product('AB', range(2), repeat=2)
-for row in rows:
-    print(row)
-# ('A', 0, 'A', 0)
-# ('A', 0, 'A', 1)
-# ('A', 0, 'B', 0)
-# ('A', 0, 'B', 1)
-# ('A', 1, 'A', 0)
-# ('A', 1, 'A', 1)
-# ('A', 1, 'B', 0)
-# ('A', 1, 'B', 1)
-# ('B', 0, 'A', 0)
-# ('B', 0, 'A', 1)
-# ('B', 0, 'B', 0)
-# ('B', 0, 'B', 1)
-# ('B', 1, 'A', 0)
-# ('B', 1, 'A', 1)
-# ('B', 1, 'B', 0)
-# ('B', 1, 'B', 1)
+[*itertools.product('AB', range(2), repeat=2)]
+# [('A', 0, 'A', 0),
+#  ('A', 0, 'A', 1),
+#  ('A', 0, 'B', 0),
+#  ('A', 0, 'B', 1),
+#  ('A', 1, 'A', 0),
+#  ('A', 1, 'A', 1),
+#  ('A', 1, 'B', 0),
+#  ('A', 1, 'B', 1),
+#  ('B', 0, 'A', 0),
+#  ('B', 0, 'A', 1),
+#  ('B', 0, 'B', 0),
+#  ('B', 0, 'B', 1),
+#  ('B', 1, 'A', 0),
+#  ('B', 1, 'A', 1),
+#  ('B', 1, 'B', 0),
+#  ('B', 1, 'B', 1)]
 
 for i in itertools.count(3):
     print(i)
@@ -152,32 +150,13 @@ next(rp), next(rp)
 # [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]
 [*itertools.permutations('ABC', 2)]
 # [('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]
-for p in itertools.permutations('ABCD'):
-    print(p)
-# ('A', 'B', 'C', 'D')
-# ('A', 'B', 'D', 'C')
-# ('A', 'C', 'B', 'D')
-# ('A', 'C', 'D', 'B')
-# ('A', 'D', 'B', 'C')
-# ('A', 'D', 'C', 'B')
-# ('B', 'A', 'C', 'D')
-# ('B', 'A', 'D', 'C')
-# ('B', 'C', 'A', 'D')
-# ('B', 'C', 'D', 'A')
-# ('B', 'D', 'A', 'C')
-# ('B', 'D', 'C', 'A')
-# ('C', 'A', 'B', 'D')
-# ('C', 'A', 'D', 'B')
-# ('C', 'B', 'A', 'D')
-# ('C', 'B', 'D', 'A')
-# ('C', 'D', 'A', 'B')
-# ('C', 'D', 'B', 'A')
-# ('D', 'A', 'B', 'C')
-# ('D', 'A', 'C', 'B')
-# ('D', 'B', 'A', 'C')
-# ('D', 'B', 'C', 'A')
-# ('D', 'C', 'A', 'B')
-# ('D', 'C', 'B', 'A')
+[*itertools.permutations('ABC')]
+# [('A', 'B', 'C'),
+#  ('A', 'C', 'B'),
+#  ('B', 'A', 'C'),
+#  ('B', 'C', 'A'),
+#  ('C', 'A', 'B'),
+#  ('C', 'B', 'A')]
 
 [*itertools.combinations([1, 2, 3], 2)]
 # [(1, 2), (1, 3), (2, 3)]
@@ -185,7 +164,7 @@ for p in itertools.permutations('ABCD'):
 # [('A', 'B'), ('A', 'C'), ('B', 'C')]
 [*itertools.combinations_with_replacement('ABC', 2)]
 # [('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C')]
-(*itertools.combinations_with_replacement('ABC', 2),)
+(*itertools.combinations_with_replacement('ABC', 2), )
 # (('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C'))
 
 [*itertools.groupby('LLLLAAGGG')]
@@ -197,38 +176,21 @@ for char, group in itertools.groupby('LLLLAAAGG'):
 # L -> ['L', 'L', 'L', 'L']
 # A -> ['A', 'A',]
 # G -> ['G', 'G', 'G']
-animals = [
-    'duck', 'eagle', 'rat', 'giraffe', 'bear', 'bat', 'dolphin', 'shark',
-    'lion'
-]
-animals.sort(key=len)
-animals
-# ['rat', 'bat', 'duck', 'bear', 'lion', 'eagle', 'shark', 'giraffe', 'dolphin']
-for length, group in itertools.groupby(animals, len):
-    print(length, '->', [*group])
+animals = ['duck', 'eagle', 'rat', 'giraffe',
+           'bear', 'bat', 'dolphin', 'shark', 'lion']
+for length, group in itertools.groupby(sorted(animals, key=len), len):
+    print(f"{length} -> {[*group]}")
 # 3 -> ['rat', 'bat']
 # 4 -> ['duck', 'bear', 'lion']
 # 5 -> ['eagle', 'shark']
 # 7 -> ['giraffe', 'dolphin']
-for length, group in itertools.groupby(reversed(animals), len):
-    print(length, '->', [*group])
-# 7 -> ['dolphin', 'giraffe']
-# 5 -> ['shark', 'eagle']
-# 4 -> ['lion', 'bear', 'duck']
-# 3 -> ['bat', 'rat']
 
 [*itertools.tee('ABC')]
-# [<itertools._tee object at 0x10222abc8>, <itertools._tee object at 0x10222ac08>]
+# [<itertools._tee at 0x521f208>, <itertools._tee at 0x521f3c8>]
 g1, g2 = itertools.tee('ABC')
-next(g1)
-# 'A'
-next(g2)
-# 'A'
-next(g2)
-# 'B'
-[*g1]
-# ['B', 'C']
-[*g2]
-# ['C']
+next(g1), next(g2), next(g2)
+# ('A', 'A', 'B')
+[*g1], [*g2]
+# (['B', 'C'], ['C'])
 [*zip(*itertools.tee('ABC'))]
 # [('A', 'A'), ('B', 'B'), ('C', 'C')]
