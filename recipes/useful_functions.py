@@ -238,37 +238,26 @@ def search_lines(lines: TextIO, pattern: str, history: int = 5) -> Generator:
         previous_lines.append(line)
 
 
-def yield_from_merging(*iterables, sorting=True, reverse=False, key=None):
+def yield_from_merging(*iterables: Iterable,
+                       key: Optional[Callable] = None,
+                       reverse: bool = False) -> Generator:
     """
     >>> [*yield_from_merging([5, 3, 1, 0], [7, 8, 0, 9, 8])]
-    [0, 0, 1, 3, 5, 7, 8, 8, 9]
+    [5, 3, 1, 0, 7, 8, 0, 9, 8]
     >>> [*yield_from_merging([5, 3, 1, 0], [7, 8, 0, 9, 8], reverse=True)]
-    [9, 8, 8, 7, 5, 3, 1, 0, 0]
+    [7, 8, 5, 3, 1, 0, 0, 9, 8]
     """
     from heapq import merge
-    if sorting:
-        iterables = (sorted(iterable, reverse=reverse, key=key)
-                     for iterable in iterables)
-    yield from merge(*iterables, reverse=reverse, key=key)
+    yield from merge(*iterables, key=key, reverse=reverse)
 
 
-def chain(*iterables: Iterable) -> Generator:
+def chain_(*iterables: Iterable) -> Generator:
     """
-    >>> [*chain(['A', 'B', 'C'], [0, 1, 2])]
+    >>> [*chain_(['A', 'B', 'C'], [0, 1, 2])]
     ['A', 'B', 'C', 0, 1, 2]
     """
     for i in iterables:
         yield from i
-
-
-def flatten(nested_lists):
-    """Flatten one level of nesting.
-
-    >>> [*flatten([[0, 1], [2, 3]])]
-    [0, 1, 2, 3]
-    """
-    from itertools import chain
-    return chain.from_iterable(nested_lists)
 
 
 def updown(n: int) -> Generator:
@@ -280,35 +269,17 @@ def updown(n: int) -> Generator:
     yield from range(n, 0, -1)
 
 
-def chunks(g, n=2):
-    """
-    Collect data into chunks of a maximum size
-    chunks('ABCDEFG', 3) --> ABC DEF G
-
-    """
-    from itertools import islice, repeat
-    yield from map(lambda it: islice(it, n), repeat(iter(g)))
-
-
-def chunks_(string, k):
-    yield from zip(*(iter(string), ) * k)
-
-
-def grouper(iterable: Iterable,
+def grouper(it: Iterable,
             n: int,
             fillvalue: Optional[str] = None) -> Generator[str, None, None]:
     """
     Collect data into fixed-length chunks or blocks
-    grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
 
-    >>> big_string = "gfdgfgdgdbvcgjkjhddfgr hfghfgf kjhkhjtgg ghfvbvcbcvfhjkh"
-    >>> [''.join(chunk) for chunk #doctest: +NORMALIZE_WHITESPACE
-    ... in grouper(big_string, 10, '_')]
-    ['gfdgfgdgdb', 'vcgjkjhddf', 'gr hfghfgf',
-    ' kjhkhjtgg', ' ghfvbvcbc', 'vfhjkh____']
+    >>> [''.join(chunk) for chunk in grouper("gfdgfgdgdb vcgjkjhddfgr", 5, '_')]
+    ['gfdgf', 'gdgdb', ' vcgj', 'kjhdd', 'fgr__']
     """
     from itertools import zip_longest
-    args = (iter(iterable), ) * n
+    args = (iter(it), ) * n
     yield from zip_longest(fillvalue=fillvalue, *args)
 
 
@@ -328,7 +299,7 @@ def unique_stable(it: Iterable, seen: Optional[Iterable] = None) -> Generator:
         yield el
 
 
-def unique_justseen(iterable, key=None):
+def unique_justseen(it: Iterable, key=None):
     """
     List unique elements, preserving order. Remember only the element just seen.
     unique_justseen('AAAABBBCCDAABBB') --> A B C D A B
@@ -337,7 +308,7 @@ def unique_justseen(iterable, key=None):
     """
     from itertools import groupby
     from operator import itemgetter
-    return map(next, map(itemgetter(1), groupby(iterable, key)))
+    return map(next, map(itemgetter(1), groupby(it, key)))
 
 
 def amount_unique_elements(seq: Sequence) -> int:
@@ -369,15 +340,6 @@ def is_vowel(char: str) -> bool:
     return char.lower() in "aeiou"
 
 
-def maximum_sum(list_of_lists: Iterable[Iterable[int]]) -> int:
-    """
-    >>> list_of_lists = [[1, 2, 3], [4, 5, 6], [10, 11, 12], [7, 8, 9]]
-    >>> maximum_sum(list_of_lists)
-    33
-    """
-    return sum(max(list_of_lists, key=sum))
-
-
 def pattern_in_string(pattern: str, string: str) -> int:
     """
     >>> pattern_in_string('aba', 'abababa')
@@ -387,22 +349,63 @@ def pattern_in_string(pattern: str, string: str) -> int:
     return sum(string[i:].startswith(pattern) for i in range(n))
 
 
-def quantify(iterable: Iterable, pred: Callable = bool) -> int:
+def maximum_sum(*iterables: Iterable, key: Callable = sum) -> int:
+    """
+    >>> maximum_sum([1, 2, 3], [4, 5, 6], [10, 11, 12], [7, 8, 9])
+    33
+    """
+    return sum(max(iterables, key=key))
+
+
+def quantify(it: Iterable, pred: Callable = bool) -> int:
     """
     Count how many times the predicate is true
 
     >>> quantify([[], (), None, 0, 1, -1, 'fsdfds', ''])
     3
     """
-    return sum(map(pred, iterable))
+    return sum(map(pred, it))
 
 
-def tail(n: int, iterable: Iterable) -> Iterator:
+def tail(it: Iterable, n: int) -> Iterator:
     """
     Return an iterator over the last n items
 
-    >>> [*tail(3, 'ABCDEFG')]
+    >>> [*tail('ABCDEFG', 3)]
     ['E', 'F', 'G']
     """
     from collections import deque
-    return iter(deque(iterable, maxlen=n))
+    return iter(deque(it, maxlen=n))
+
+
+def nth(it: Iterable, n: int, default: Optional[Any] = None) -> Any:
+    """
+    Returns the nth item or a default value
+
+    >>> nth(range(10), 5)
+    5
+    """
+    from itertools import islice
+    return next(islice(it, n, None), default)
+
+
+def ncycles(it: Iterable, n: int) -> Iterator:
+    """
+    Returns the sequence elements n times
+
+    >>> [*ncycles(range(3), 3)]
+    [0, 1, 2, 0, 1, 2, 0, 1, 2]
+    """
+    from itertools import chain, repeat
+    return chain.from_iterable(repeat(it, n))
+
+
+def pairwise(it: Iterable) -> Iterator:
+    """
+    >>> [*pairwise(range(6))]
+    [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)]
+    """
+    from itertools import tee
+    a, b = tee(it)
+    next(b, None)
+    return zip(a, b)
