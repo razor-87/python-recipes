@@ -377,3 +377,43 @@ def fibonacci_gen(num: int) -> Generator:
     for _ in range(num):
         yield a
         a, b = b, a + b
+
+
+def binomial_coefficient(n: int, k: int) -> float:
+    """
+    math.comb(n, k)
+    scipy.special.binom(n, k)
+
+    >>> binomial_coefficient(4, 2)
+    6.0
+    """
+    res = 1.0
+    for i in range(1, k + 1):
+        res *= (n - i + 1) / i
+    return res
+
+
+def pascal_triangle(rows: int) -> list:
+    """
+    https://oeis.org/A007318
+
+    >>> pascal_triangle(4)
+    [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]
+    """
+    res = [[1]]
+    for _ in range(rows):
+        row = res[-1]
+        res.append([1, *map(sum, zip(row, row[1:])), 1])
+    return res
+
+
+def pascal_triangle_gen() -> Generator:
+    """
+    >>> p = pascal_triangle_gen()
+    >>> [next(p) for _ in range(5)]
+    [(1,), (1, 1), (1, 2, 1), (1, 3, 3, 1), (1, 4, 6, 4, 1)]
+    """
+    row = (1,)
+    while True:
+        yield row
+        row = (1, *map(sum, zip(row, row[1:])), 1)
