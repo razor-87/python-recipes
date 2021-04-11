@@ -212,6 +212,21 @@ def approx_pi2(n: int = 10000000) -> float:
     return sqrt(6 * val)
 
 
+def a002024(n: int) -> list:
+    """
+    https://oeis.org/A002024
+
+    >>> a002024(1)
+    [1]
+    >>> a002024(7)
+    [1, 2, 2, 3, 3, 3, 4]
+    """
+    from itertools import chain, islice
+    seq = chain.from_iterable(
+        (i for _ in range(i)) for i in range(1, 100))
+    return [*islice(seq, n)]
+
+
 def a078633(n: int) -> int:
     """
     https://oeis.org/A078633
