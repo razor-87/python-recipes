@@ -59,6 +59,15 @@ math.frexp(x)[1] - 1  # fast
 x.bit_length() - 1  # faster
 # 1
 
+# decimal: accurate decimal math, eg: for money
+from decimal import Decimal
+sum(0.1 for i in range(1000))
+# 99.9999999999986
+sum(Decimal('0.1') for i in range(1000))
+# Decimal('100.0')
+Decimal(0.1)  # be careful converting from floats!
+# Decimal('0.1000000000000000055511151231257827021181583404541015625')
+
 
 def digits(n: int) -> Generator[int, None, None]:
     # How to get the digits of an integer
