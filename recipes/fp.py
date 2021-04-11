@@ -33,8 +33,6 @@ gen = (lambda s: (yield from s))('abs')
 next(gen), next(gen), next(gen)
 # ('a', 'b', 's')
 
-[*reversed([3, 2, 1, 0])] == [0, 1, 2, 3]
-# True
 
 xs = {'a': 4, 'b': 3, 'c': 2, 'd': 1}
 dict(map(itemgetter(1, 0), xs.items()))
