@@ -38,6 +38,8 @@ dict(map(itemgetter(1, 0), d.items()))
 # {4: 'a', 3: 'b', 2: 'c', 1: 'd'}
 sorted(d.items(), key=itemgetter(1))  # == key=lambda x: x[1]
 # [('d', 1), ('c', 2), ('b', 3), ('a', 4)]
+sorted(d, key=d.get)
+# ['d', 'c', 'b', 'a']
 sorted([(0, 1), (0, 1), (0, 1)], key=itemgetter(1), reverse=True)
 # [(0, 1), (0, 1), (0, 1)]
 sorted([[1], [1, 1, 1], [1, 1]], reverse=True, key=len)  # sort by len
