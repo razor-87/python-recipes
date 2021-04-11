@@ -33,11 +33,10 @@ gen = (lambda s: (yield from s))('abs')
 next(gen), next(gen), next(gen)
 # ('a', 'b', 's')
 
-
-xs = {'a': 4, 'b': 3, 'c': 2, 'd': 1}
-dict(map(itemgetter(1, 0), xs.items()))
+d = {'a': 4, 'b': 3, 'c': 2, 'd': 1}
+dict(map(itemgetter(1, 0), d.items()))
 # {4: 'a', 3: 'b', 2: 'c', 1: 'd'}
-sorted(xs.items(), key=itemgetter(1))  # == key=lambda x: x[1]
+sorted(d.items(), key=itemgetter(1))  # == key=lambda x: x[1]
 # [('d', 1), ('c', 2), ('b', 3), ('a', 4)]
 sorted([(0, 1), (0, 1), (0, 1)], key=itemgetter(1), reverse=True)
 # [(0, 1), (0, 1), (0, 1)]
