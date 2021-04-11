@@ -292,19 +292,25 @@ def unique_stable(it: Iterable, seen: Optional[Iterable] = None) -> Generator:
     >>> ''.join(unique_stable('AAAABBBCCDAABBB', 'B'))
     'ACD'
     """
-    from itertools import filterfalse
-    seen = set(seen or [])
-    for el in filterfalse(seen.__contains__, it):  # if el not in seen
-        seen.add(el)
-        yield el
+    if seen is None:
+        yield from dict.fromkeys(it)
+    else:
+        from itertools import filterfalse
+        seen = set(seen)
+        seen_add = seen.add
+        for el in filterfalse(seen.__contains__, it):  # if el not in seen
+            seen_add(el)
+            yield el
 
 
-def unique_justseen(it: Iterable, key=None):
+def unique_justseen(it: Iterable, key: Optional[Callable] = None) -> Iterator:
     """
     List unique elements, preserving order. Remember only the element just seen.
-    unique_justseen('AAAABBBCCDAABBB') --> A B C D A B
-    unique_justseen('ABBCcAD', str.lower) --> A B C A D
 
+    >>> ''.join(unique_justseen('AAAABBBCCDAABBB'))
+    'ABCDAB'
+    >>> ''.join(unique_justseen('ABBCcAD', str.lower))
+    'ABCAD'
     """
     from itertools import groupby
     from operator import itemgetter
